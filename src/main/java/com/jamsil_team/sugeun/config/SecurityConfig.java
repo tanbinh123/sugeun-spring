@@ -1,8 +1,10 @@
 package com.jamsil_team.sugeun.config;
 
+import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.filter.ApiCheckFilter;
 import com.jamsil_team.sugeun.filter.ApiLoginFilter;
 import com.jamsil_team.sugeun.security.UserDetailsServiceImpl;
+import com.jamsil_team.sugeun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,28 +21,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl ;
+    @Autowired private UserRepository userRepository;
+    @Autowired private UserService userService;
 
-   @Bean
+    @Bean
     public PasswordEncoder encode(){
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public ApiLoginFilter apiLoginFilter() throws Exception{
-        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", userRepository, userService);
         apiLoginFilter.setAuthenticationManager(authenticationManager());
 
         return apiLoginFilter;
 
     }
 
-    /*
+
     @Bean
     public ApiCheckFilter apiCheckFilter(){
-        return new ApiCheckFilter();
-    }*/
+        return new ApiCheckFilter("/api/**/*", userRepository);
+    }
 
 
     @Override
@@ -57,8 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout();
 
         http.authorizeRequests()
-                .antMatchers("/api/login","/api/signup").permitAll() // 로그인, 회원가입 주소는 모두에게 접근 허용
-                .anyRequest().hasRole("USER"); // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
+                .anyRequest().permitAll(); //접근 권한은 filter 에서 검증
 
         http.addFilterBefore(apiLoginFilter(),
                 UsernamePasswordAuthenticationFilter.class); //로그인 필터를  인증필터 전에 실행

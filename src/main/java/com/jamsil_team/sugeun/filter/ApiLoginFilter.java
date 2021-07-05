@@ -28,16 +28,17 @@ import java.util.Optional;
 @Log4j2
 public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    @Autowired  private UserService userService;
-    @Autowired private UserRepository userRepository;
-
-    private String deviceToken;
-
+    private UserRepository userRepository;
+    private UserService userService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public ApiLoginFilter(String defaultFilterProcessesUrl) {
+    public ApiLoginFilter(String defaultFilterProcessesUrl, UserRepository userRepository, UserService userService) {
         super(defaultFilterProcessesUrl);
+        this.userRepository = userRepository;
+        this.userService =userService;
     }
+
+    private String deviceToken;
 
     /**
      * 로그인 인증토큰 생성
