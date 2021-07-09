@@ -37,4 +37,8 @@ public class Folder {
     @JoinColumn(name = "parent_folder_id")
     private Folder Folder;
 
+    public void changeFileName(String fileName){
+        this.fileName = fileName;
+    }
+
 }
