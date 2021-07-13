@@ -67,7 +67,7 @@ class FolderServiceImplTest {
 
 
         //when
-        folderService.folderNameModify(folder.getFolderId(), "이름변경");
+        folderService.ModifyFolderName(folder.getFolderId(), "이름변경");
 
         //then
         Assertions.assertThat(folder.getFolderName()).isEqualTo("이름변경");

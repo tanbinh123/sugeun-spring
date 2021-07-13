@@ -1,12 +1,15 @@
 package com.jamsil_team.sugeun.service;
 
+import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.dto.PhraseDTO;
 
 public interface PhraseService {
 
-    Long createPhrase(PhraseDTO phraseDTO);
+    Phrase createPhrase(PhraseDTO phraseDTO);
 
-    void modifyPhrase(PhraseDTO phraseDTO);
+    void ModifyPhraseText(Long phraseId, String text);
+
+    void ModifyBookmark(Long phraseId);
 
     void removePhrase(Long phraseId);
 }

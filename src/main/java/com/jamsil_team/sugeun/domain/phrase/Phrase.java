@@ -4,8 +4,11 @@ import com.jamsil_team.sugeun.domain.BaseEntity;
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.user.User;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -33,4 +36,21 @@ public class Phrase extends BaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private Boolean bookmark = false;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDate textDate;
+
+    public void changeText(String text){
+        this.text = text;
+        this.textDate = LocalDate.now();
+    }
+
+    public void registerBookmark(){
+        this.bookmark = true;
+    }
+
+    public void cancelBookmark(){
+        this.bookmark = false;
+    }
 }

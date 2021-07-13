@@ -1,6 +1,9 @@
 package com.jamsil_team.sugeun.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jamsil_team.sugeun.domain.folder.Folder;
+import com.jamsil_team.sugeun.domain.phrase.Phrase;
+import com.jamsil_team.sugeun.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +19,7 @@ public class PhraseDTO {
 
     private Long phraseId;
 
-    private Long userId;
+    private String userId;
 
     private Long folderId;
 
@@ -29,5 +32,16 @@ public class PhraseDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime modDate;
+
+    public Phrase toEntity(){
+        Phrase phrase = Phrase.builder()
+                .user(User.builder().userId(this.userId).build())
+                .folder(Folder.builder().folderId(this.folderId).build())
+                .text(this.text)
+                .build();
+
+        return phrase;
+
+    }
 
 }
