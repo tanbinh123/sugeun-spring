@@ -41,7 +41,7 @@ public class FolderDTO {
         Folder folder = Folder.builder()
                 .folderName(this.folderName)
                 .user(User.builder().userId(this.userId).build())
-                .type(type)
+                .type(this.type)
                 .Folder(Folder.builder().folderId(this.parentFolderId).build())
                 .build();
 
