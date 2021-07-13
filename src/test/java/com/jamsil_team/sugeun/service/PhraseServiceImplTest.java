@@ -70,6 +70,42 @@ class PhraseServiceImplTest {
     }
 
     @Test
+    void 북마크_등록() throws Exception{
+        //given
+        User user = createUser();
+
+        Phrase phrase = Phrase.builder()
+                .user(user)
+                .build();
+        phraseRepository.save(phrase);
+
+        //when
+        phraseService.ModifyBookmark(phrase.getPhraseId());
+
+        //then
+        Assertions.assertThat(phrase.getBookmark()).isTrue();
+
+    }
+
+    @Test
+    void 북마크_취소() throws Exception{
+        //given
+        User user = createUser();
+
+        Phrase phrase = Phrase.builder()
+                .user(user)
+                .bookmark(true)
+                .build();
+        phraseRepository.save(phrase);
+
+        //when
+        phraseService.ModifyBookmark(phrase.getPhraseId());
+
+        //then
+        Assertions.assertThat(phrase.getBookmark()).isFalse();
+    }
+
+    @Test
     void 글귀삭제() throws Exception{
         //given
         User user = createUser();
@@ -90,42 +126,6 @@ class PhraseServiceImplTest {
         Assertions.assertThat(e.getMessage()).isEqualTo("No value present");
     }
 
-    @Test
-    void 북마크_등록() throws Exception{
-        //given
-        User user = createUser();
-
-        Phrase phrase = Phrase.builder()
-                .user(user)
-                .bookmark(true)
-                .build();
-        phraseRepository.save(phrase);
-
-        //when
-        phraseService.ModifyBookmark(phrase.getPhraseId());
-
-        //then
-        Assertions.assertThat(phrase.getBookmark()).isFalse();
-
-    }
-
-    @Test
-    void 북마크_취소() throws Exception{
-        //given
-        User user = createUser();
-
-        Phrase phrase = Phrase.builder()
-                .user(user)
-                .bookmark(false)
-                .build();
-        phraseRepository.save(phrase);
-
-        //when
-        phraseService.ModifyBookmark(phrase.getPhraseId());
-
-        //then
-        Assertions.assertThat(phrase.getBookmark()).isTrue();
-    }
 
     private Folder createFolder() {
         User user = User.builder()

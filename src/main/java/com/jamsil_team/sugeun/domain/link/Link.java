@@ -34,4 +34,12 @@ public class Link extends BaseEntity {
     @Column(nullable = false)
     private Boolean bookmark = false;
 
+    public void registerBookmark(){
+        this.bookmark = true;
+    }
+
+    public void cancelBookmark(){
+        this.bookmark = false;
+    }
+
 }

@@ -11,5 +11,5 @@ public interface FolderService {
     //TODO 2021.07.13- 작성필요
     //void folderImageModify(FolderDTO folderDTO);
 
-    //void remove(Long folderId);
+    //void removeFolder(Long folderId);
 }

@@ -48,7 +48,7 @@ public class FolderServiceImpl implements FolderService{
      */
     /*
     @Override
-    public void remove(Long folderId) {
+    public void removeFolder(Long folderId) {
 
         Folder folder = folderRepository.findById(folderId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 ID 입니다."));
