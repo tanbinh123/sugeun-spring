@@ -32,7 +32,7 @@ public class FolderServiceImpl implements FolderService{
         Folder folder = folderRepository.findById(folderId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 ID 입니다."));
 
-        folder.changeFileName(folderName);
+        folder.changeFolderName(folderName);
     }
 
     //TODO 2021.07.10-phrase, link 삭제 구현 후 작성

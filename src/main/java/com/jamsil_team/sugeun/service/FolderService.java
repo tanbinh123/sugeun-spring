@@ -8,6 +8,7 @@ public interface FolderService {
 
     void folderNameModify(Long folderId, String folderName);
 
+    //TODO 2021.07.13- 작성필요
     //void folderImageModify(FolderDTO folderDTO);
 
     //void remove(Long folderId);
