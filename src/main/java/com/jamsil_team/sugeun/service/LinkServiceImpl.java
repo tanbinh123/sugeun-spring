@@ -14,6 +14,9 @@ public class LinkServiceImpl implements LinkService{
 
     private final LinkRepository linkRepository;
 
+    /**
+     * 링크생성
+     */
     @Override
     public Link createLink(LinkDTO linkDTO) {
 
@@ -24,6 +27,9 @@ public class LinkServiceImpl implements LinkService{
         return link;
     }
 
+    /**
+     * 링크 북마크 기능
+     */
     @Override
     public void modifyBookmark(Long linkId) {
 
@@ -38,6 +44,9 @@ public class LinkServiceImpl implements LinkService{
 
     }
 
+    /**
+     * 링크삭제
+     */
     @Override
     public void removeLink(Long linkId) {
 
