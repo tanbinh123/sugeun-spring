@@ -29,6 +29,9 @@ public class Timeout {
     @Column(nullable = false)
     private LocalDateTime deadline;
 
+    @Builder.Default
+    private Boolean isValid = true;
+
     private String filePath;
 
     private String fileName;
