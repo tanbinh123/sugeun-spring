@@ -40,12 +40,9 @@ class UserServiceImplTest {
         SignUpDTO signUpDTO = createSignUpDTO();
 
         //when
-        String savedUserId = userService.join(signUpDTO);
+        User user = userService.join(signUpDTO);
 
         //then
-        Optional<User> result = userRepository.findById(savedUserId);
-        User user = result.get();
-
         Assertions.assertThat(user.getUserId()).isEqualTo("형우");
         Assertions.assertThat(user.getDeviceToken()).isNull();
     }

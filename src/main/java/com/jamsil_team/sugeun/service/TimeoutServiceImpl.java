@@ -22,6 +22,9 @@ public class TimeoutServiceImpl implements TimeoutService{
     private final TimeoutRepository timeoutRepository;
     private final TimeoutSelectRepository timeoutSelectRepository;
 
+    /**
+     * 타임아웃 생성
+     */
     @Override
     public Timeout createTimeout(TimeoutDTO timeoutDTO) {
 
@@ -42,4 +45,22 @@ public class TimeoutServiceImpl implements TimeoutService{
 
         return timeout;
     }
+
+    /**
+     * 사용완료 기능
+     */
+    @Override
+    public void finishUse(Long timeoutId) {
+        Timeout timeout = timeoutRepository.findById(timeoutId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 타임아웃 입니다."));
+
+        //isValid == false 변경
+        timeout.isValidFalse();
+
+        //기존 알람 삭제
+        timeoutSelectRepository.deleteByTimoutId(timeoutId);
+
+    }
+
+
 }

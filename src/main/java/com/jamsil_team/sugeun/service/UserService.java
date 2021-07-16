@@ -8,7 +8,7 @@ public interface UserService {
 
     Boolean isDuplicateNickname(String userId);
 
-    String join(SignUpDTO signUpDTO);
+    User join(SignUpDTO signUpDTO);
 
     void UpdateDeviceToken(String userId, String deviceToken);
 

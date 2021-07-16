@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -22,6 +23,8 @@ public class SignUpDTO {
 
     @NotEmpty
     private String phone;
+
+    private MultipartFile file;
 
     public User toEntity(){
 
