@@ -44,6 +44,10 @@ public class User {
         this.deviceToken = deviceToken;
     }
 
+    public void changePassword(String password){
+        this.password = password;
+    }
+
     public void saveUserImg(String filePath, String uuid, String fileName){
         this.filePath = filePath;
         this.uuid = uuid;

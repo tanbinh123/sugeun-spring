@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService{
 
     }
 
-    //폴더 생성성
+    //폴더 생성
     private String makeFolder() {
 
         String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
@@ -144,6 +144,34 @@ public class UserServiceImpl implements UserService{
         else{
             throw new IllegalStateException("존재하지 않는 ID 입니다.");
         }
+    }
+
+    /**
+     * 기본 비밀번호 검증
+     */
+    @Override
+    public Boolean verifyPassword(String userId, String password) {
+
+        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 회원입니다."));
+
+        return passwordEncoder.matches(password, user.getPassword());
+
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    @Override
+    public void modifyPassword(String userId, String password) {
+
+        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 회원입니다."));
+
+        //암호화
+        String encPassword = passwordEncoder.encode(password);
+
+        user.changePassword(encPassword);
     }
 
 

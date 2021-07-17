@@ -12,4 +12,7 @@ public interface UserService {
 
     void UpdateDeviceToken(String userId, String deviceToken);
 
+    Boolean verifyPassword(String userId, String password);
+
+    void modifyPassword(String userId, String password);
 }
