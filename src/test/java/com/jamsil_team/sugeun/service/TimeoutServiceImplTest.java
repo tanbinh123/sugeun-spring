@@ -70,7 +70,7 @@ class TimeoutServiceImplTest {
                         .minusDays(selected.get(0)).minusHours(11).minusMinutes(59))
                 .isEqualTo(LocalDateTime.of(2021,8,10,12,00));
 
-        //마감일: 21.08.11 23:59 -> selected.get(0) == 3 -> 알람일: 21.08.08 12:00
+        //마감일: 21.08.11 23:59 -> selected.get(1) == 3 -> 알람일: 21.08.08 12:00
         Assertions.assertThat(result.get(1).getAlarmDateTime())
                 .isEqualTo(timeoutDTO.getDeadline()
                         .minusDays(selected.get(1)).minusHours(11).minusMinutes(59))
