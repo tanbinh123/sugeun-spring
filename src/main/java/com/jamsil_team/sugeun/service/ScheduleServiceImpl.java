@@ -43,4 +43,39 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         return schedule;
     }
+
+    @Override
+    public void modifySchedule(ScheduleDTO scheduleDTO) {
+
+        Schedule schedule = scheduleRepository.findById(scheduleDTO.getScheduleId()).orElseThrow(() ->
+                new IllegalStateException("존재하는 않는 스케줄 입니다."));
+
+        if(scheduleDTO.getTitle() != null){
+            schedule.changeTitle(scheduleDTO.getTitle());
+        }
+
+        if(scheduleDTO.getScheduleDate() != null){
+            schedule.changeScheduleDate(scheduleDTO.getScheduleDate());
+        }
+
+        if(scheduleDTO.getSelected() != null){
+
+            //기존 해당 알람 모두 삭제
+            scheduleSelectRepository.deleteByScheduleId(scheduleDTO.getScheduleId());
+
+
+            //TODO 2021.07.18 - 수정 데이터 의논
+
+
+        }
+
+
+    }
+
+    @Override
+    public void deleteSchedule(Long scheduleId) {
+
+    }
+
+
 }

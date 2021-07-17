@@ -7,4 +7,8 @@ public interface ScheduleService {
 
     Schedule createSchedule(ScheduleDTO scheduleDTO);
 
+    void modifySchedule(ScheduleDTO scheduleDTO);
+
+    void deleteSchedule(Long scheduleId);
+
 }

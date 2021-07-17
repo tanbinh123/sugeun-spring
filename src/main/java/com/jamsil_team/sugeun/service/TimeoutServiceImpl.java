@@ -62,5 +62,10 @@ public class TimeoutServiceImpl implements TimeoutService{
 
     }
 
+    @Override
+    public void removeTimeout(Long timeoutId) {
+
+    }
+
 
 }
