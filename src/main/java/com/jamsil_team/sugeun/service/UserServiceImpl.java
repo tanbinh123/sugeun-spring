@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
     private String uploadPath;
 
     /**
-     * 중복확인
+     * 아이디 중복확인
      */
     @Transactional(readOnly = true)
     @Override
