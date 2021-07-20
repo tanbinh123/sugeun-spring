@@ -1,12 +1,17 @@
 package com.jamsil_team.sugeun.controller;
 
+import com.jamsil_team.sugeun.dto.FolderDTO;
+import com.jamsil_team.sugeun.dto.SignupDTO;
+import com.jamsil_team.sugeun.dto.UserDTO;
+import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.SendSmsService;
+import com.jamsil_team.sugeun.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.PermitAll;
+import java.util.List;
 import java.util.Random;
 
 
@@ -16,6 +21,8 @@ import java.util.Random;
 public class AccessController {
 
     private final SendSmsService sendSmsService;
+    private final UserService userService;
+    private final FolderService folderService;
 
 
 
@@ -42,10 +49,16 @@ public class AccessController {
 
     }
 
-
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(){
+    public ResponseEntity<String> signup(@RequestBody SignupDTO signUpDTO){
+
+        userService.join(signUpDTO);
+
         return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public void login(){
 
     }
 

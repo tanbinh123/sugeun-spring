@@ -3,6 +3,8 @@ package com.jamsil_team.sugeun.service;
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.dto.FolderDTO;
 
+import java.util.List;
+
 public interface FolderService {
     Folder createFolder(FolderDTO folderDTO);
 
@@ -13,4 +15,6 @@ public interface FolderService {
 
 
     void removeFolder(Long folderId);
+
+    List<FolderDTO> getListOfFolder(String userId);
 }

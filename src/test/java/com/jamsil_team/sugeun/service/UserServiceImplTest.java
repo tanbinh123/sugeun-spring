@@ -2,7 +2,7 @@ package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
-import com.jamsil_team.sugeun.dto.SignUpDTO;
+import com.jamsil_team.sugeun.dto.SignupDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ class UserServiceImplTest {
     @Test
     void 중복확인() throws Exception{
         //given
-        SignUpDTO signUpDTO = createSignUpDTO();
+        SignupDTO signUpDTO = createSignUpDTO();
         User user = signUpDTO.toEntity();
         userRepository.save(user);
 
@@ -39,7 +39,7 @@ class UserServiceImplTest {
     @Test
     void 회원가입() throws Exception{
         //given
-        SignUpDTO signUpDTO = createSignUpDTO();
+        SignupDTO signUpDTO = createSignUpDTO();
 
         //when
         User user = userService.join(signUpDTO);
@@ -53,16 +53,16 @@ class UserServiceImplTest {
     void 회원가입_실패() throws Exception{
         //given
         //기존 등록된 아이디
-        SignUpDTO signUpDTO1 = createSignUpDTO();// loginId = 형우
-        User user1 = signUpDTO1.toEntity();
+        SignupDTO signupDTO1 = createSignUpDTO();// loginId = 형우
+        User user1 = signupDTO1.toEntity();
         userRepository.save(user1);
 
         //회원가입
-        SignUpDTO signUpDTO2 = createSignUpDTO();// loginId = 형우
+        SignupDTO signupDTO2 = createSignUpDTO();// loginId = 형우
 
         //when
         IllegalStateException e = assertThrows(IllegalStateException.class,
-                () -> userService.join(signUpDTO2));
+                () -> userService.join(signupDTO2));
 
         //then
         Assertions.assertThat(e.getMessage()).isEqualTo("이미 등록된 ID 입니다.");
@@ -133,8 +133,8 @@ class UserServiceImplTest {
 
 
 
-    private SignUpDTO createSignUpDTO() {
-        SignUpDTO signUpDTO = SignUpDTO.builder()
+    private SignupDTO createSignUpDTO() {
+        SignupDTO signUpDTO = SignupDTO.builder()
                 .userId("형우")
                 .password("1111")
                 .phone("010-0000-0000")

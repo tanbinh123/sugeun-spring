@@ -3,7 +3,9 @@ package com.jamsil_team.sugeun.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
+import com.jamsil_team.sugeun.dto.FolderDTO;
 import com.jamsil_team.sugeun.dto.UserDTO;
+import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -30,12 +33,14 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private UserRepository userRepository;
     private UserService userService;
+    private FolderService folderService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public ApiLoginFilter(String defaultFilterProcessesUrl, UserRepository userRepository, UserService userService) {
+    public ApiLoginFilter(String defaultFilterProcessesUrl, UserRepository userRepository, UserService userService, FolderService folderService) {
         super(defaultFilterProcessesUrl);
         this.userRepository = userRepository;
         this.userService =userService;
+        this.folderService = folderService;
     }
 
     private String deviceToken;
@@ -90,15 +95,15 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         userService.UpdateDeviceToken(userId, this.deviceToken);
 
+
         //response json 값
         response.setHeader("content-type", "application/json");
         response.setCharacterEncoding("utf-8");
 
-        User user = userRepository.findByUserId(userId).get();
 
-        UserDTO userDTO = user.toDTO(); //dto로 변환
+        List<FolderDTO> folderDTOList = folderService.getListOfFolder(userId);
 
-        String result = objectMapper.writeValueAsString(userDTO);
+        String result = objectMapper.writeValueAsString(folderDTOList);
         response.getWriter().write(result);
 
     }

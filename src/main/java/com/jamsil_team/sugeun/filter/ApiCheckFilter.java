@@ -36,7 +36,9 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
+        System.out.println(request.getPathTranslated());
+        System.out.println(request.getServletPath());
+        System.out.println(request.getPathInfo());
         log.info("REQUESTURI: " + request.getRequestURI() );
         log.info(antPathMatcher.match(pattern, request.getRequestURI()));
 
@@ -53,11 +55,7 @@ public class ApiCheckFilter extends OncePerRequestFilter {
          */
         else{
 
-            ServletInputStream inputStream = request.getInputStream();
-
-            UserDTO userDTO = objectMapper.readValue(inputStream, UserDTO.class);
-
-            boolean checkHeader = checkAuthHeader(userDTO);
+            boolean checkHeader = checkAuthHeader(request);
 
             //deviceToken 같을 경우
             if(checkHeader){
@@ -83,19 +81,22 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     }
 
 
-    private boolean checkAuthHeader(UserDTO userDTO) {
-        //request 로 받은 deviceToken
-        String deviceToken = userDTO.getDeviceToken();
+    private boolean checkAuthHeader(HttpServletRequest request) {
+
+        String deviceToken = request.getHeader("Authorization");
+        String userId = request.getHeader("userID");
 
         // DB에 저장된 deviceToken 가져오기
-        User user = userRepository.findByUserId(userDTO.getUserId()).orElseThrow(() ->
+        User user = userRepository.findByUserId(userId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 ID 입니다."));
 
-        log.info("UserDTO.getDeviceToken(): " + userDTO.getDeviceToken());
+        log.info("UserDTO.getDeviceToken(): " + deviceToken);
         log.info("User.getDeviceToken(): " + user.getDeviceToken());
 
         //request 로 받은 deviceToken 과 DB에 저장된 deviceToken 동일 체크
         boolean checkResult = deviceToken.equals(user.getDeviceToken());
+
+        System.out.println(checkResult);
 
         return checkResult;
 

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpDTO {
+public class SignupDTO {
 
     @NotEmpty
     private String userId;

@@ -1,12 +1,13 @@
 package com.jamsil_team.sugeun.domain.folder;
 
 import com.jamsil_team.sugeun.domain.user.User;
+import com.jamsil_team.sugeun.dto.FolderDTO;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
-@ToString
+@ToString(exclude = {"user","folder"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,10 +36,36 @@ public class Folder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_folder_id")
-    private Folder Folder;
+    private Folder folder;
 
     public void changeFolderName(String folderName){
         this.folderName = folderName;
+    }
+
+
+    public FolderDTO toDTO(){
+
+        FolderDTO folderDTO;
+
+        if(this.folder != null){
+            folderDTO = FolderDTO.builder()
+                    .folderId(this.folderId)
+                    .folderName(this.folderName)
+                    .userId(this.user.getUserId())
+                    .type(this.type)
+                    .parentFolderId(this.folder.folderId)
+                    .build();
+        }else{
+            folderDTO = FolderDTO.builder()
+                    .folderId(this.folderId)
+                    .folderName(this.folderName)
+                    .userId(this.user.getUserId())
+                    .type(this.type)
+                    .build();
+        }
+
+
+        return folderDTO;
     }
 
 }

@@ -11,6 +11,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Log4j2
 @Transactional
 @RequiredArgsConstructor
@@ -29,6 +32,12 @@ public class FolderServiceImpl implements FolderService{
 
         Folder folder = folderDTO.toEntity();
 
+        System.out.println("====================");
+        System.out.println(folder.getType());
+        System.out.println(folder.getType().equals(FolderType.PHRASE));
+        System.out.println(folder);
+
+        System.out.println(folder.getUser());
          folderRepository.save(folder);
 
         return folder;
@@ -50,7 +59,6 @@ public class FolderServiceImpl implements FolderService{
     /**
      * 폴더삭제
      */
-
     @Override
     public void removeFolder(Long folderId) {
 
@@ -69,6 +77,22 @@ public class FolderServiceImpl implements FolderService{
 
         folderRepository.deleteById(folder.getFolderId());
 
+    }
+    /**
+     * 폴더 DTO list
+     */
+    @Override
+    public List<FolderDTO> getListOfFolder(String userId) {
+
+        List<Folder> result = folderRepository.getListFolder(userId);
+
+        List<FolderDTO> folderDTOList = result.stream().map(folder -> {
+            FolderDTO folderDTO = folder.toDTO();
+            return folderDTO;
+        }).collect(Collectors.toList());
+
+
+        return folderDTOList;
     }
 
 

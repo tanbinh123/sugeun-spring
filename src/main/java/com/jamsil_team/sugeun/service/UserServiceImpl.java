@@ -2,7 +2,7 @@ package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
-import com.jamsil_team.sugeun.dto.SignUpDTO;
+import com.jamsil_team.sugeun.dto.SignupDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService{
      * 회원가입
      */
     @Override
-    public User join(SignUpDTO signUpDTO) {
+    public User join(SignupDTO signUpDTO) {
 
 
         Optional<User> result = userRepository.findById(signUpDTO.getUserId());
