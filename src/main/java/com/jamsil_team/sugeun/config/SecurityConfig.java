@@ -4,6 +4,7 @@ import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.filter.ApiCheckFilter;
 import com.jamsil_team.sugeun.filter.ApiLoginFilter;
 import com.jamsil_team.sugeun.security.UserDetailsServiceImpl;
+import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired private UserRepository userRepository;
     @Autowired private UserService userService;
+    @Autowired private FolderService folderService;
 
     @Bean
     public PasswordEncoder encode(){
@@ -31,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public ApiLoginFilter apiLoginFilter() throws Exception{
-        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", userRepository, userService);
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", userRepository, userService, folderService);
         apiLoginFilter.setAuthenticationManager(authenticationManager());
 
         return apiLoginFilter;

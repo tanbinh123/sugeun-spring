@@ -17,6 +17,7 @@ import org.springframework.web.context.request.async.TimeoutDeferredResultProces
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,7 +70,7 @@ class TimeoutServiceImplTest {
                         .minusDays(selected.get(0)).minusHours(11).minusMinutes(59))
                 .isEqualTo(LocalDateTime.of(2021,8,10,12,00));
 
-        //마감일: 21.08.11 23:59 -> selected.get(0) == 3 -> 알람일: 21.08.08 12:00
+        //마감일: 21.08.11 23:59 -> selected.get(1) == 3 -> 알람일: 21.08.08 12:00
         Assertions.assertThat(result.get(1).getAlarmDateTime())
                 .isEqualTo(timeoutDTO.getDeadline()
                         .minusDays(selected.get(1)).minusHours(11).minusMinutes(59))
@@ -105,6 +106,38 @@ class TimeoutServiceImplTest {
         List<TimeoutSelect> result = timeoutSelectRepository.findByUserId(timeout.getUser().getUserId());
 
         Assertions.assertThat(result).isEmpty();
+
+    }
+
+    @Test
+    void 사용완료기능() throws Exception{
+        //given
+        User user = createUser();
+
+        //타임아웃 생성
+        Timeout timeout = Timeout.builder()
+                .user(user)
+                .title("스타벅스 아메리카노")
+                .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
+                .fileName("timeoutImg")
+                .filePath("/hyeongwoo")
+                .uuid(UUID.randomUUID().toString())
+                .build();
+
+        timeoutRepository.save(timeout);
+
+        //when
+        timeoutService.finishUse(timeout.getTimeoutId());
+
+        //then
+        //유효필드 false 확인
+        Assertions.assertThat(timeout.getIsValid()).isFalse();
+
+        //삭제된 타임아웃 알람 삭제 확인
+        System.out.println(timeoutSelectRepository.findByTimeoutId(timeout.getTimeoutId()));
+
+        Assertions.assertThat(timeoutSelectRepository.findByTimeoutId(timeout.getTimeoutId()).size()).isEqualTo(0);
+        Assertions.assertThat(timeoutSelectRepository.findByTimeoutId(timeout.getTimeoutId())).isEmpty();
 
     }
 

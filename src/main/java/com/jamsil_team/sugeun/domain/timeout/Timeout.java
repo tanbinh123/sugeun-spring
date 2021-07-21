@@ -37,4 +37,8 @@ public class Timeout {
     private String fileName;
 
     private String uuid;
+
+    public void isValidFalse(){
+        this.isValid = false;
+    }
 }

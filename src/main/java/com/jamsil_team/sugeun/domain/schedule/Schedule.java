@@ -28,4 +28,12 @@ public class Schedule {
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
     @Column(nullable = false)
     private LocalDateTime scheduleDate;
+
+    public void changeTitle(String title){
+        this.title = title;
+    }
+
+    public void changeScheduleDate(LocalDateTime scheduleDate){
+        this.scheduleDate = scheduleDate;
+    }
 }

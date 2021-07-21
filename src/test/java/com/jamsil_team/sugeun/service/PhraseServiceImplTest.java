@@ -12,6 +12,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -59,6 +60,7 @@ class PhraseServiceImplTest {
         Phrase phrase = Phrase.builder()
                 .user(user)
                 .text("나의 첫 글귀")
+                .textDate(LocalDate.of(2021,07,16))
                 .build();
         phraseRepository.save(phrase);
 
@@ -67,6 +69,7 @@ class PhraseServiceImplTest {
 
         //then
         Assertions.assertThat(phrase.getText()).isEqualTo("글귀변경");
+        Assertions.assertThat(phrase.getTextDate()).isEqualTo(LocalDate.now());
     }
 
     @Test

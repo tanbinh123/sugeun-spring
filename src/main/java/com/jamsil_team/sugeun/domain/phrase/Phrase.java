@@ -38,12 +38,10 @@ public class Phrase extends BaseEntity {
     private Boolean bookmark = false;
 
     @CreatedDate
-    @Column(updatable = false)
     private LocalDate textDate;
 
     public void changeText(String text){
         this.text = text;
-        this.textDate = LocalDate.now();
     }
 
     public void registerBookmark(){
