@@ -146,9 +146,11 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+
     /**
      * 기본 비밀번호 검증
      */
+    /*
     @Override
     public Boolean verifyPassword(String userId, String password) {
 
@@ -158,6 +160,8 @@ public class UserServiceImpl implements UserService{
         return passwordEncoder.matches(password, user.getPassword());
 
     }
+    */
+
 
     /**
      * 비밀번호 변경

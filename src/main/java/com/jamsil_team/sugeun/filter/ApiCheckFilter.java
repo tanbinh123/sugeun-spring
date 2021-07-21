@@ -6,6 +6,7 @@ import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.UserDTO;
 import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
