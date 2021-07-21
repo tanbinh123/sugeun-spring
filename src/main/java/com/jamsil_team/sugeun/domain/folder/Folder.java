@@ -41,8 +41,7 @@ public class Folder {
     public void changeFolderName(String folderName){
         this.folderName = folderName;
     }
-
-
+    
     public FolderDTO toDTO(){
 
         FolderDTO folderDTO;
