@@ -25,6 +25,7 @@ public class TimeoutServiceImpl implements TimeoutService{
     /**
      * 타임아웃 생성
      */
+    @Transactional
     @Override
     public Timeout createTimeout(TimeoutDTO timeoutDTO) {
 
@@ -49,6 +50,7 @@ public class TimeoutServiceImpl implements TimeoutService{
     /**
      * 사용완료 기능
      */
+    @Transactional
     @Override
     public void finishUse(Long timeoutId) {
         Timeout timeout = timeoutRepository.findById(timeoutId).orElseThrow(() ->
@@ -62,6 +64,10 @@ public class TimeoutServiceImpl implements TimeoutService{
 
     }
 
+    /**
+     * 타임아웃 삭제
+     */
+    @Transactional
     @Override
     public void removeTimeout(Long timeoutId) {
 

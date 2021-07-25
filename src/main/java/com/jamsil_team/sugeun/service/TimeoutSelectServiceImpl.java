@@ -22,6 +22,7 @@ public class TimeoutSelectServiceImpl implements TimeoutSelectService{
     /**
      * 알람변경
      */
+    @Transactional
     @Override
     public void modifyAlarm(Long timeoutId, List<Integer> selected) {
 

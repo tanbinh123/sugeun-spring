@@ -50,7 +50,7 @@ public class FolderDTO {
                     .folderName(this.folderName)
                     .user(User.builder().userId(this.userId).build())
                     .type(this.type)
-                    .folder(Folder.builder().folderId(this.parentFolderId).build())
+                    .parentFolder(Folder.builder().folderId(this.parentFolderId).build())
                     .build();
         }
 

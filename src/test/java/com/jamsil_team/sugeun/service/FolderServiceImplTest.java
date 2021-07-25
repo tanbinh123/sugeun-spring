@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -183,6 +184,47 @@ class FolderServiceImplTest {
 
         Assertions.assertThat(e1.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e2.getMessage()).isEqualTo("No value present");
+    }
+
+    @Test
+    void 폴더_리스트() throws Exception{
+        //given
+        User user = createUser();
+        Folder folderA = Folder.builder()
+                .folderName("폴더A")
+                .user(user)
+                .type(FolderType.PHRASE)
+                .build();
+
+        folderRepository.save(folderA); //userId: 형우, type: Phrase, parentFolder: null
+
+        Folder folderB = Folder.builder()
+                .folderName("폴더B")
+                .user(user)
+                .type(FolderType.PHRASE)
+                .parentFolder(folderA)
+                .build();
+
+        folderRepository.save(folderB); //userId: 형우, type: Phrase, parentFolder: folderA
+
+        Folder folderC = Folder.builder()
+                .folderName("폴더C")
+                .user(user)
+                .type(FolderType.LINK)
+                .build();
+
+        folderRepository.save(folderC); //userId: 형우, type: Link, parentFolder: null
+
+        //when 폴더A 1개만 출력 기대
+        List<FolderDTO> result = folderService.getListOfFolder("형우", FolderType.PHRASE, null);
+
+        //then
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getFolderId()).isEqualTo(folderA.getFolderId());
+        Assertions.assertThat(result.get(0).getFolderName()).isEqualTo(folderA.getFolderName());
+        Assertions.assertThat(result.get(0).getUserId()).isEqualTo(folderA.getUser().getUserId());
+        Assertions.assertThat(result.get(0).getParentFolderId()).isNull();
+        Assertions.assertThat(result.get(0).getType()).isEqualTo(folderA.getType());
     }
 
     private User createUser() {

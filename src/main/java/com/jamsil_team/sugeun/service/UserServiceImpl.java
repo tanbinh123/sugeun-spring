@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 회원가입
      */
+    @Transactional
     @Override
     public User join(SignupDTO signUpDTO) {
 
@@ -132,6 +133,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 로그인 시 deviceToken 갱신
      */
+    @Transactional
     @Override
     public void UpdateDeviceToken(String userId, String deviceToken) {
 
@@ -166,6 +168,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 비밀번호 변경
      */
+    @Transactional
     @Override
     public void modifyPassword(String userId, String password) {
 

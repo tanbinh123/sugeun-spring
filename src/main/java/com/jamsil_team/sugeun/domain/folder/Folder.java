@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
-@ToString(exclude = {"user","folder"})
+@ToString(exclude = {"user", "folder"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,7 +36,7 @@ public class Folder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_folder_id")
-    private Folder folder;
+    private Folder parentFolder;
 
     public void changeFolderName(String folderName){
         this.folderName = folderName;
@@ -47,13 +47,13 @@ public class Folder {
 
         FolderDTO folderDTO;
 
-        if(this.folder != null){
+        if(this.parentFolder != null){
             folderDTO = FolderDTO.builder()
                     .folderId(this.folderId)
                     .folderName(this.folderName)
                     .userId(this.user.getUserId())
                     .type(this.type)
-                    .parentFolderId(this.folder.folderId)
+                    .parentFolderId(this.parentFolder.folderId)
                     .build();
         }else{
             folderDTO = FolderDTO.builder()

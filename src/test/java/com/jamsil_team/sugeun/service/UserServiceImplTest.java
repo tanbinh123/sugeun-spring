@@ -68,6 +68,7 @@ class UserServiceImplTest {
         Assertions.assertThat(e.getMessage()).isEqualTo("이미 등록된 ID 입니다.");
     }
 
+    /*
     @Test
     void 기존비밀번호_검증_성공() throws Exception{
         //given
@@ -86,7 +87,10 @@ class UserServiceImplTest {
         //then
         Assertions.assertThat(result).isTrue();
     }
+    */
 
+
+    /*
     @Test
     void 기존비밀번호_검증_실패() throws Exception{
         //given
@@ -106,6 +110,8 @@ class UserServiceImplTest {
         Assertions.assertThat(result).isFalse();
 
     }
+
+     */
 
     @Test
     void 비밀번호_변경() throws Exception{
