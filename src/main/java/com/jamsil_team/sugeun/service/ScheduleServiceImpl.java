@@ -23,6 +23,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     /**
      * 스케줄 생성
      */
+    @Transactional
     @Override
     public Schedule createSchedule(ScheduleDTO scheduleDTO) {
 
@@ -44,6 +45,11 @@ public class ScheduleServiceImpl implements ScheduleService{
         return schedule;
     }
 
+
+    /**
+     * 스케줄 변경
+     */
+    @Transactional
     @Override
     public void modifySchedule(ScheduleDTO scheduleDTO) {
 
@@ -72,6 +78,11 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     }
 
+
+    /**
+     * 스케줄 삭제
+     */
+    @Transactional
     @Override
     public void deleteSchedule(Long scheduleId) {
 

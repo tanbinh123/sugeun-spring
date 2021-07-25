@@ -27,6 +27,7 @@ public class FolderServiceImpl implements FolderService{
     /**
      * 폴더생성
      */
+    @Transactional
     @Override
     public Folder createFolder(FolderDTO folderDTO) {
 
@@ -46,6 +47,7 @@ public class FolderServiceImpl implements FolderService{
     /**
      * 폴더 이름변경
      */
+    @Transactional
     @Override
     public void ModifyFolderName(Long folderId, String folderName) {
 
@@ -59,6 +61,7 @@ public class FolderServiceImpl implements FolderService{
     /**
      * 폴더삭제
      */
+    @Transactional
     @Override
     public void removeFolder(Long folderId) {
 
@@ -81,10 +84,11 @@ public class FolderServiceImpl implements FolderService{
     /**
      * 폴더 DTO list
      */
+    @Transactional(readOnly = true)
     @Override
-    public List<FolderDTO> getListOfFolder(String userId) {
+    public List<FolderDTO> getListOfFolder(String userId, FolderType type, Long parentFolderId) {
 
-        List<Folder> result = folderRepository.getListFolder(userId);
+        List<Folder> result = folderRepository.getListFolder(userId, type, parentFolderId);
 
         List<FolderDTO> folderDTOList = result.stream().map(folder -> {
             FolderDTO folderDTO = folder.toDTO();
@@ -94,6 +98,8 @@ public class FolderServiceImpl implements FolderService{
 
         return folderDTOList;
     }
+
+
 
 
 }

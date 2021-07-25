@@ -9,7 +9,6 @@ import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -101,7 +100,7 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setCharacterEncoding("utf-8");
 
 
-        List<FolderDTO> folderDTOList = folderService.getListOfFolder(userId);
+        List<FolderDTO> folderDTOList = folderService.getListOfFolder(userId, null, null);
 
         String result = objectMapper.writeValueAsString(folderDTOList);
         response.getWriter().write(result);

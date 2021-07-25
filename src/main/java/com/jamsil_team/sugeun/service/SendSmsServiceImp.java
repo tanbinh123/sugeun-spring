@@ -5,6 +5,7 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 
 @Service
@@ -14,6 +15,10 @@ public class SendSmsServiceImp implements SendSmsService {
     private String apiSecret = "AHODJBSNE04IT3VZW1KAZN4F8QGTH5ID";
     private String fromNumber ="01047027253";
 
+    /**
+     * SMS 보내기
+     */
+    @Transactional
     @Override
     public void sendSms(String toNumber, String certifyNum)  {
 
