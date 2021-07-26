@@ -1,6 +1,7 @@
 package com.jamsil_team.sugeun.domain.schedule;
 
 import com.jamsil_team.sugeun.domain.user.User;
+import com.jamsil_team.sugeun.dto.ScheduleDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -35,5 +36,17 @@ public class Schedule {
 
     public void changeScheduleDate(LocalDateTime scheduleDate){
         this.scheduleDate = scheduleDate;
+    }
+
+    public ScheduleDTO toDTO(){
+
+        ScheduleDTO scheduleDTO = ScheduleDTO.builder()
+                .scheduleId(this.scheduleId)
+                .userId(this.user.getUserId())
+                .title(this.title)
+                .scheduleDate(this.scheduleDate)
+                .build();
+
+        return scheduleDTO;
     }
 }

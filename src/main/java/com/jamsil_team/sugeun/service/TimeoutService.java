@@ -15,5 +15,7 @@ public interface TimeoutService {
 
     void removeTimeout(Long timeoutId);
 
+    List<TimeoutDTO> getListOfTimeout(String userId);
+
 
 }

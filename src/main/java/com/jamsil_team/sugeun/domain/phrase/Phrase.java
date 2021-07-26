@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
+@ToString(exclude = {"user","folder"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

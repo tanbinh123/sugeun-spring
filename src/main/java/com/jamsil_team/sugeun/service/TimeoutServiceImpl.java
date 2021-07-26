@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Transactional
@@ -92,10 +93,8 @@ public class TimeoutServiceImpl implements TimeoutService{
             timeoutSelectList.forEach(scheduleSelect ->
                     timeoutSelectRepository.save(scheduleSelect));
         }
-
-
-
     }
+
 
     /**
      * 타임아웃 삭제
@@ -106,6 +105,31 @@ public class TimeoutServiceImpl implements TimeoutService{
         //알람 삭제 -> 타임아웃 삭제
         timeoutSelectRepository.deleteByTimoutId(timeoutId);
         timeoutRepository.deleteById(timeoutId);
+    }
+
+
+    /**
+     * 타임아웃 DTO 리스트
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<TimeoutDTO> getListOfTimeout(String userId) {
+
+        List<Timeout> timeoutList = timeoutRepository.getTimeoutList(userId);
+
+        List<TimeoutDTO> timeoutDTOList = timeoutList.stream().map(timeout -> {
+
+            //타임아웃 select 리스트
+            List<Integer> selected = timeoutSelectRepository.selectedByTimeoutId(timeout.getTimeoutId());
+
+            TimeoutDTO timeoutDTO = timeout.toDTO();
+
+            timeoutDTO.setSelected(selected);
+
+            return timeoutDTO;
+        }).collect(Collectors.toList());
+
+        return timeoutDTOList;
     }
 
 

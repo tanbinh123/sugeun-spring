@@ -9,7 +9,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
-@ToString
+@ToString(exclude = {"user","folder"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

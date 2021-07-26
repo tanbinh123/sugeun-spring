@@ -1,6 +1,7 @@
 package com.jamsil_team.sugeun.domain.timeout;
 
 import com.jamsil_team.sugeun.domain.user.User;
+import com.jamsil_team.sugeun.dto.TimeoutDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,6 +31,7 @@ public class Timeout {
     private LocalDateTime deadline;
 
     @Builder.Default
+    @Column(nullable = false)
     private Boolean isValid = true;
 
     private String filePath;
@@ -49,5 +51,23 @@ public class Timeout {
     public void changeDeadline(LocalDateTime deadline){
         this.deadline = deadline;
     }
+
+    public TimeoutDTO toDTO(){
+
+        TimeoutDTO timeoutDTO = TimeoutDTO.builder()
+                .timeoutId(this.timeoutId)
+                .userId(this.user.getUserId())
+                .title(this.title)
+                .deadline(this.deadline)
+                .isValid(this.isValid)
+                .filePath(this.filePath)
+                .fileName(this.fileName)
+                .uuid(this.uuid)
+                .build();
+
+        return timeoutDTO;
+    }
+
+
 
 }

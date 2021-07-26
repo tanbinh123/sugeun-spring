@@ -17,6 +17,7 @@ public class LinkServiceImpl implements LinkService{
     /**
      * 링크생성
      */
+    @Transactional
     @Override
     public Link createLink(LinkDTO linkDTO) {
 
@@ -30,6 +31,7 @@ public class LinkServiceImpl implements LinkService{
     /**
      * 링크 북마크 기능
      */
+    @Transactional
     @Override
     public void modifyBookmark(Long linkId) {
 
@@ -47,6 +49,7 @@ public class LinkServiceImpl implements LinkService{
     /**
      * 링크삭제
      */
+    @Transactional
     @Override
     public void removeLink(Long linkId) {
 

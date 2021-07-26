@@ -12,6 +12,9 @@ public interface ScheduleSelectRepository extends JpaRepository<ScheduleSelect, 
     @Query("delete from ScheduleSelect ss where ss.schedule.scheduleId = :scheduleId")
     void deleteByScheduleId(Long scheduleId);
 
+    @Query("select ss.selected from ScheduleSelect ss where ss.schedule.scheduleId = :scheduleId")
+    List<Integer> selectedByScheduleId(Long scheduleId);
+
 
     //테스트코드에 사용
     @Query("select ss from ScheduleSelect ss " +

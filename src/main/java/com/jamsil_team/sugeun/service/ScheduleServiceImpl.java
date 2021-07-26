@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Transactional
 @RequiredArgsConstructor
@@ -74,8 +75,6 @@ public class ScheduleServiceImpl implements ScheduleService{
             scheduleSelectList.forEach(scheduleSelect ->
                     scheduleSelectRepository.save(scheduleSelect));
         }
-
-
     }
 
     /**
@@ -90,4 +89,25 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
 
+    /**
+     * 스케줄 DTO 리스트
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<ScheduleDTO> getListOfSchedule(String userId) {
+
+        List<Schedule> scheduleList = scheduleRepository.getScheduleList(userId);
+
+        List<ScheduleDTO> scheduleDTOList = scheduleList.stream().map(schedule -> {
+
+            List<Integer> selected = scheduleSelectRepository.selectedByScheduleId(schedule.getScheduleId());
+
+            ScheduleDTO scheduleDTO = schedule.toDTO();
+            scheduleDTO.setSelected(selected);
+
+            return scheduleDTO;
+        }).collect(Collectors.toList());
+
+        return scheduleDTOList;
+    }
 }

@@ -17,6 +17,7 @@ public class PhraseServiceImpl implements PhraseService{
     /**
      * 글귀생성
      */
+    @Transactional
     @Override
     public Phrase createPhrase(PhraseDTO phraseDTO) {
 
@@ -30,6 +31,7 @@ public class PhraseServiceImpl implements PhraseService{
     /**
      * 글귀 text 변경
      */
+    @Transactional
     @Override
     public void ModifyPhraseText(Long phraseId, String text) {
 
@@ -43,6 +45,7 @@ public class PhraseServiceImpl implements PhraseService{
     /**
      * 글귀 북마크 기능
      */
+    @Transactional
     @Override
     public void ModifyBookmark(Long phraseId) {
 
@@ -60,6 +63,7 @@ public class PhraseServiceImpl implements PhraseService{
     /**
      * 글귀삭제
      */
+    @Transactional
     @Override
     public void removePhrase(Long phraseId) {
 

@@ -13,6 +13,9 @@ public interface TimeoutSelectRepository extends JpaRepository<TimeoutSelect, Lo
     @Query("delete from TimeoutSelect ts where ts.timeout.timeoutId = :timeoutId")
     void deleteByTimoutId(Long timeoutId);
 
+    @Query("select ts.selected from TimeoutSelect ts where ts.timeout.timeoutId = :timeoutId")
+    List<Integer> selectedByTimeoutId(Long timeoutId);
+
     //테스트코드 사용
     @Query("select ts from TimeoutSelect ts " +
             "left join Timeout t on t.timeoutId = ts.timeout.timeoutId " +

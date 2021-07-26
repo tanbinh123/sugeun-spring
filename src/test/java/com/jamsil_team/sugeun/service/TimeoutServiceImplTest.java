@@ -244,6 +244,77 @@ class TimeoutServiceImplTest {
                 () -> (timeoutRepository.findById(timeout.getTimeoutId())).get());
     }
 
+    @Test
+    void 타임아웃_리스트() throws Exception{
+        //given
+        User user = createUser();
+
+        Timeout timeoutA = Timeout.builder()
+                .title("나")
+                .user(user)
+                .deadline(LocalDateTime.of(2021, 8, 01, 23, 59))
+                .isValid(true)
+                .build();
+
+        timeoutRepository.save(timeoutA);
+
+        Timeout timeoutB = Timeout.builder()
+                .title("가")
+                .user(user)
+                .deadline(LocalDateTime.of(2021, 9, 01, 23, 59))
+                .isValid(false)
+                .build();
+
+        timeoutRepository.save(timeoutB);
+
+        Timeout timeoutC = Timeout.builder()
+                .title("다")
+                .user(user)
+                .deadline(LocalDateTime.of(2021, 10, 01, 23, 59))
+                .isValid(true)
+                .build();
+
+        timeoutRepository.save(timeoutC);
+
+        //timeoutC 의 1,3일전 알람 생성
+        //timeout 1,3일전 알람 생성
+        LocalDateTime before1 = timeoutC.getDeadline().minusDays(1).toLocalDate().atTime(12, 00);
+        LocalDateTime before3 = timeoutC.getDeadline().minusDays(3).toLocalDate().atTime(12, 00);
+
+        TimeoutSelect timeoutSelectA = TimeoutSelect.builder()
+                .timeout(timeoutC) //timeout
+                .alarmDateTime(before1) //1일전
+                .selected(1)
+                .build();
+
+        timeoutSelectRepository.save(timeoutSelectA);
+
+        TimeoutSelect timeoutSelectB = TimeoutSelect.builder()
+                .timeout(timeoutC) //timeout
+                .alarmDateTime(before3) //3일전
+                .selected(3)
+                .build();
+
+        timeoutSelectRepository.save(timeoutSelectB);
+
+        //when
+        List<TimeoutDTO> result = timeoutService.getListOfTimeout(user.getUserId());
+
+        //then
+        //timeoutBDTO(3번째) 가 제일 뒤 순서
+        Assertions.assertThat(result.get(2).getTimeoutId()).isEqualTo(timeoutB.getTimeoutId());
+        Assertions.assertThat(result.get(2).getIsValid()).isFalse();
+
+        //timeoutCDTO(2번째) 의 selected 검증 (List.of(1,3))
+        List<Integer> selected = timeoutSelectRepository.selectedByTimeoutId(timeoutC.getTimeoutId());
+        Assertions.assertThat(result.get(1).getSelected()).isEqualTo(selected);
+
+        //timeoutADTO(1번째) 의 selected 검증 (빈리스트)
+        Assertions.assertThat(result.get(0).getSelected()).isEmpty();
+
+
+    }
+
 
     private User createUser() {
 
