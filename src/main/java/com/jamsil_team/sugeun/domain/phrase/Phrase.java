@@ -3,6 +3,7 @@ package com.jamsil_team.sugeun.domain.phrase;
 import com.jamsil_team.sugeun.domain.BaseEntity;
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.user.User;
+import com.jamsil_team.sugeun.dto.PhraseDTO;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -26,7 +27,7 @@ public class Phrase extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "folder_id")
+    @JoinColumn(name = "folder_id", nullable = false)
     private Folder folder;
 
     @Builder.Default
@@ -38,6 +39,7 @@ public class Phrase extends BaseEntity {
     private Boolean bookmark = false;
 
     @CreatedDate
+    @Column(nullable = false)
     private LocalDate textDate;
 
     public void changeText(String text){
@@ -50,5 +52,19 @@ public class Phrase extends BaseEntity {
 
     public void cancelBookmark(){
         this.bookmark = false;
+    }
+
+
+    public PhraseDTO toDTO(){
+        PhraseDTO phraseDTO = PhraseDTO.builder()
+                .phraseId(this.phraseId)
+                .userId(this.user.getUserId())
+                .folderId(this.folder.getFolderId())
+                .text(this.text)
+                .bookmark(this.bookmark)
+                .textDate(this.textDate)
+                .build();
+
+        return phraseDTO;
     }
 }

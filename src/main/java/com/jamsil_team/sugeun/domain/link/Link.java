@@ -3,6 +3,7 @@ package com.jamsil_team.sugeun.domain.link;
 import com.jamsil_team.sugeun.domain.BaseEntity;
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.user.User;
+import com.jamsil_team.sugeun.dto.LinkDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,6 +41,20 @@ public class Link extends BaseEntity {
 
     public void cancelBookmark(){
         this.bookmark = false;
+    }
+
+    public LinkDTO toDTO(){
+
+        LinkDTO linkDTO = LinkDTO.builder()
+                .linkId(this.linkId)
+                .userId(this.user.getUserId())
+                .folderId(this.folder.getFolderId())
+                .link(this.link)
+                .bookmark(this.bookmark)
+                .build();
+
+        return linkDTO;
+
     }
 
 }

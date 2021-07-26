@@ -9,7 +9,10 @@ import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
+import com.jamsil_team.sugeun.dto.DetailFolderDTO;
 import com.jamsil_team.sugeun.dto.FolderDTO;
+import com.jamsil_team.sugeun.dto.LinkDTO;
+import com.jamsil_team.sugeun.dto.PhraseDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,6 +228,97 @@ class FolderServiceImplTest {
         Assertions.assertThat(result.get(0).getUserId()).isEqualTo(folderA.getUser().getUserId());
         Assertions.assertThat(result.get(0).getParentFolderId()).isNull();
         Assertions.assertThat(result.get(0).getType()).isEqualTo(folderA.getType());
+    }
+
+    @Test
+    void 글귀폴더_상세조회() throws Exception{
+        //given
+        User user = createUser();
+
+        Folder folderA = Folder.builder()
+                .folderName("폴더A")
+                .user(user)
+                .type(FolderType.PHRASE)
+                .build();
+
+        folderRepository.save(folderA); //userId: 형우, type: Phrase, parentFolder: null
+
+        //폴더A 안에 글귀 2, 폴더 1 추가
+        Phrase phraseA = Phrase.builder()
+                .user(user)
+                .folder(folderA)
+                .text("폴더 상세조회 테스트 하기")
+                .build();
+
+        phraseRepository.save(phraseA); //userId: 형우,folder: folderA
+
+        Phrase phraseB = Phrase.builder()
+                .user(user)
+                .folder(folderA)
+                .text("폴더 상세조회 테스트 하기")
+                .build();
+
+        phraseRepository.save(phraseB); //userId: 형우,folder: folderA
+
+        Folder folderB = Folder.builder()
+                .folderName("폴더B")
+                .user(user)
+                .parentFolder(folderA)
+                .type(FolderType.PHRASE)
+                .build();
+
+        folderRepository.save(folderB); //userId: 형우, type: Phrase, parentFolder: folderA
+
+        //when
+        //폴더 A 조회
+        DetailFolderDTO detailFolderDTO =
+                folderService.getFolder(user.getUserId(), folderA.getFolderId());
+
+        //then
+        List<PhraseDTO> phraseDTOList = detailFolderDTO.getPhraseDTOList();
+        List<FolderDTO> folderDTOList = detailFolderDTO.getFolderDTOList();
+        //글귀 2, 폴더 1
+        Assertions.assertThat(phraseDTOList.size()).isEqualTo(2);
+        Assertions.assertThat(folderDTOList.size()).isEqualTo(1);
+
+    }
+
+    @Test
+    void 링크폴더_상세조회() throws Exception{
+        //given
+        User user = createUser();
+
+        Folder folderA = Folder.builder()
+                .folderName("폴더A")
+                .user(user)
+                .type(FolderType.LINK)
+                .build();
+
+        folderRepository.save(folderA); //userId: 형우, type: link, parentFolder: null
+
+        //폴더A 안에 글귀x, 폴더 1만 추가
+
+        Folder folderB = Folder.builder()
+                .folderName("폴더B")
+                .user(user)
+                .parentFolder(folderA)
+                .type(FolderType.LINK)
+                .build();
+
+        folderRepository.save(folderB); //userId: 형우, type: link, parentFolder: folderA
+
+        //when
+        //폴더 A 조회
+        DetailFolderDTO detailFolderDTO =
+                folderService.getFolder(user.getUserId(), folderA.getFolderId());
+        
+        //then
+        List<LinkDTO> linkDTOList = detailFolderDTO.getLinkDTOList();
+        List<FolderDTO> folderDTOList = detailFolderDTO.getFolderDTOList();
+        //링크 0, 폴더 1
+        Assertions.assertThat(linkDTOList.size()).isEqualTo(0);
+        Assertions.assertThat(folderDTOList.size()).isEqualTo(1);
+
     }
 
     private User createUser() {
