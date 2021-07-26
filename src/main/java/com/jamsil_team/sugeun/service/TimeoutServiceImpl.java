@@ -1,5 +1,6 @@
 package com.jamsil_team.sugeun.service;
 
+import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelect;
 import com.jamsil_team.sugeun.domain.timeout.Timeout;
 import com.jamsil_team.sugeun.domain.timeout.TimeoutRepository;
 import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelect;
@@ -65,12 +66,46 @@ public class TimeoutServiceImpl implements TimeoutService{
     }
 
     /**
+     * 타임아웃 수정
+     */
+    @Transactional
+    @Override
+    public void modifyTimeout(TimeoutDTO timeoutDTO) {
+
+        Timeout timeout = timeoutRepository.findById(timeoutDTO.getTimeoutId()).orElseThrow(() ->
+                new IllegalStateException("존재하지 않은 타임아웃입니다."));
+
+        //제목, 유효기간 수정
+        timeout.changeTitle(timeoutDTO.getTitle());
+        timeout.changeDeadline(timeoutDTO.getDeadline());
+
+        //알람 수정
+        //기존 해당 알람 모두 삭제
+        timeoutSelectRepository.deleteByTimoutId(timeout.getTimeoutId());
+
+        List<Integer> selected = timeoutDTO.getSelected();
+
+        List<TimeoutSelect> timeoutSelectList = timeoutDTO.getTimeoutSelectEntities(selected, timeout);
+
+        //스케줄 알람 유무 확인
+        if(timeoutSelectList != null && timeoutSelectList.size() > 0){
+            timeoutSelectList.forEach(scheduleSelect ->
+                    timeoutSelectRepository.save(scheduleSelect));
+        }
+
+
+
+    }
+
+    /**
      * 타임아웃 삭제
      */
     @Transactional
     @Override
     public void removeTimeout(Long timeoutId) {
-
+        //알람 삭제 -> 타임아웃 삭제
+        timeoutSelectRepository.deleteByTimoutId(timeoutId);
+        timeoutRepository.deleteById(timeoutId);
     }
 
 

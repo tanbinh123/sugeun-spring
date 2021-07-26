@@ -11,9 +11,9 @@ public interface TimeoutService {
 
     void finishUse(Long timeoutId);
 
-    //TODO 2021.07.18 - 수정정
+    void modifyTimeout(TimeoutDTO timeoutDTO);
 
-   void removeTimeout(Long timeoutId);
+    void removeTimeout(Long timeoutId);
 
 
 }

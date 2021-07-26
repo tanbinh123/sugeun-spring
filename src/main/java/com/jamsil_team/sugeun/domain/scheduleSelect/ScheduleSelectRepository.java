@@ -19,5 +19,9 @@ public interface ScheduleSelectRepository extends JpaRepository<ScheduleSelect, 
             "where s.user.userId = :userId")
     List<ScheduleSelect> findByUserId(String userId);
 
+    //테스트코드에 사용
+    @Query("select ss from ScheduleSelect ss where ss.schedule.scheduleId = :scheduleId")
+    List<ScheduleSelect> findByScheduleId(Long scheduleId);
+
 
 }

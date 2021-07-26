@@ -9,6 +9,6 @@ public interface ScheduleService {
 
     void modifySchedule(ScheduleDTO scheduleDTO);
 
-    void deleteSchedule(Long scheduleId);
+    void removeSchedule(Long scheduleId);
 
 }

@@ -56,36 +56,37 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = scheduleRepository.findById(scheduleDTO.getScheduleId()).orElseThrow(() ->
                 new IllegalStateException("존재하는 않는 스케줄 입니다."));
 
-        if(scheduleDTO.getTitle() != null){
-            schedule.changeTitle(scheduleDTO.getTitle());
-        }
+        //제목, 스케줄 날짜 수정
+        schedule.changeTitle(scheduleDTO.getTitle());
+        schedule.changeScheduleDate(scheduleDTO.getScheduleDate());
 
-        if(scheduleDTO.getScheduleDate() != null){
-            schedule.changeScheduleDate(scheduleDTO.getScheduleDate());
-        }
-
-        if(scheduleDTO.getSelected() != null){
-
-            //기존 해당 알람 모두 삭제
-            scheduleSelectRepository.deleteByScheduleId(scheduleDTO.getScheduleId());
+        //알람 수정
+        //기존 해당 알람 모두 삭제
+        scheduleSelectRepository.deleteByScheduleId(scheduleDTO.getScheduleId());
 
 
-            //TODO 2021.07.18 - 수정 데이터 의논
+        List<Integer> selected = scheduleDTO.getSelected();
 
+        List<ScheduleSelect> scheduleSelectList = scheduleDTO.getScheduleSelectEntities(selected, schedule);
 
+        //스케줄 알람 유무 확인
+        if(scheduleSelectList != null && scheduleSelectList.size() > 0){
+            scheduleSelectList.forEach(scheduleSelect ->
+                    scheduleSelectRepository.save(scheduleSelect));
         }
 
 
     }
-
 
     /**
      * 스케줄 삭제
      */
     @Transactional
     @Override
-    public void deleteSchedule(Long scheduleId) {
-
+    public void removeSchedule(Long scheduleId) {
+        //알람 삭제 -> 스케줄 삭제
+        scheduleSelectRepository.deleteByScheduleId(scheduleId);
+        scheduleRepository.deleteById(scheduleId);
     }
 
 

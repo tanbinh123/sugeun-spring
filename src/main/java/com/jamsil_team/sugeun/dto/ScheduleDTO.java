@@ -56,7 +56,7 @@ public class ScheduleDTO {
 
     }
 
-    private List<ScheduleSelect> getScheduleSelectEntities(List<Integer> selected, Schedule schedule) {
+    public List<ScheduleSelect> getScheduleSelectEntities(List<Integer> selected, Schedule schedule) {
 
         if(selected != null && selected.size() > 0){
 

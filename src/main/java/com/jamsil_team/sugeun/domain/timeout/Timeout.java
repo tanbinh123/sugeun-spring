@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
+@ToString(exclude = {"user"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,4 +41,13 @@ public class Timeout {
     public void isValidFalse(){
         this.isValid = false;
     }
+
+    public void changeTitle(String title){
+        this.title = title;
+    }
+
+    public void changeDeadline(LocalDateTime deadline){
+        this.deadline = deadline;
+    }
+
 }

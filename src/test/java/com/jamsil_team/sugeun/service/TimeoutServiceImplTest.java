@@ -1,5 +1,6 @@
 package com.jamsil_team.sugeun.service;
 
+import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelect;
 import com.jamsil_team.sugeun.domain.timeout.Timeout;
 import com.jamsil_team.sugeun.domain.timeout.TimeoutRepository;
 import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelect;
@@ -139,6 +140,108 @@ class TimeoutServiceImplTest {
         Assertions.assertThat(timeoutSelectRepository.findByTimeoutId(timeout.getTimeoutId()).size()).isEqualTo(0);
         Assertions.assertThat(timeoutSelectRepository.findByTimeoutId(timeout.getTimeoutId())).isEmpty();
 
+    }
+
+    @Test
+    void 타임아웃_수정() throws Exception{
+        //given
+        User user = createUser();
+
+        //타임아웃 생성
+        Timeout timeout = Timeout.builder()
+                .user(user)
+                .title("스타벅스 아메리카노")
+                .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
+                .fileName("timeoutImg")
+                .filePath("/hyeongwoo")
+                .uuid(UUID.randomUUID().toString())
+                .build();
+
+        timeoutRepository.save(timeout);
+
+        //timeout 1,3일전 알람 생성
+        LocalDateTime before1 = timeout.getDeadline().minusDays(1).toLocalDate().atTime(12, 00);
+        LocalDateTime before3 = timeout.getDeadline().minusDays(3).toLocalDate().atTime(12, 00);
+
+        TimeoutSelect timeoutSelectA = TimeoutSelect.builder()
+                .timeout(timeout) //timeout
+                .alarmDateTime(before1) //1일전
+                .selected(1)
+                .build();
+
+        timeoutSelectRepository.save(timeoutSelectA);
+
+        TimeoutSelect timeoutSelectB = TimeoutSelect.builder()
+                .timeout(timeout) //timeout
+                .alarmDateTime(before3) //3일전
+                .selected(3)
+                .build();
+
+        timeoutSelectRepository.save(timeoutSelectB);
+
+        TimeoutDTO timeoutDTO = TimeoutDTO.builder()
+                .timeoutId(timeout.getTimeoutId())
+                .userId(user.getUserId())
+                .title("스타벅스 아메리카노")
+                .deadline(LocalDateTime.of(2021, 8, 10, 23, 59))//11일 -> 10일
+                .build();//알람 선택 x
+
+        //제목 "스타벅스 아메리카노", 스케줄 날짜 "2021/08/10 23:59", 알람일 x
+        //when
+        timeoutService.modifyTimeout(timeoutDTO);
+
+        //then
+        //timeout 변경 검증
+        Assertions.assertThat(timeout.getUser()).isEqualTo(user);
+        Assertions.assertThat(timeout.getTitle()).isEqualTo(timeoutDTO.getTitle());
+        Assertions.assertThat(timeout.getDeadline()).isEqualTo(timeoutDTO.getDeadline());
+        Assertions.assertThat(timeout.getIsValid()).isTrue();
+
+        //timeoutSelect 변경 검증
+        Long alarm = timeoutSelectRepository.alarmCountByTimeoutId(timeout.getTimeoutId());
+
+        Assertions.assertThat(alarm).isEqualTo(0);
+    }
+
+    @Test
+    void 타임아웃_삭제() throws Exception{
+        //given
+        User user = createUser();
+
+        //타임아웃 생성
+        Timeout timeout = Timeout.builder()
+                .user(user)
+                .title("스타벅스 아메리카노")
+                .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
+                .fileName("timeoutImg")
+                .filePath("/hyeongwoo")
+                .uuid(UUID.randomUUID().toString())
+                .build();
+
+        timeoutRepository.save(timeout);
+
+        //timeout 1일전 알람 생성
+        LocalDateTime before1 = timeout.getDeadline().minusDays(1).toLocalDate().atTime(12, 00);
+
+        TimeoutSelect timeoutSelect = TimeoutSelect.builder()
+                .timeout(timeout) //timeout
+                .alarmDateTime(before1) //1일전
+                .selected(1)
+                .build();
+
+        timeoutSelectRepository.save(timeoutSelect);
+
+        //when
+        timeoutService.removeTimeout(timeout.getTimeoutId());
+
+        //then
+        //삭제된 타임아웃의 알람 검색
+        NoSuchElementException e1 = assertThrows(NoSuchElementException.class,
+                () -> (timeoutSelectRepository.findById(timeoutSelect.getTimeoutSelectId())).get());
+
+        //삭제된 스케줄 검색
+        NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
+                () -> (timeoutRepository.findById(timeout.getTimeoutId())).get());
     }
 
 

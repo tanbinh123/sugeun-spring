@@ -63,7 +63,7 @@ public class TimeoutDTO {
         return entityMap;
     }
 
-    private List<TimeoutSelect> getTimeoutSelectEntities(List<Integer> selected, Timeout timeout) {
+    public List<TimeoutSelect> getTimeoutSelectEntities(List<Integer> selected, Timeout timeout) {
 
         //알람선택 유무 확인
         if( this.selected != null && this.selected.size() > 0){
