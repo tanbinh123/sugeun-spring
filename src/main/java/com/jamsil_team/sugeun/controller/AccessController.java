@@ -1,5 +1,6 @@
 package com.jamsil_team.sugeun.controller;
 
+import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.FolderDTO;
 import com.jamsil_team.sugeun.dto.SignupDTO;
 import com.jamsil_team.sugeun.dto.UserDTO;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 
@@ -26,7 +28,7 @@ public class AccessController {
 
 
 
-    @PostMapping("/send-sms")
+    @GetMapping("/send-sms")
     public ResponseEntity<String> sendSms(@RequestBody String toNumber){
 
 
@@ -40,6 +42,8 @@ public class AccessController {
             String ran = Integer.toString(rand.nextInt(10));
             certifyNumber+=ran;
         }
+
+
         System.out.println(certifyNumber);
 
         sendSmsService.sendSms(toNumber, certifyNumber);
@@ -52,7 +56,9 @@ public class AccessController {
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupDTO signUpDTO){
 
-        userService.join(signUpDTO);
+        User join = userService.join(signUpDTO);
+
+        System.out.println(join);
 
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }

@@ -22,11 +22,12 @@ public class UserDTO {
 
     private String deviceToken;
 
-    private String filePath;
+    @Builder.Default
+    private String filePath = "";
 
+    @Builder.Default
     private String fileName;
 
-    private String uuid;
 
     public User toEntity() {
         User user = User.builder()

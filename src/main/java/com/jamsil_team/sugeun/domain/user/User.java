@@ -30,11 +30,9 @@ public class User {
 
     private String deviceToken;
 
-    private String filePath;
+    private String folderPath;
 
-    private String fileName;
-
-    private String uuid;
+    private String storeFilename;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
