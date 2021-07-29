@@ -2,6 +2,10 @@ package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.SignupDTO;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 public interface UserService {
 
@@ -11,7 +15,9 @@ public interface UserService {
 
     void UpdateDeviceToken(String userId, String deviceToken);
 
-    //Boolean verifyPassword(String userId, String password);
+    void modifyUserImg(String userId, MultipartFile multipartFile) throws IOException;
+
+    void modifyUserId(String userId, String updateUserId);
 
     void modifyPassword(String userId, String password);
 }

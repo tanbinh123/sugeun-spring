@@ -2,6 +2,7 @@ package com.jamsil_team.sugeun.domain.user;
 
 import com.jamsil_team.sugeun.domain.userRole.UserRole;
 import com.jamsil_team.sugeun.dto.UserDTO;
+import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -46,12 +47,17 @@ public class User {
         this.password = password;
     }
 
-    public void saveUserImg(String filePath, String uuid, String fileName){
-        this.filePath = filePath;
-        this.uuid = uuid;
-        this.fileName = fileName;
-    }
+    public void changeUserImg(ResultFileStore resultFileStore){
 
+        if(resultFileStore == null){
+            this.folderPath = "";
+            this.storeFilename = "";
+        }
+        else{
+            this.folderPath = resultFileStore.getFolderPath();
+            this.storeFilename = resultFileStore.getStoreFilename();
+        }
+    }
 
     public UserDTO toDTO(){
         UserDTO userDTO = UserDTO.builder()
@@ -60,9 +66,6 @@ public class User {
                 .phone(phone)
                 .alarm(alarm)
                 .deviceToken(deviceToken)
-                .filePath(filePath)
-                .fileName(fileName)
-                .uuid(uuid)
                 .build();
 
         return userDTO;

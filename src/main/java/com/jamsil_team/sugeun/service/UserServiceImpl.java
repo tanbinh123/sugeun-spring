@@ -4,6 +4,8 @@ import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.SignupDTO;
 
+import com.jamsil_team.sugeun.file.FileStore;
+import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +34,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileStore fileStore;
 
     @Value("${com.jamsil_team.upload.path")
     private String uploadPath;
@@ -70,65 +75,12 @@ public class UserServiceImpl implements UserService{
 
         User user = signUpDTO.toEntity();
 
-        //회원 프로필 사진 저장
-        if(signUpDTO.getFile() != null){
-
-            String originalName = signUpDTO.getFile().getOriginalFilename();
-
-            String fileName = originalName.substring(originalName.lastIndexOf("//") + 1);
-            log.info("fileName: " + fileName);
-
-            String folderPath = makeFolder();
-
-            String uuid = UUID.randomUUID().toString(); //이미지 네임 고유성 보장
-
-            String saveName = uploadPath + File.separator + folderPath + File.separator +
-                    uuid + "_" + fileName;
-
-
-            Path savePath = Paths.get(saveName);
-
-            try{
-                signUpDTO.getFile().transferTo(savePath);
-
-                //섬네일
-                String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator +
-                        "s_" + uuid + "_" + fileName;
-
-                File thumbnailFile = new File(thumbnailSaveName);
-
-                Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
-
-                user.saveUserImg(folderPath, uuid, fileName);
-
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-
         userRepository.save(user);
 
         return user;
 
     }
 
-    //폴더 생성
-    private String makeFolder() {
-
-        String str = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-
-        log.info("str: " + str);
-
-        String folderPath = str.replace("//", File.separator);
-
-        File uploadPathFolder = new File(uploadPath, folderPath);
-
-        if(uploadPathFolder.exists() == false){
-            uploadPathFolder.mkdirs();
-        }
-
-        return folderPath;
-    }
 
     /**
      * 로그인 시 deviceToken 갱신
@@ -148,21 +100,52 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-
     /**
-     * 기본 비밀번호 검증
+     * 프로필사진 업데이트
      */
-    /*
+    @Transactional
     @Override
-    public Boolean verifyPassword(String userId, String password) {
+    public void modifyUserImg(String userId, MultipartFile multipartFile) throws IOException {
 
         User user = userRepository.findByUserId(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 회원입니다."));
+                new IllegalStateException("존재하는 않은 회원입니다."));
 
-        return passwordEncoder.matches(password, user.getPassword());
+
+
+        //서버 컴퓨터에 저장된 기존 프로필 사진 삭제
+        removeImageFile(user);
+
+        ResultFileStore resultFileStore = fileStore.storeFile(multipartFile);
+
+        //사진 저장
+        user.changeUserImg(resultFileStore);
+    }
+
+    private void removeImageFile(User user) {
+
+        //기존 프로필 이미지가 있을 경우
+        if(user.getStoreFilename() != null && !(user.getStoreFilename().equals(""))){
+            String folderPath = user.getFolderPath();
+            String storeFilename = user.getStoreFilename();
+
+            //원본 이미지 삭제
+            File file = new File(fileStore.getFullPath(folderPath, storeFilename));
+            file.delete();
+
+            //썸네일 이미지 삭제
+            File thumbnail = new File(fileStore.getThumbnailFullPath(folderPath, storeFilename));
+            thumbnail.delete();
+        }
+    }
+
+    /**
+     *  아이디 변경
+     */
+    @Transactional
+    @Override
+    public void modifyUserId(String userId, String updateUserId) {
 
     }
-    */
 
 
     /**

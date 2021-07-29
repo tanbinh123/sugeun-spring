@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -20,13 +22,14 @@ public class UserDTO {
 
     private Boolean alarm;
 
-    private String deviceToken;
+    @Builder.Default
+    private String deviceToken = "";
 
     @Builder.Default
-    private String filePath = "";
+    private String folderPath = "";
 
     @Builder.Default
-    private String fileName;
+    private String storeFilename = "";
 
 
     public User toEntity() {
@@ -36,9 +39,8 @@ public class UserDTO {
                 .phone(phone)
                 .alarm(alarm)
                 .deviceToken(deviceToken)
-                .filePath(filePath)
-                .fileName(fileName)
-                .uuid(uuid)
+                .folderPath(folderPath)
+                .storeFilename(storeFilename)
                 .build();
 
         return user;
