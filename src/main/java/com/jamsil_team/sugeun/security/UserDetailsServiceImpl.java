@@ -43,9 +43,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         authUserDTO.setPhone(user.getPhone());
         authUserDTO.setAlarm(user.getAlarm());
         authUserDTO.setPassword(user.getPassword());
-        authUserDTO.setFileName(user.getFileName());
-        authUserDTO.setFilePath(user.getFilePath());
-        authUserDTO.setUuid(user.getUuid());
+        authUserDTO.setFileName(user.getFolderPath());
+        authUserDTO.setFilePath(user.getStoreFilename());
 
         System.out.println("authUserDTO = " + authUserDTO.getPassword()); //password 가 제대로 지정됐는지 확인
 

@@ -8,9 +8,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -113,6 +116,115 @@ class UserServiceImplTest {
     }
 
      */
+    @Test
+    @Commit
+    void 프로필사진_업데이트_기존x() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        MockMultipartFile file = new MockMultipartFile("file", "filename-1.jpeg", "image/jpeg", "some-image".getBytes());
+
+        //when
+        userService.modifyUserImg(user.getUserId(), file);
+
+        //then
+        User savedUser = userRepository.findByUserId(user.getUserId()).get();
+        String storeFilename = savedUser.getStoreFilename();
+
+        Assertions.assertThat(savedUser.getFolderPath()).isNotBlank();
+        Assertions.assertThat(storeFilename.substring(storeFilename.lastIndexOf("_")+1)).isEqualTo(file.getOriginalFilename());
+
+    }
+
+    @Test
+    void 프로필사진_업데이트_기존o() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        MockMultipartFile file1 = new MockMultipartFile("file", "filename-1.jpeg", "image/jpeg", "some-image".getBytes());
+        //savedUserB의 folderPath 와 비교
+        User savedUserA = userRepository.findByUserId(user.getUserId()).get();
+
+
+        //프로필 사진 저장
+        userService.modifyUserImg(user.getUserId(), file1);
+
+        MockMultipartFile file2 = new MockMultipartFile("file", "filename-2.jpeg", "image/jpeg", "some-image".getBytes());
+
+        //when
+        userService.modifyUserImg(user.getUserId(), file2);
+
+        //then
+        User savedUserB = userRepository.findByUserId(user.getUserId()).get();
+        String storeFilename = savedUserB.getStoreFilename();
+
+        Assertions.assertThat(savedUserB.getFolderPath()).isNotNull();
+        Assertions.assertThat(savedUserB.getFolderPath()).isNotBlank();
+        Assertions.assertThat(savedUserB.getFolderPath()).isEqualTo(savedUserA.getFolderPath());
+        Assertions.assertThat(storeFilename.substring(storeFilename.lastIndexOf("_")+1)).isEqualTo(file2.getOriginalFilename());
+    }
+
+    @Test
+    void 프로필사진_업데이트_기존o_변경값NULL() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        MockMultipartFile file = new MockMultipartFile("file", "filename-1.jpeg", "image/jpeg", "some-image".getBytes());
+
+        //when
+        userService.modifyUserImg(user.getUserId(), null);
+
+        //then
+        User savedUser = userRepository.findByUserId(user.getUserId()).get();
+
+        Assertions.assertThat(savedUser.getFolderPath()).isBlank();
+        Assertions.assertThat(savedUser.getStoreFilename()).isBlank();
+    }
+
+    @Test
+    void 프로필사진_업데이트_이미지파일x() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        MockMultipartFile file = new MockMultipartFile("file", "filename-1.jpeg", "json/jpeg", "some-image".getBytes());
+
+        //when
+        IllegalStateException e = assertThrows(IllegalStateException.class,
+                () -> userService.modifyUserImg(user.getUserId(), file));
+
+        //then
+        Assertions.assertThat(e.getMessage()).isEqualTo("이미지 파일이 아닙니다.");
+    }
+    
+    
 
     @Test
     void 비밀번호_변경() throws Exception{
