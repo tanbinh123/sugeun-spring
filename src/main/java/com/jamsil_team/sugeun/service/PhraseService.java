@@ -12,4 +12,6 @@ public interface PhraseService {
     void ModifyBookmark(Long phraseId);
 
     void removePhrase(Long phraseId);
+
+
 }

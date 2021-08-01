@@ -15,6 +15,12 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping
+    public ResponseEntity<String> getUserProfile(@PathVariable("user-id") Long userId){
+
+        return null;
+
+    }
 
 
 

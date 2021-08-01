@@ -45,6 +45,10 @@ dependencies {
 
 	//querydsl
 	implementation 'com.querydsl:querydsl-jpa'  //qdsl 추가 내용
+
+	//swagger 라이브러리
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.5.0'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
 }
 
 test {

@@ -1,7 +1,9 @@
 package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.user.User;
+import com.jamsil_team.sugeun.dto.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.SignupDTO;
+import com.jamsil_team.sugeun.dto.UserDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,4 +22,6 @@ public interface UserService {
     void modifyUserId(String userId, String updateUserId);
 
     void modifyPassword(String userId, String password);
+
+    BookmarkDTO getListOfBookmark(String userId);
 }

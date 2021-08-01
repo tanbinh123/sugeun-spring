@@ -1,7 +1,14 @@
 package com.jamsil_team.sugeun.service;
 
+import com.jamsil_team.sugeun.domain.link.Link;
+import com.jamsil_team.sugeun.domain.link.LinkRepository;
+import com.jamsil_team.sugeun.domain.phrase.Phrase;
+import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
+import com.jamsil_team.sugeun.dto.BookmarkDTO;
+import com.jamsil_team.sugeun.dto.LinkDTO;
+import com.jamsil_team.sugeun.dto.PhraseDTO;
 import com.jamsil_team.sugeun.dto.SignupDTO;
 
 import com.jamsil_team.sugeun.file.FileStore;
@@ -25,6 +32,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -35,6 +44,8 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FileStore fileStore;
+    private final PhraseRepository phraseRepository;
+    private final LinkRepository linkRepository;
 
     @Value("${com.jamsil_team.upload.path")
     private String uploadPath;
@@ -162,6 +173,37 @@ public class UserServiceImpl implements UserService{
         String encPassword = passwordEncoder.encode(password);
 
         user.changePassword(encPassword);
+    }
+
+    /**
+     * 북마크 DTO 리스트
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public BookmarkDTO getListOfBookmark(String userId) {
+
+        //bookmark = true 인 phrase, link 리스트
+        List<Phrase> phraseList = phraseRepository.getPhraseBookmarkList(userId);
+        List<Link> linkList = linkRepository.getLinkBookmarkList(userId);
+
+        //bookmark = true 인 phraseDTO 리스트
+        List<PhraseDTO> phraseDTOList = phraseList.stream().map(phrase -> {
+            PhraseDTO phraseDTO = phrase.toDTO();
+            return phraseDTO;
+        }).collect(Collectors.toList());
+
+
+        //bookmark = true 인 linkDTO 리스트
+        List<LinkDTO> linkDTOList = linkList.stream().map(link -> {
+            LinkDTO linkDTO = link.toDTO();
+            return linkDTO;
+        }).collect(Collectors.toList());
+
+
+        return BookmarkDTO.builder()
+                .phraseDTOList(phraseDTOList)
+                .linkDTOList(linkDTOList)
+                .build();
     }
 
 

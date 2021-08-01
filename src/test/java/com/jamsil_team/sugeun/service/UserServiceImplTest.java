@@ -1,7 +1,15 @@
 package com.jamsil_team.sugeun.service;
 
+import com.jamsil_team.sugeun.domain.folder.Folder;
+import com.jamsil_team.sugeun.domain.folder.FolderRepository;
+import com.jamsil_team.sugeun.domain.folder.FolderType;
+import com.jamsil_team.sugeun.domain.link.Link;
+import com.jamsil_team.sugeun.domain.link.LinkRepository;
+import com.jamsil_team.sugeun.domain.phrase.Phrase;
+import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
+import com.jamsil_team.sugeun.dto.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.SignupDTO;
 import org.assertj.core.api.Assertions;
 
@@ -25,6 +33,9 @@ class UserServiceImplTest {
     @Autowired UserService userService;
     @Autowired UserRepository userRepository;
     @Autowired PasswordEncoder passwordEncoder;
+    @Autowired FolderRepository folderRepository;
+    @Autowired PhraseRepository phraseRepository;
+    @Autowired LinkRepository linkRepository;
 
     @Test
     void 중복확인() throws Exception{
@@ -250,6 +261,69 @@ class UserServiceImplTest {
         Assertions.assertThat(matches).isTrue();
     }
 
+    @Test
+    void 북마크_리스트() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+        //폴더 생성
+        Folder folderA = createFolder(user, FolderType.PHRASE); //글귀 폴더
+        Folder folderB = createFolder(user, FolderType.LINK); //링크 폴더
+
+        //글귀 true : 1, false: 1 , 링크 true : 0, false : 1
+        Phrase phraseTrue = Phrase.builder()
+                .user(user)
+                .folder(folderA)
+                .text("북마크 테스트")
+                .bookmark(true) //true
+                .build();
+
+        phraseRepository.save(phraseTrue);
+
+        Phrase phraseFalse = Phrase.builder()
+                .user(user)
+                .folder(folderA)
+                .text("북마크 테스트")
+                .bookmark(false) //true
+                .build();
+
+        phraseRepository.save(phraseFalse);
+
+        Link linkFalse = Link.builder()
+                .user(user)
+                .folder(folderB)
+                .link("북마크 테스트")
+                .bookmark(false) //false
+                .build();
+
+        linkRepository.save(linkFalse);
+
+        //when
+        BookmarkDTO bookmarkDTO = userService.getListOfBookmark(user.getUserId());
+
+        //then phrase.bookmark = true 인 글귀 1개만 출력, link 빈 리스트 출력
+        Assertions.assertThat(bookmarkDTO.getPhraseDTOList().size()).isEqualTo(1);
+        Assertions.assertThat(bookmarkDTO.getPhraseDTOList().get(0).getBookmark()).isTrue();
+        Assertions.assertThat(bookmarkDTO.getLinkDTOList()).isEmpty();
+    }
+
+    private Folder createFolder(User user, FolderType type) {
+        Folder folder = Folder.builder()
+                .user(user)
+                .type(type)
+                .folderName("폴더")
+                .build();
+
+        folderRepository.save(folder);
+
+        return folder;
+    }
 
 
     private SignupDTO createSignUpDTO() {

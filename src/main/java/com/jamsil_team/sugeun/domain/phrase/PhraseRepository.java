@@ -20,5 +20,10 @@ public interface PhraseRepository extends JpaRepository<Phrase, Long> {
             "and p.folder.folderId = :folderId")
     List<Phrase> getPhraseList(@Param("userId") String userId, @Param("folderId") Long folderId);
 
+    //북마크
+    @Query("select p from Phrase p where p.user.userId = :userId and " +
+            "p.bookmark = true")
+    List<Phrase> getPhraseBookmarkList(String userId);
+
 
 }
