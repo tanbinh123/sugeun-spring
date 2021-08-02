@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/users/{user-id}/folders")
@@ -19,17 +20,10 @@ public class FolderController {
 
     private final FolderService folderService;
 
-    @PostMapping
-    public ResponseEntity<FolderDTO> createFolder(@PathVariable("user-id") String userId,
-                                               @RequestBody FolderDTO folderDTO){
 
-        Folder folder = folderService.createFolder(folderDTO);
-
-        FolderDTO folderResDTO = folder.toDTO();
-
-        return new ResponseEntity<>(folderResDTO, HttpStatus.OK);
-    }
-
+    /**
+     *  폴더 DTO 리스트
+     */
     @GetMapping("{type}")
     public ResponseEntity<List<FolderDTO>> typeFolderList(@PathVariable("user-id") String userId,
                                                           @PathVariable("type") FolderType type){
@@ -39,6 +33,22 @@ public class FolderController {
         return new ResponseEntity<>(folderDTOList, HttpStatus.OK);
     }
 
+    /**
+     *  폴더 생성
+     */
+    @PostMapping
+    public ResponseEntity<String> createFolder(@PathVariable("user-id") String userId,
+                                               @RequestBody FolderDTO folderDTO) throws IOException {
+
+        folderService.createFolder(folderDTO);
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+
+    /**
+     *  폴더 조회
+     */
     @GetMapping("{folder-id}")
     public ResponseEntity<DetailFolderDTO> readFolder(@PathVariable("user-id") String userId,
                                        @PathVariable("folder-id") Long folderId){

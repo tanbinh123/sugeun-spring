@@ -5,15 +5,16 @@ import com.jamsil_team.sugeun.domain.folder.FolderType;
 import com.jamsil_team.sugeun.dto.FolderDTO;
 import com.jamsil_team.sugeun.dto.DetailFolderDTO;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface FolderService {
-    Folder createFolder(FolderDTO folderDTO);
+    Folder createFolder(FolderDTO folderDTO) throws IOException;
 
-    void ModifyFolderName(Long folderId, String folderName);
+    void modifyFolderName(Long folderId, String folderName);
 
     //TODO 2021.07.13- 작성필요
-    //void folderImageModify(FolderDTO folderDTO);
+    //void modifyFolderImage(FolderDTO folderDTO);
 
     void removeFolder(Long folderId);
 

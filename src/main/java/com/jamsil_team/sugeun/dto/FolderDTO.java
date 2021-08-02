@@ -5,6 +5,7 @@ import com.jamsil_team.sugeun.domain.folder.FolderType;
 import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.user.User;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,14 +25,13 @@ public class FolderDTO {
     @Enumerated(EnumType.STRING)
     private FolderType type;
 
-    //TODO 2021.07.10.- 사진 저장 아직 정하지 x
-    private String filePath;
+    private String folderPath; //이미지 저장 폴더 경로
 
-    private String fileName;
-
-    private String uuid;
+    private String storeFilename;
 
     private Long parentFolderId;
+
+    private MultipartFile imageFile;
 
 
     public Folder toEntity() {

@@ -10,7 +10,8 @@ import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.BookmarkDTO;
-import com.jamsil_team.sugeun.dto.SignupDTO;
+import com.jamsil_team.sugeun.dto.UserDTO;
+import com.jamsil_team.sugeun.dto.UserSignupDTO;
 import org.assertj.core.api.Assertions;
 
 import org.junit.jupiter.api.Test;
@@ -40,8 +41,8 @@ class UserServiceImplTest {
     @Test
     void 중복확인() throws Exception{
         //given
-        SignupDTO signUpDTO = createSignUpDTO();
-        User user = signUpDTO.toEntity();
+        UserSignupDTO signUpDTOUser = createSignUpDTO();
+        User user = signUpDTOUser.toEntity();
         userRepository.save(user);
 
         //when
@@ -54,10 +55,10 @@ class UserServiceImplTest {
     @Test
     void 회원가입() throws Exception{
         //given
-        SignupDTO signUpDTO = createSignUpDTO();
+        UserSignupDTO signUpDTOUser = createSignUpDTO();
 
         //when
-        User user = userService.join(signUpDTO);
+        User user = userService.join(signUpDTOUser);
 
         //then
         Assertions.assertThat(user.getUserId()).isEqualTo("형우");
@@ -68,16 +69,16 @@ class UserServiceImplTest {
     void 회원가입_실패() throws Exception{
         //given
         //기존 등록된 아이디
-        SignupDTO signupDTO1 = createSignUpDTO();// loginId = 형우
-        User user1 = signupDTO1.toEntity();
+        UserSignupDTO userSignupDTO1 = createSignUpDTO();// loginId = 형우
+        User user1 = userSignupDTO1.toEntity();
         userRepository.save(user1);
 
         //회원가입
-        SignupDTO signupDTO2 = createSignUpDTO();// loginId = 형우
+        UserSignupDTO userSignupDTO2 = createSignUpDTO();// loginId = 형우
 
         //when
         IllegalStateException e = assertThrows(IllegalStateException.class,
-                () -> userService.join(signupDTO2));
+                () -> userService.join(userSignupDTO2));
 
         //then
         Assertions.assertThat(e.getMessage()).isEqualTo("이미 등록된 ID 입니다.");
@@ -128,7 +129,6 @@ class UserServiceImplTest {
 
      */
     @Test
-    @Commit
     void 프로필사진_업데이트_기존x() throws Exception{
         //given
         User user = User.builder()
@@ -234,8 +234,36 @@ class UserServiceImplTest {
         //then
         Assertions.assertThat(e.getMessage()).isEqualTo("이미지 파일이 아닙니다.");
     }
-    
-    
+
+    /*
+    @Test
+    void 아이디_변경() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        userService.modifyUserId(user.getUserId(), "수근수근");
+
+        //then
+        Assertions.assertThat(userRepository.findByUserId("수근수근")).isNotNull();
+
+        User savedUser = userRepository.findById("수근수근").get();
+
+        boolean matches = passwordEncoder.matches("1111", savedUser.getPassword());
+        Assertions.assertThat(matches).isTrue();
+
+        Assertions.assertThat(savedUser.getPhone()).isEqualTo("010-0000-0000");
+        Assertions.assertThat(savedUser.getDeviceToken()).isEqualTo("adsf1r@Afdfas");
+    }
+
+*/
 
     @Test
     void 비밀번호_변경() throws Exception{
@@ -259,6 +287,75 @@ class UserServiceImplTest {
         boolean matches = passwordEncoder.matches("2222", savedUser.getPassword());
 
         Assertions.assertThat(matches).isTrue();
+    }
+
+    @Test
+    void 프로필_조회() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        UserDTO userDTO = userService.getUser(user.getUserId());
+
+        //then
+        Assertions.assertThat(userDTO.getUserId()).isEqualTo(user.getUserId());
+        Assertions.assertThat(userDTO.getAlarm()).isEqualTo(user.getAlarm());
+        Assertions.assertThat(userDTO.getPhone()).isEqualTo(user.getPhone());
+//        Assertions.assertThat(userDTO.getFolderPath()).isEqualTo(user.getFolderPath());
+//        Assertions.assertThat(userDTO.getStoreFilename()).isEqualTo(user.getStoreFilename());
+    }
+
+    @Test
+    void 알람허용_변경_기존_true() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .alarm(true) //알람 허용o
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        userService.modifyAlarm(user.getUserId());
+
+        //then
+        Optional<User> result = userRepository.findByUserId("형우");
+        User savedUser = result.get();
+
+        Assertions.assertThat(savedUser.getAlarm()).isFalse();
+    }
+    
+    @Test
+    void 알람허용_변경_기존_false() throws Exception{
+        //given
+        User user = User.builder()
+                .userId("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .alarm(false) //알람 허용x
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        userService.modifyAlarm(user.getUserId());
+
+        //then
+        Optional<User> result = userRepository.findByUserId("형우");
+        User savedUser = result.get();
+
+        Assertions.assertThat(savedUser.getAlarm()).isTrue();
     }
 
     @Test
@@ -326,13 +423,13 @@ class UserServiceImplTest {
     }
 
 
-    private SignupDTO createSignUpDTO() {
-        SignupDTO signUpDTO = SignupDTO.builder()
+    private UserSignupDTO createSignUpDTO() {
+        UserSignupDTO signUpDTOUser = UserSignupDTO.builder()
                 .userId("형우")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();
 
-        return signUpDTO;
+        return signUpDTOUser;
     }
 }

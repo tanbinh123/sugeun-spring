@@ -2,6 +2,7 @@ package com.jamsil_team.sugeun.domain.folder;
 
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.FolderDTO;
+import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,11 +29,13 @@ public class Folder {
     @Column(nullable = false)
     private FolderType type;
 
-    private String filePath;
+    @Builder.Default
+    @Column(nullable = false)
+    private String folderPath = "";  //이미지 저장 폴더 경로
 
-    private String fileName;
-
-    private String uuid;
+    @Builder.Default
+    @Column(nullable = false)
+    private String storeFilename ="";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_folder_id")
@@ -41,7 +44,18 @@ public class Folder {
     public void changeFolderName(String folderName){
         this.folderName = folderName;
     }
-    
+
+
+    public void changeFolderImg(ResultFileStore resultFileStore){
+        if(resultFileStore == null){
+            this.folderPath = "";
+            this.storeFilename = "";
+        }
+        else{
+            this.folderPath = resultFileStore.getFolderPath();
+            this.storeFilename = resultFileStore.getStoreFilename();
+        }
+    }
     public FolderDTO toDTO(){
 
         FolderDTO folderDTO;

@@ -27,17 +27,34 @@ public class User {
     private String phone;
 
     @Builder.Default
-    private Boolean alarm = false;
+    @Column(nullable = false)
+    private Boolean alarm = true;
 
     private String deviceToken;
 
-    private String folderPath;
+    @Builder.Default
+    @Column(nullable = false)
+    private String folderPath = "";
 
-    private String storeFilename;
+    @Builder.Default
+    @Column(nullable = false)
+    private String storeFilename = "";
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private Set<UserRole> roleSet = new HashSet<UserRole>(Arrays.asList(UserRole.USER));
+
+//    public void changeUserId(String userId){
+//        this.userId = userId;
+//    }
+
+    public void changeAlarm() {
+        if (this.alarm == false) {
+            this.alarm = true;
+        } else {
+            this.alarm = false;
+        }
+    }
 
     public void changeDeviceToken(String deviceToken){
         this.deviceToken = deviceToken;
@@ -62,7 +79,6 @@ public class User {
     public UserDTO toDTO(){
         UserDTO userDTO = UserDTO.builder()
                 .userId(userId)
-                .password(password)
                 .phone(phone)
                 .alarm(alarm)
                 .build();

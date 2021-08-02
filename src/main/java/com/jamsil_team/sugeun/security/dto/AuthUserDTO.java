@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 
 @Log4j2
@@ -25,11 +26,9 @@ public class AuthUserDTO extends User {
 
     private Boolean alarm;
 
-    private String filePath;
+    private String folderPath;
 
-    private String fileName;
-
-    private String uuid;
+    private String storeFilename;
 
 
     public AuthUserDTO(String username, String password,

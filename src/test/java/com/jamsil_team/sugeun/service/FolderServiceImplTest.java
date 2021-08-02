@@ -17,6 +17,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -36,17 +37,17 @@ class FolderServiceImplTest {
     @Autowired LinkRepository linkRepository;
 
     @Test
-    void 폴더생성() throws Exception{
+    void 폴더생성_이미지o() throws Exception{
         //given
         User user = createUser();
+
+        MockMultipartFile file = new MockMultipartFile("file", "filename-1.jpeg", "image/jpeg", "some-image".getBytes());
 
         FolderDTO folderDTO = FolderDTO.builder()
                 .folderName("파일A")
                 .userId(user.getUserId())
                 .type(FolderType.PHRASE)
-                .fileName("fileImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
+                .imageFile(file)
                 .build();
 
         //when
@@ -57,7 +58,35 @@ class FolderServiceImplTest {
         Assertions.assertThat(folder.getFolderName()).isEqualTo("파일A");
         Assertions.assertThat(folder.getUser().getUserId()).isEqualTo(user.getUserId());
         Assertions.assertThat(folder.getType()).isEqualTo(FolderType.PHRASE);
+        Assertions.assertThat(folder.getFolderPath()).isNotBlank();
+        Assertions.assertThat(folder.getStoreFilename().substring(folder.getStoreFilename().lastIndexOf("_")+1))
+                .isEqualTo(file.getOriginalFilename());
     }
+
+    @Test
+    void 폴더생성_이미지x() throws Exception{
+        //given
+        User user = createUser();
+
+        FolderDTO folderDTO = FolderDTO.builder()
+                .folderName("파일A")
+                .userId(user.getUserId())
+                .type(FolderType.PHRASE)
+                .build();
+
+        //when
+        Folder folder = folderService.createFolder(folderDTO);
+
+        //then
+        Assertions.assertThat(folder.getFolderId()).isNotNull();
+        Assertions.assertThat(folder.getFolderName()).isEqualTo("파일A");
+        Assertions.assertThat(folder.getUser().getUserId()).isEqualTo(user.getUserId());
+        Assertions.assertThat(folder.getType()).isEqualTo(FolderType.PHRASE);
+        Assertions.assertThat(folder.getFolderPath()).isEqualTo("");
+        Assertions.assertThat(folder.getStoreFilename()).isBlank();
+    }
+
+
 
     @Test
     void 폴더_이름변경() throws Exception{
@@ -69,16 +98,13 @@ class FolderServiceImplTest {
                 .user(user)
                 .folderName("파일A")
                 .type(FolderType.PHRASE)
-                .fileName("fileImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
                 .build();
 
         folderRepository.save(folder);
 
 
         //when
-        folderService.ModifyFolderName(folder.getFolderId(), "이름변경");
+        folderService.modifyFolderName(folder.getFolderId(), "이름변경");
 
         //then
         Assertions.assertThat(folder.getFolderName()).isEqualTo("이름변경");
@@ -93,9 +119,7 @@ class FolderServiceImplTest {
                 .user(user)
                 .folderName("폴더A")
                 .type(FolderType.PHRASE)
-                .fileName("folderImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
+                .storeFilename("asdfsfss")
                 .build();
 
         folderRepository.save(folder);
@@ -119,9 +143,6 @@ class FolderServiceImplTest {
                 .user(user)
                 .folderName("폴더A")
                 .type(FolderType.PHRASE)
-                .fileName("folderImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
                 .build();
 
         folderRepository.save(folder);
@@ -159,9 +180,6 @@ class FolderServiceImplTest {
                 .user(user)
                 .folderName("폴더A")
                 .type(FolderType.LINK)
-                .fileName("folderImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
                 .build();
 
         folderRepository.save(folder);

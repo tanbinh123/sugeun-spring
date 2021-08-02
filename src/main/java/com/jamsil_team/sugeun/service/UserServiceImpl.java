@@ -12,7 +12,6 @@ import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,15 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -68,20 +61,21 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional
     @Override
-    public User join(SignupDTO signUpDTO) {
+    public User join(UserSignupDTO userSignupDTO) {
 
 
-        Optional<User> result = userRepository.findById(signUpDTO.getUserId());
+        Optional<User> result = userRepository.findById(userSignupDTO.getUserId());
 
         if(result.isPresent()){
             throw new IllegalStateException("이미 등록된 ID 입니다.");
         }
 
-        String rawPassword = signUpDTO.getPassword();
-        String encPassword = passwordEncoder.encode(rawPassword);
-        signUpDTO.setPassword(encPassword);
 
-        User user = signUpDTO.toEntity();
+        String rawPassword = userSignupDTO.getPassword();
+        String encPassword = passwordEncoder.encode(rawPassword);
+        userSignupDTO.setPassword(encPassword);
+
+        User user = userSignupDTO.toEntity();
 
         userRepository.save(user);
 
@@ -118,8 +112,6 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByUserId(userId).orElseThrow(() ->
                 new IllegalStateException("존재하는 않은 회원입니다."));
 
-
-
         //서버 컴퓨터에 저장된 기존 프로필 사진 삭제
         removeImageFile(user);
 
@@ -149,11 +141,16 @@ public class UserServiceImpl implements UserService{
     /**
      *  아이디 변경
      */
+    /*
     @Transactional
     @Override
     public void modifyUserId(String userId, String updateUserId) {
 
-    }
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 회원입니다."));
+
+        user.changeUserId(updateUserId);
+    }*/
 
 
     /**
@@ -184,6 +181,19 @@ public class UserServiceImpl implements UserService{
                 new IllegalStateException("존재하지 않은 회원입니다."));
 
         return user.toDTO();
+    }
+
+    /**
+     * 알람허용 변경
+     */
+    @Transactional
+    @Override
+    public void modifyAlarm(String userId) {
+
+        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않은 회원입니다."));
+
+        user.changeAlarm();
     }
 
     /**

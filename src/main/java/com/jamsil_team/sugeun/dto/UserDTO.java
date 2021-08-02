@@ -17,8 +17,6 @@ public class UserDTO {
 
     private String userId;
 
-    private String password;
-
     private String phone;
 
     private Boolean alarm;
@@ -29,13 +27,11 @@ public class UserDTO {
     @Builder.Default
     private String storeFilename = "";
 
-    private MultipartFile file ;
 
 
     public User toEntity() {
         User user = User.builder()
                 .userId(userId)
-                .password(password)
                 .phone(phone)
                 .alarm(alarm)
                 .folderPath(folderPath)

@@ -27,13 +27,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info("------------------------");
         log.info("username: " + username);
 
-        Optional<User> result = userRepository.findByUserId(username);
 
-        if(result.isEmpty()){
-            throw new IllegalStateException("존재하지 않는 ID 입니다.");
-        }
+        User user = userRepository.findByUserId(username).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 ID 입니다."));
 
-        User user = result.get();
 
         AuthUserDTO authUserDTO = new AuthUserDTO(user.getUserId(), user.getPassword(),
                 user.getRoleSet().stream().map(role ->
@@ -43,8 +40,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         authUserDTO.setPhone(user.getPhone());
         authUserDTO.setAlarm(user.getAlarm());
         authUserDTO.setPassword(user.getPassword());
-        authUserDTO.setFileName(user.getFolderPath());
-        authUserDTO.setFilePath(user.getStoreFilename());
+        authUserDTO.setFolderPath(user.getFolderPath());
+        authUserDTO.setStoreFilename(user.getStoreFilename());
 
         System.out.println("authUserDTO = " + authUserDTO.getPassword()); //password 가 제대로 지정됐는지 확인
 

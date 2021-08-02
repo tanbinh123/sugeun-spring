@@ -11,11 +11,15 @@ import com.jamsil_team.sugeun.dto.FolderDTO;
 import com.jamsil_team.sugeun.dto.LinkDTO;
 import com.jamsil_team.sugeun.dto.PhraseDTO;
 import com.jamsil_team.sugeun.dto.DetailFolderDTO;
+import com.jamsil_team.sugeun.file.FileStore;
+import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,23 +32,22 @@ public class FolderServiceImpl implements FolderService{
     private final FolderRepository folderRepository;
     private final PhraseRepository phraseRepository;
     private final LinkRepository linkRepository;
+    private final FileStore fileStore;
 
     /**
      * 폴더생성
      */
     @Transactional
     @Override
-    public Folder createFolder(FolderDTO folderDTO) {
+    public Folder createFolder(FolderDTO folderDTO) throws IOException {
 
         Folder folder = folderDTO.toEntity();
 
-        System.out.println("====================");
-        System.out.println(folder.getType());
-        System.out.println(folder.getType().equals(FolderType.PHRASE));
-        System.out.println(folder);
+        ResultFileStore resultFileStore = fileStore.storeFile(folderDTO.getImageFile());
 
-        System.out.println(folder.getUser());
-         folderRepository.save(folder);
+        folder.changeFolderImg(resultFileStore);
+
+        folderRepository.save(folder);
 
         return folder;
     }
@@ -54,7 +57,7 @@ public class FolderServiceImpl implements FolderService{
      */
     @Transactional
     @Override
-    public void ModifyFolderName(Long folderId, String folderName) {
+    public void modifyFolderName(Long folderId, String folderName) {
 
         Folder folder = folderRepository.findById(folderId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 ID 입니다."));
@@ -70,7 +73,9 @@ public class FolderServiceImpl implements FolderService{
     @Override
     public void removeFolder(Long folderId) {
 
-        Folder folder = folderRepository.findById(folderId).orElseThrow(() ->
+        // 글귀,링크 삭제 -> 서버컴퓨터 폴더 사진 삭제 -> 폴더 삭제
+
+       Folder folder = folderRepository.findById(folderId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 ID 입니다."));
 
         if(folder.getType() == FolderType.PHRASE){
@@ -80,12 +85,28 @@ public class FolderServiceImpl implements FolderService{
         }else if (folder.getType() == FolderType.LINK){
 
             linkRepository.deleteByFolder(folder);
-
         }
 
-        folderRepository.deleteById(folder.getFolderId());
+        //서버컴퓨터에 있는 폴더 이미지 삭제
+        fileRemove(folder);
 
+        folderRepository.deleteById(folder.getFolderId());
     }
+
+    private void fileRemove(Folder folder) {
+        //storeFilename 이 빈칸이 아닐 경우
+        if(!folder.getStoreFilename().isBlank()){
+            String folderPath = folder.getFolderPath();
+            String storeFilename = folder.getStoreFilename();
+
+            File file = new File(fileStore.getFullPath(folderPath, storeFilename));
+            file.delete();
+
+//            File thumbnail = new File(fileStore.getThumbnailFullPath(folderPath, "s_" + storeFilename));
+//            thumbnail.delete();
+        }
+    }
+
     /**
      * 폴더 DTO list
      */

@@ -1,9 +1,7 @@
 package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.dto.FolderDTO;
-import com.jamsil_team.sugeun.dto.SignupDTO;
-import com.jamsil_team.sugeun.dto.UserDTO;
+import com.jamsil_team.sugeun.dto.UserSignupDTO;
 import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.SendSmsService;
 import com.jamsil_team.sugeun.service.UserService;
@@ -12,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
-import java.util.List;
 import java.util.Random;
 
 
@@ -54,9 +50,9 @@ public class AccessController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupDTO signUpDTO){
+    public ResponseEntity<String> signup(@RequestBody UserSignupDTO signUpDTOUser){
 
-        User join = userService.join(signUpDTO);
+        User join = userService.join(signUpDTOUser);
 
         System.out.println(join);
 
