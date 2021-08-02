@@ -24,7 +24,6 @@ public class SignupDTO {
     @NotEmpty
     private String phone;
 
-    private MultipartFile file;
 
     public User toEntity(){
 

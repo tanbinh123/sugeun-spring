@@ -23,5 +23,7 @@ public interface UserService {
 
     void modifyPassword(String userId, String password);
 
+    UserDTO getUser(String userId);
+
     BookmarkDTO getListOfBookmark(String userId);
 }

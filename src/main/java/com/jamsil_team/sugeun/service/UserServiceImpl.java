@@ -6,10 +6,7 @@ import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
-import com.jamsil_team.sugeun.dto.BookmarkDTO;
-import com.jamsil_team.sugeun.dto.LinkDTO;
-import com.jamsil_team.sugeun.dto.PhraseDTO;
-import com.jamsil_team.sugeun.dto.SignupDTO;
+import com.jamsil_team.sugeun.dto.*;
 
 import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
@@ -173,6 +170,20 @@ public class UserServiceImpl implements UserService{
         String encPassword = passwordEncoder.encode(password);
 
         user.changePassword(encPassword);
+    }
+
+
+    /**
+     * 프로필 조회
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public UserDTO getUser(String userId) {
+
+        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않은 회원입니다."));
+
+        return user.toDTO();
     }
 
     /**

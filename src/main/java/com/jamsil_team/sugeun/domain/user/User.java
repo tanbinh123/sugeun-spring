@@ -65,7 +65,6 @@ public class User {
                 .password(password)
                 .phone(phone)
                 .alarm(alarm)
-                .deviceToken(deviceToken)
                 .build();
 
         return userDTO;

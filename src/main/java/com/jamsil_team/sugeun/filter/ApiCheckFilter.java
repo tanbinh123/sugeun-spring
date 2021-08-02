@@ -89,9 +89,9 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
         // DB에 저장된 deviceToken 가져오기
         User user = userRepository.findByUserId(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 ID 입니다."));
+                new IllegalStateException("존재하지 않는 ID입니다."));
 
-        log.info("UserDTO.getDeviceToken(): " + deviceToken);
+        log.info("headerDeviceToken(): " + deviceToken);
         log.info("User.getDeviceToken(): " + user.getDeviceToken());
 
         //request 로 받은 deviceToken 과 DB에 저장된 deviceToken 동일 체크

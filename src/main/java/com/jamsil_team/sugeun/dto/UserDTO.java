@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
 
@@ -23,13 +24,12 @@ public class UserDTO {
     private Boolean alarm;
 
     @Builder.Default
-    private String deviceToken = "";
-
-    @Builder.Default
     private String folderPath = "";
 
     @Builder.Default
     private String storeFilename = "";
+
+    private MultipartFile file ;
 
 
     public User toEntity() {
@@ -38,7 +38,6 @@ public class UserDTO {
                 .password(password)
                 .phone(phone)
                 .alarm(alarm)
-                .deviceToken(deviceToken)
                 .folderPath(folderPath)
                 .storeFilename(storeFilename)
                 .build();
