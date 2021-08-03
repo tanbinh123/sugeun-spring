@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.dto;
+package com.jamsil_team.sugeun.dto.schedule;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jamsil_team.sugeun.domain.schedule.Schedule;

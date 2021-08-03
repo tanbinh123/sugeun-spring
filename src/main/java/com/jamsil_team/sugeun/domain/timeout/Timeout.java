@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.domain.timeout;
 
 import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.dto.TimeoutDTO;
+import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

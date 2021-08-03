@@ -2,7 +2,7 @@ package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.link.LinkRepository;
-import com.jamsil_team.sugeun.dto.LinkDTO;
+import com.jamsil_team.sugeun.dto.link.LinkDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

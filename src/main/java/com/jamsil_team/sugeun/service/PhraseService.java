@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.phrase.Phrase;
-import com.jamsil_team.sugeun.dto.PhraseDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
 
 public interface PhraseService {
 

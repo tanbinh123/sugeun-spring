@@ -1,9 +1,9 @@
 package com.jamsil_team.sugeun.controller;
 
 
-import com.jamsil_team.sugeun.dto.BookmarkDTO;
-import com.jamsil_team.sugeun.dto.UserDTO;
-import com.jamsil_team.sugeun.dto.UserUpdateDTO;
+import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
+import com.jamsil_team.sugeun.dto.user.UserDTO;
+import com.jamsil_team.sugeun.dto.user.UserUpdateDTO;
 import com.jamsil_team.sugeun.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class UserController {
      *  프로필 조회
      */
     @GetMapping
-    public ResponseEntity<UserDTO> getUserProfile(@PathVariable("user-id") String userId){
+    public ResponseEntity<UserDTO> getUserProfile(@PathVariable("user-id") String userId) throws IOException {
 
         UserDTO userDTO = userService.getUser(userId);
 

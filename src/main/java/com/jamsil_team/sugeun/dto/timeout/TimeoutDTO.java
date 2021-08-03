@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.dto;
+package com.jamsil_team.sugeun.dto.timeout;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jamsil_team.sugeun.domain.timeout.Timeout;

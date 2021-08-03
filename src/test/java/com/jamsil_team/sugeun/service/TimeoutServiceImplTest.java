@@ -1,21 +1,18 @@
 package com.jamsil_team.sugeun.service;
 
-import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelect;
 import com.jamsil_team.sugeun.domain.timeout.Timeout;
 import com.jamsil_team.sugeun.domain.timeout.TimeoutRepository;
 import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelect;
 import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelectRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
-import com.jamsil_team.sugeun.dto.TimeoutDTO;
+import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.async.TimeoutDeferredResultProcessingInterceptor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;

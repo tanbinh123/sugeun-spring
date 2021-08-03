@@ -3,8 +3,8 @@ package com.jamsil_team.sugeun.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
-import com.jamsil_team.sugeun.dto.FolderDTO;
-import com.jamsil_team.sugeun.dto.UserDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.UserService;
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
 
 
 @Log4j2
@@ -101,9 +100,9 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setCharacterEncoding("utf-8");
 
 
-        List<FolderDTO> folderDTOList = folderService.getListOfFolder(userId, null, null);
+        List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, null, null);
 
-        String result = objectMapper.writeValueAsString(folderDTOList);
+        String result = objectMapper.writeValueAsString(folderResDTOList);
         response.getWriter().write(result);
 
     }

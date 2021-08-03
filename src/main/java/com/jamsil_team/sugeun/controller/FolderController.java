@@ -1,9 +1,9 @@
 package com.jamsil_team.sugeun.controller;
 
-import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.folder.FolderType;
-import com.jamsil_team.sugeun.dto.DetailFolderDTO;
-import com.jamsil_team.sugeun.dto.FolderDTO;
+import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
 import com.jamsil_team.sugeun.service.FolderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,12 +25,12 @@ public class FolderController {
      *  폴더 DTO 리스트
      */
     @GetMapping("{type}")
-    public ResponseEntity<List<FolderDTO>> typeFolderList(@PathVariable("user-id") String userId,
+    public ResponseEntity<List<FolderResDTO>> typeFolderList(@PathVariable("user-id") String userId,
                                                           @PathVariable("type") FolderType type){
 
-        List<FolderDTO> folderDTOList = folderService.getListOfFolder(userId, type, null);
+        List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, type, null);
 
-        return new ResponseEntity<>(folderDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(folderResDTOList, HttpStatus.OK);
     }
 
     /**

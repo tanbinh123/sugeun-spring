@@ -7,16 +7,18 @@ import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.link.LinkRepository;
 import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
-import com.jamsil_team.sugeun.dto.FolderDTO;
-import com.jamsil_team.sugeun.dto.LinkDTO;
-import com.jamsil_team.sugeun.dto.PhraseDTO;
-import com.jamsil_team.sugeun.dto.DetailFolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
+import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
 import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,17 +114,31 @@ public class FolderServiceImpl implements FolderService{
      */
     @Transactional(readOnly = true)
     @Override
-    public List<FolderDTO> getListOfFolder(String userId, FolderType type, Long parentFolderId) {
+    public List<FolderResDTO> getListOfFolder(String userId, FolderType type, Long parentFolderId) {
 
         List<Folder> result = folderRepository.getListFolder(userId, type, parentFolderId);
 
-        List<FolderDTO> folderDTOList = result.stream().map(folder -> {
-            FolderDTO folderDTO = folder.toDTO();
-            return folderDTO;
+        List<FolderResDTO> folderResDTOList = result.stream().map(folder -> {
+            FolderResDTO folderResDTO = folder.toResDTO();
+
+            //이미지 파일 데이터
+            if(!(folder.getStoreFilename().isBlank())){
+
+                File file = new File(fileStore.getThumbnailFullPath(folder.getFolderPath(), folder.getStoreFilename()));
+                byte[] bytes = new byte[0];
+
+                try {
+                    bytes = FileCopyUtils.copyToByteArray(file);
+                    folderResDTO.setImageData(bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return folderResDTO;
         }).collect(Collectors.toList());
 
 
-        return folderDTOList;
+        return folderResDTOList;
     }
 
 
@@ -153,14 +169,14 @@ public class FolderServiceImpl implements FolderService{
             //폴더 리스트
             List<Folder> folderList = folderRepository.getListFolder(userId, folder.getType(), folderId);
 
-            List<FolderDTO> folderDTOList = folderList.stream().map(findFolder -> {
-                FolderDTO folderDTO = findFolder.toDTO();
-                return folderDTO;
+            List<FolderResDTO> folderResDTOList = folderList.stream().map(findFolder -> {
+                FolderResDTO folderResDTO = findFolder.toResDTO();
+                return folderResDTO;
             }).collect(Collectors.toList());
 
             //detailFolderDTO 값 추가
             detailFolderDTO.setPhraseDTOList(phraseDTOList);
-            detailFolderDTO.setFolderDTOList(folderDTOList);
+            detailFolderDTO.setFolderResDTOList(folderResDTOList);
 
         }
         //링크 폴더일 경우
@@ -177,14 +193,14 @@ public class FolderServiceImpl implements FolderService{
             //폴더 리스트
             List<Folder> folderList = folderRepository.getListFolder(userId, folder.getType(), folderId);
 
-            List<FolderDTO> folderDTOList = folderList.stream().map(findFolder -> {
-                FolderDTO folderDTO = findFolder.toDTO();
-                return folderDTO;
+            List<FolderResDTO> folderResDTOList = folderList.stream().map(findFolder -> {
+                FolderResDTO folderResDTO = findFolder.toResDTO();
+                return folderResDTO;
             }).collect(Collectors.toList());
 
             //detailFolderDTO 값 추가
             detailFolderDTO.setLinkDTOList(linkDTOList);
-            detailFolderDTO.setFolderDTOList(folderDTOList);
+            detailFolderDTO.setFolderResDTOList(folderResDTOList);
 
         }
 

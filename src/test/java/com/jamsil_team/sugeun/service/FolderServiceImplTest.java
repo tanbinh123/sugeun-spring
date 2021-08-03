@@ -9,10 +9,11 @@ import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
-import com.jamsil_team.sugeun.dto.DetailFolderDTO;
-import com.jamsil_team.sugeun.dto.FolderDTO;
-import com.jamsil_team.sugeun.dto.LinkDTO;
-import com.jamsil_team.sugeun.dto.PhraseDTO;
+import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
+import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -237,7 +237,7 @@ class FolderServiceImplTest {
         folderRepository.save(folderC); //userId: 형우, type: Link, parentFolder: null
 
         //when 폴더A 1개만 출력 기대
-        List<FolderDTO> result = folderService.getListOfFolder("형우", FolderType.PHRASE, null);
+        List<FolderResDTO> result = folderService.getListOfFolder("형우", FolderType.PHRASE, null);
 
         //then
         Assertions.assertThat(result.size()).isEqualTo(1);
@@ -294,10 +294,10 @@ class FolderServiceImplTest {
 
         //then
         List<PhraseDTO> phraseDTOList = detailFolderDTO.getPhraseDTOList();
-        List<FolderDTO> folderDTOList = detailFolderDTO.getFolderDTOList();
+        List<FolderResDTO> folderResDTOList = detailFolderDTO.getFolderResDTOList();
         //글귀 2, 폴더 1
         Assertions.assertThat(phraseDTOList.size()).isEqualTo(2);
-        Assertions.assertThat(folderDTOList.size()).isEqualTo(1);
+        Assertions.assertThat(folderResDTOList.size()).isEqualTo(1);
 
     }
 
@@ -332,10 +332,10 @@ class FolderServiceImplTest {
         
         //then
         List<LinkDTO> linkDTOList = detailFolderDTO.getLinkDTOList();
-        List<FolderDTO> folderDTOList = detailFolderDTO.getFolderDTOList();
+        List<FolderResDTO> folderResDTOList = detailFolderDTO.getFolderResDTOList();
         //링크 0, 폴더 1
         Assertions.assertThat(linkDTOList.size()).isEqualTo(0);
-        Assertions.assertThat(folderDTOList.size()).isEqualTo(1);
+        Assertions.assertThat(folderResDTOList.size()).isEqualTo(1);
 
     }
 

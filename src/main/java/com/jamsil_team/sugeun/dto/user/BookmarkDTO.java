@@ -1,5 +1,8 @@
-package com.jamsil_team.sugeun.dto;
+package com.jamsil_team.sugeun.dto.user;
 
+
+import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,16 +15,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DetailFolderDTO {
+public class BookmarkDTO {
 
     @Builder.Default
     private List<PhraseDTO> phraseDTOList = new ArrayList<>();
 
     @Builder.Default
     private List<LinkDTO> linkDTOList = new ArrayList<>();
-
-    @Builder.Default
-    private List<FolderDTO> folderDTOList = new ArrayList<>();
-
-
 }

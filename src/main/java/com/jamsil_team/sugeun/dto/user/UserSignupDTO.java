@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.dto;
+package com.jamsil_team.sugeun.dto.user;
 
 import com.jamsil_team.sugeun.domain.user.User;
 import lombok.AllArgsConstructor;

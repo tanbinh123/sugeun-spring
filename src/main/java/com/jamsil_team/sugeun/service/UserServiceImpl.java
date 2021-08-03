@@ -6,8 +6,12 @@ import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
-import com.jamsil_team.sugeun.dto.*;
 
+import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
+import com.jamsil_team.sugeun.dto.user.UserDTO;
+import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
 import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -36,9 +41,6 @@ public class UserServiceImpl implements UserService{
     private final FileStore fileStore;
     private final PhraseRepository phraseRepository;
     private final LinkRepository linkRepository;
-
-    @Value("${com.jamsil_team.upload.path")
-    private String uploadPath;
 
     /**
      * 아이디 중복확인
@@ -175,12 +177,22 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional(readOnly = true)
     @Override
-    public UserDTO getUser(String userId) {
+    public UserDTO getUser(String userId) throws IOException {
 
         User user = userRepository.findByUserId(userId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않은 회원입니다."));
 
-        return user.toDTO();
+        UserDTO userDTO = user.toDTO();
+
+        //이미지 파일 데이터
+        if(!(user.getStoreFilename().isBlank())){
+            File file = new File(fileStore.getFullPath(user.getFolderPath(), user.getStoreFilename()));
+            byte[] bytes = FileCopyUtils.copyToByteArray(file);
+            userDTO.setImageData(bytes);
+        }
+
+
+        return userDTO;
     }
 
     /**

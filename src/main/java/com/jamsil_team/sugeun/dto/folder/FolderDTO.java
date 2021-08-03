@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.dto;
+package com.jamsil_team.sugeun.dto.folder;
 
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.folder.FolderType;
@@ -24,10 +24,6 @@ public class FolderDTO {
 
     @Enumerated(EnumType.STRING)
     private FolderType type;
-
-    private String folderPath; //이미지 저장 폴더 경로
-
-    private String storeFilename;
 
     private Long parentFolderId;
 

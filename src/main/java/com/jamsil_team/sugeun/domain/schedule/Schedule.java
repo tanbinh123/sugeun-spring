@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.domain.schedule;
 
 import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.dto.ScheduleDTO;
+import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

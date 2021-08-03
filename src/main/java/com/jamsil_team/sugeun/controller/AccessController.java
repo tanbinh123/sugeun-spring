@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.dto.UserSignupDTO;
+import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
 import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.SendSmsService;
 import com.jamsil_team.sugeun.service.UserService;

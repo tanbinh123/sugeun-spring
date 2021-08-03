@@ -4,7 +4,7 @@ import com.jamsil_team.sugeun.domain.schedule.Schedule;
 import com.jamsil_team.sugeun.domain.schedule.ScheduleRepository;
 import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelect;
 import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelectRepository;
-import com.jamsil_team.sugeun.dto.ScheduleDTO;
+import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

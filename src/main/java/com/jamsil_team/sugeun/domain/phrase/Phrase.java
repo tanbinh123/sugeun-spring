@@ -3,13 +3,12 @@ package com.jamsil_team.sugeun.domain.phrase;
 import com.jamsil_team.sugeun.domain.BaseEntity;
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.dto.PhraseDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @ToString(exclude = {"user","folder"})

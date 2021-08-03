@@ -1,7 +1,8 @@
 package com.jamsil_team.sugeun.domain.folder;
 
 import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.dto.FolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
 import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.*;
 
@@ -56,12 +57,12 @@ public class Folder {
             this.storeFilename = resultFileStore.getStoreFilename();
         }
     }
-    public FolderDTO toDTO(){
+    public FolderResDTO toResDTO(){
 
-        FolderDTO folderDTO;
+        FolderResDTO folderResDTO;
 
         if(this.parentFolder != null){
-            folderDTO = FolderDTO.builder()
+            folderResDTO = FolderResDTO.builder()
                     .folderId(this.folderId)
                     .folderName(this.folderName)
                     .userId(this.user.getUserId())
@@ -69,7 +70,7 @@ public class Folder {
                     .parentFolderId(this.parentFolder.folderId)
                     .build();
         }else{
-            folderDTO = FolderDTO.builder()
+            folderResDTO = FolderResDTO.builder()
                     .folderId(this.folderId)
                     .folderName(this.folderName)
                     .userId(this.user.getUserId())
@@ -78,7 +79,7 @@ public class Folder {
         }
 
 
-        return folderDTO;
+        return folderResDTO;
     }
 
 }

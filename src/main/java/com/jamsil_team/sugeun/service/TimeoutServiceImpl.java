@@ -1,11 +1,10 @@
 package com.jamsil_team.sugeun.service;
 
-import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelect;
 import com.jamsil_team.sugeun.domain.timeout.Timeout;
 import com.jamsil_team.sugeun.domain.timeout.TimeoutRepository;
 import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelect;
 import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelectRepository;
-import com.jamsil_team.sugeun.dto.TimeoutDTO;
+import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

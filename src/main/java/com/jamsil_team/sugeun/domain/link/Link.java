@@ -3,7 +3,7 @@ package com.jamsil_team.sugeun.domain.link;
 import com.jamsil_team.sugeun.domain.BaseEntity;
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.dto.LinkDTO;
+import com.jamsil_team.sugeun.dto.link.LinkDTO;
 import lombok.*;
 
 import javax.persistence.*;

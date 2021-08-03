@@ -1,30 +1,29 @@
-package com.jamsil_team.sugeun.dto;
+package com.jamsil_team.sugeun.dto.link;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jamsil_team.sugeun.domain.folder.Folder;
-import com.jamsil_team.sugeun.domain.phrase.Phrase;
+import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PhraseDTO {
+public class LinkDTO {
 
-    private Long phraseId;
+    private Long linkId;
 
     private String userId;
 
     private Long folderId;
 
-    private String text;
+    private String link;
 
     private Boolean bookmark;
 
@@ -34,29 +33,24 @@ public class PhraseDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime modDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Asia/Seoul")
-    private LocalDate textDate;
 
-    public Phrase toEntity(){
+    public Link toEntity() {
 
-        Phrase phrase;
+        Link link;
 
-        if(this.getFolderId() == null){
-            phrase = Phrase.builder()
+        if (folderId == null) {
+            link = Link.builder()
                     .user(User.builder().userId(this.userId).build())
-                    .text(this.text)
+                    .link(this.link)
                     .build();
-
-        }else {
-            phrase = Phrase.builder()
+        } else {
+            link = Link.builder()
                     .user(User.builder().userId(this.userId).build())
                     .folder(Folder.builder().folderId(this.folderId).build())
-                    .text(this.text)
+                    .link(this.link)
                     .build();
-
         }
-        return phrase;
 
+        return link;
     }
-
 }

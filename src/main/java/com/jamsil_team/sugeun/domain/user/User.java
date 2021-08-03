@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.domain.user;
 
 import com.jamsil_team.sugeun.domain.userRole.UserRole;
-import com.jamsil_team.sugeun.dto.UserDTO;
+import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.*;
 

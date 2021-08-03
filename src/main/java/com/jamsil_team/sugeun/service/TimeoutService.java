@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.timeout.Timeout;
-import com.jamsil_team.sugeun.dto.TimeoutDTO;
+import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 
 import java.util.List;
 

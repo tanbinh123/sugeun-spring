@@ -1,7 +1,6 @@
 package com.jamsil_team.sugeun.domain.phrase;
 
 import com.jamsil_team.sugeun.domain.folder.Folder;
-import com.jamsil_team.sugeun.dto.PhraseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

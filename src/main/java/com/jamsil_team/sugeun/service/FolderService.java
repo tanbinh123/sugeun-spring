@@ -2,8 +2,9 @@ package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.folder.FolderType;
-import com.jamsil_team.sugeun.dto.FolderDTO;
-import com.jamsil_team.sugeun.dto.DetailFolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderDTO;
+import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
+import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface FolderService {
 
     void removeFolder(Long folderId);
 
-    List<FolderDTO> getListOfFolder(String userId, FolderType type, Long parentFolderId);
+    List<FolderResDTO> getListOfFolder(String userId, FolderType type, Long parentFolderId);
 
      DetailFolderDTO getFolder(String userId, Long folderId);
 }

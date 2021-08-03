@@ -1,29 +1,30 @@
-package com.jamsil_team.sugeun.dto;
+package com.jamsil_team.sugeun.dto.phrase;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jamsil_team.sugeun.domain.folder.Folder;
-import com.jamsil_team.sugeun.domain.link.Link;
+import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LinkDTO {
+public class PhraseDTO {
 
-    private Long linkId;
+    private Long phraseId;
 
     private String userId;
 
     private Long folderId;
 
-    private String link;
+    private String text;
 
     private Boolean bookmark;
 
@@ -33,24 +34,29 @@ public class LinkDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime modDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Asia/Seoul")
+    private LocalDate textDate;
 
-    public Link toEntity() {
+    public Phrase toEntity(){
 
-        Link link;
+        Phrase phrase;
 
-        if (folderId == null) {
-            link = Link.builder()
+        if(this.getFolderId() == null){
+            phrase = Phrase.builder()
                     .user(User.builder().userId(this.userId).build())
-                    .link(this.link)
+                    .text(this.text)
                     .build();
-        } else {
-            link = Link.builder()
+
+        }else {
+            phrase = Phrase.builder()
                     .user(User.builder().userId(this.userId).build())
                     .folder(Folder.builder().folderId(this.folderId).build())
-                    .link(this.link)
+                    .text(this.text)
                     .build();
-        }
 
-        return link;
+        }
+        return phrase;
+
     }
+
 }

@@ -1,9 +1,9 @@
 package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.dto.BookmarkDTO;
-import com.jamsil_team.sugeun.dto.UserSignupDTO;
-import com.jamsil_team.sugeun.dto.UserDTO;
+import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
+import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
+import com.jamsil_team.sugeun.dto.user.UserDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ public interface UserService {
 
     void modifyPassword(String userId, String password);
 
-    UserDTO getUser(String userId);
+    UserDTO getUser(String userId) throws IOException;
 
     void modifyAlarm(String userId);
 
