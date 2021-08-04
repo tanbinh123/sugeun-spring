@@ -135,7 +135,7 @@ public class FolderServiceImpl implements FolderService{
      */
     @Transactional(readOnly = true)
     @Override
-    public List<FolderResDTO> getListOfFolder(String userId, FolderType type, Long parentFolderId) {
+    public List<FolderResDTO> getListOfFolder(Long userId, FolderType type, Long parentFolderId) {
 
         List<Folder> result = folderRepository.getListFolder(userId, type, parentFolderId);
 
@@ -168,7 +168,7 @@ public class FolderServiceImpl implements FolderService{
      */
     @Transactional(readOnly = true)
     @Override
-    public DetailFolderDTO getFolder(String userId, Long folderId) {
+    public DetailFolderDTO getFolder(Long userId, Long folderId) {
 
         Folder folder = folderRepository.findById(folderId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않은 폴더입니다."));

@@ -25,7 +25,7 @@ public class FolderController {
      *  폴더 DTO 리스트
      */
     @GetMapping("/{type}")
-    public ResponseEntity<List<FolderResDTO>> typeFolderList(@PathVariable("user-id") String userId,
+    public ResponseEntity<List<FolderResDTO>> typeFolderList(@PathVariable("user-id") Long userId,
                                                           @PathVariable(value = "type", required = false) FolderType type){
 
         List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, type, null);
@@ -37,7 +37,7 @@ public class FolderController {
      *  폴더 생성
      */
     @PostMapping
-    public ResponseEntity<String> createFolder(@PathVariable("user-id") String userId,
+    public ResponseEntity<String> createFolder(@PathVariable("user-id") Long userId,
                                                @RequestBody FolderDTO folderDTO) throws IOException {
 
         folderService.createFolder(folderDTO);
@@ -50,7 +50,7 @@ public class FolderController {
      *  폴더 조회
      */
     @GetMapping("{folder-id}")
-    public ResponseEntity<DetailFolderDTO> readFolder(@PathVariable("user-id") String userId,
+    public ResponseEntity<DetailFolderDTO> readFolder(@PathVariable("user-id") Long userId,
                                        @PathVariable("folder-id") Long folderId){
 
         DetailFolderDTO detailFolderDTO = folderService.getFolder(userId, folderId);
@@ -62,7 +62,7 @@ public class FolderController {
      * 폴더 이미지 업로드
      */
     @PatchMapping("/{folder-id}/image")
-    public ResponseEntity<String> modifyFolderImg(@PathVariable("user-id") String userId,
+    public ResponseEntity<String> modifyFolderImg(@PathVariable("user-id") Long userId,
                                                   @PathVariable("folder-id") Long folderId,
                                                   @ModelAttribute FolderDTO folderDTO) throws IOException {
 
@@ -75,7 +75,7 @@ public class FolderController {
      * 폴더 이름 변경
      */
     @PatchMapping("/{folder-id}/name")
-    public ResponseEntity<String> modifyFolderName(@PathVariable("user-id") String userId,
+    public ResponseEntity<String> modifyFolderName(@PathVariable("user-id") Long userId,
                                                   @PathVariable("folder-id") Long folderId,
                                                   @RequestBody FolderDTO folderDTO){
 
@@ -88,7 +88,7 @@ public class FolderController {
      * 폴더 삭제
      */
     @DeleteMapping("/{folder-id}")
-    public ResponseEntity<String> removeFolder(@PathVariable("user-id") String userId,
+    public ResponseEntity<String> removeFolder(@PathVariable("user-id") Long userId,
                                                @PathVariable("folder-id") Long folderId){
 
         folderService.removeFolder(folderId);

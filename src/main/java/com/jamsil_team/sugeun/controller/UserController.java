@@ -2,7 +2,7 @@ package com.jamsil_team.sugeun.controller;
 
 
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
-import com.jamsil_team.sugeun.dto.user.UserDTO;
+import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserUpdateDTO;
 import com.jamsil_team.sugeun.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +23,11 @@ public class UserController {
      *  프로필 조회
      */
     @GetMapping
-    public ResponseEntity<UserDTO> getUserProfile(@PathVariable("user-id") String userId) throws IOException {
+    public ResponseEntity<UserResDTO> getUserProfile(@PathVariable("user-id") Long userId) throws IOException {
 
-        UserDTO userDTO = userService.getUser(userId);
+        UserResDTO userResDTO = userService.getUser(userId);
 
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        return new ResponseEntity<>(userResDTO, HttpStatus.OK);
     }
 
 
@@ -35,7 +35,7 @@ public class UserController {
      *  이미지 업로드
      */
     @PatchMapping("/image")
-    public ResponseEntity<String> modifyUserImg(@PathVariable("user-id") String userId,
+    public ResponseEntity<String> modifyUserImg(@PathVariable("user-id") Long userId,
                                                 @RequestBody UserUpdateDTO userUpdateDTO) throws IOException {
 
         userService.modifyUserImg(userId, userUpdateDTO.getImageFile());
@@ -48,7 +48,7 @@ public class UserController {
      */
     /*
     @PatchMapping("/userId")
-    public ResponseEntity<String> modifyUserId(@PathVariable("user-id") String userId,
+    public ResponseEntity<String> modifyUserId(@PathVariable("user-id") Long userId,
                                                @ModelAttribute UserUpdateDTO userUpdateDTO){
 
         userService.modifyUserId(userId, userUpdateDTO.getUpdateId());
@@ -60,7 +60,7 @@ public class UserController {
      *  비밀번호 변경
      */
     @PatchMapping("/password")
-    public ResponseEntity<String> modifyUserPassword(@PathVariable("user-id") String userId,
+    public ResponseEntity<String> modifyUserPassword(@PathVariable("user-id") Long userId,
                                                      @RequestBody UserUpdateDTO userUpdateDTO){
 
         userService.modifyPassword(userId, userUpdateDTO.getUpdatePassword());
@@ -73,7 +73,7 @@ public class UserController {
      *  알림 허용 변경
      */
     @PatchMapping("/alarm")
-    public ResponseEntity<String> modifyUserAlarm(@PathVariable("user-id") String userId){
+    public ResponseEntity<String> modifyUserAlarm(@PathVariable("user-id") Long userId){
 
         userService.modifyAlarm(userId);
 
@@ -85,7 +85,7 @@ public class UserController {
      *  북마크 조회
      */
     @GetMapping("/bookmark")
-    public ResponseEntity<BookmarkDTO> getBookmark(@PathVariable("user-id") String userId){
+    public ResponseEntity<BookmarkDTO> getBookmark(@PathVariable("user-id") Long userId){
 
         BookmarkDTO bookmarkDTO = userService.getListOfBookmark(userId);
 

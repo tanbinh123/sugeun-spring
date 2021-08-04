@@ -28,15 +28,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info("username: " + username);
 
 
-        User user = userRepository.findByUserId(username).orElseThrow(() ->
+        User user = userRepository.findByNickname(username).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 ID 입니다."));
 
 
-        AuthUserDTO authUserDTO = new AuthUserDTO(user.getUserId(), user.getPassword(),
+        AuthUserDTO authUserDTO = new AuthUserDTO(user.getNickname(), user.getPassword(),
                 user.getRoleSet().stream().map(role ->
                         new SimpleGrantedAuthority("ROLE_" + role.name()))
                         .collect(Collectors.toList()));
 
+        authUserDTO.setUserId(user.getUserId());
         authUserDTO.setPhone(user.getPhone());
         authUserDTO.setAlarm(user.getAlarm());
         authUserDTO.setPassword(user.getPassword());

@@ -82,13 +82,12 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     private boolean checkAuthHeader(HttpServletRequest request) {
 
         String deviceToken = request.getHeader("Authorization");
-        String userId = request.getHeader("userId");
 
-        log.info(userId);
+        Long userId = Long.parseLong(request.getHeader("userId"));
 
         // DB에 저장된 deviceToken 가져오기
-        User user = userRepository.findByUserId(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 ID입니다."));
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 회원입니다."));
 
         log.info("headerDeviceToken(): " + deviceToken);
         log.info("User.getDeviceToken(): " + user.getDeviceToken());

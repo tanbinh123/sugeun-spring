@@ -17,10 +17,10 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     //링크 리스트
     @Query("select l from Link l where l.user.userId = :userId " +
             "and l.folder.folderId = :folderId")
-    List<Link> getLinkList(@Param("userId") String userId, @Param("folderId") Long folderId);
+    List<Link> getLinkList(@Param("userId") Long userId, @Param("folderId") Long folderId);
 
     //북마크
     @Query("select l from Link l where l.user.userId = :userId and " +
             "l.bookmark = true")
-    List<Link> getLinkBookmarkList(String userId);
+    List<Link> getLinkBookmarkList(Long userId);
 }

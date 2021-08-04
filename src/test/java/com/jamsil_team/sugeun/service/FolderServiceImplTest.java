@@ -237,7 +237,7 @@ class FolderServiceImplTest {
         folderRepository.save(folderC); //userId: 형우, type: Link, parentFolder: null
 
         //when 폴더A 1개만 출력 기대
-        List<FolderResDTO> result = folderService.getListOfFolder("형우", FolderType.PHRASE, null);
+        List<FolderResDTO> result = folderService.getListOfFolder(user.getUserId(), FolderType.PHRASE, null);
 
         //then
         Assertions.assertThat(result.size()).isEqualTo(1);
@@ -342,7 +342,7 @@ class FolderServiceImplTest {
     private User createUser() {
 
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();

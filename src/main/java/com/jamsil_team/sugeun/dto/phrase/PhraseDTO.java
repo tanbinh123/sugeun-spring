@@ -20,7 +20,7 @@ public class PhraseDTO {
 
     private Long phraseId;
 
-    private String userId;
+    private Long userId;
 
     private Long folderId;
 

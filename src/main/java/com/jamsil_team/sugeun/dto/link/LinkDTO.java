@@ -19,7 +19,7 @@ public class LinkDTO {
 
     private Long linkId;
 
-    private String userId;
+    private Long userId;
 
     private Long folderId;
 

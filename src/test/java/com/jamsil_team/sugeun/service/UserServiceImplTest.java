@@ -10,7 +10,7 @@ import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
-import com.jamsil_team.sugeun.dto.user.UserDTO;
+import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
 import org.assertj.core.api.Assertions;
 
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -41,6 +40,7 @@ class UserServiceImplTest {
     void 중복확인() throws Exception{
         //given
         UserSignupDTO signUpDTOUser = createSignUpDTO();
+
         User user = signUpDTOUser.toEntity();
         userRepository.save(user);
 
@@ -56,11 +56,17 @@ class UserServiceImplTest {
         //given
         UserSignupDTO signUpDTOUser = createSignUpDTO();
 
+        String rawPassword = signUpDTOUser.getPassword();
         //when
         User user = userService.join(signUpDTOUser);
 
         //then
-        Assertions.assertThat(user.getUserId()).isEqualTo("형우");
+        Assertions.assertThat(user.getUserId()).isNotNull();
+        Assertions.assertThat(user.getNickname()).isEqualTo(signUpDTOUser.getNickname());
+
+        boolean matches = passwordEncoder.matches(rawPassword, user.getPassword());
+        Assertions.assertThat(matches).isTrue();
+
         Assertions.assertThat(user.getDeviceToken()).isNull();
     }
 
@@ -131,7 +137,7 @@ class UserServiceImplTest {
     void 프로필사진_업데이트_기존x() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -145,7 +151,7 @@ class UserServiceImplTest {
         userService.modifyUserImg(user.getUserId(), file);
 
         //then
-        User savedUser = userRepository.findByUserId(user.getUserId()).get();
+        User savedUser = userRepository.findById(user.getUserId()).get();
         String storeFilename = savedUser.getStoreFilename();
 
         Assertions.assertThat(savedUser.getFolderPath()).isNotBlank();
@@ -157,7 +163,7 @@ class UserServiceImplTest {
     void 프로필사진_업데이트_기존o() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -167,7 +173,7 @@ class UserServiceImplTest {
 
         MockMultipartFile file1 = new MockMultipartFile("file", "filename-1.jpeg", "image/jpeg", "some-image".getBytes());
         //savedUserB의 folderPath 와 비교
-        User savedUserA = userRepository.findByUserId(user.getUserId()).get();
+        User savedUserA = userRepository.findById(user.getUserId()).get();
 
 
         //프로필 사진 저장
@@ -179,7 +185,7 @@ class UserServiceImplTest {
         userService.modifyUserImg(user.getUserId(), file2);
 
         //then
-        User savedUserB = userRepository.findByUserId(user.getUserId()).get();
+        User savedUserB = userRepository.findById(user.getUserId()).get();
         String storeFilename = savedUserB.getStoreFilename();
 
         Assertions.assertThat(savedUserB.getFolderPath()).isNotNull();
@@ -192,7 +198,7 @@ class UserServiceImplTest {
     void 프로필사진_업데이트_기존o_변경값NULL() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -206,7 +212,7 @@ class UserServiceImplTest {
         userService.modifyUserImg(user.getUserId(), null);
 
         //then
-        User savedUser = userRepository.findByUserId(user.getUserId()).get();
+        User savedUser = userRepository.findById(user.getUserId()).get();
 
         Assertions.assertThat(savedUser.getFolderPath()).isBlank();
         Assertions.assertThat(savedUser.getStoreFilename()).isBlank();
@@ -216,7 +222,7 @@ class UserServiceImplTest {
     void 프로필사진_업데이트_이미지파일x() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -234,12 +240,12 @@ class UserServiceImplTest {
         Assertions.assertThat(e.getMessage()).isEqualTo("이미지 파일이 아닙니다.");
     }
 
-    /*
+
     @Test
     void 아이디_변경() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -251,9 +257,10 @@ class UserServiceImplTest {
         userService.modifyUserId(user.getUserId(), "수근수근");
 
         //then
-        Assertions.assertThat(userRepository.findByUserId("수근수근")).isNotNull();
+        Assertions.assertThat(userRepository.findByNickname("수근수근")).isNotNull();
 
-        User savedUser = userRepository.findById("수근수근").get();
+        User savedUser = userRepository.findById(user.getUserId()).get();
+        Assertions.assertThat(savedUser.getNickname()).isEqualTo("수근수근");
 
         boolean matches = passwordEncoder.matches("1111", savedUser.getPassword());
         Assertions.assertThat(matches).isTrue();
@@ -262,13 +269,13 @@ class UserServiceImplTest {
         Assertions.assertThat(savedUser.getDeviceToken()).isEqualTo("adsf1r@Afdfas");
     }
 
-*/
+
 
     @Test
     void 비밀번호_변경() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -277,10 +284,10 @@ class UserServiceImplTest {
         userRepository.save(user);
 
         //when
-        userService.modifyPassword("형우", "2222");
+        userService.modifyPassword(user.getUserId(), "2222");
 
         //then
-        Optional<User> result = userRepository.findByUserId("형우");
+        Optional<User> result = userRepository.findById(user.getUserId());
         User savedUser = result.get();
 
         boolean matches = passwordEncoder.matches("2222", savedUser.getPassword());
@@ -292,7 +299,7 @@ class UserServiceImplTest {
     void 프로필_조회() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -301,12 +308,12 @@ class UserServiceImplTest {
         userRepository.save(user);
 
         //when
-        UserDTO userDTO = userService.getUser(user.getUserId());
+        UserResDTO userResDTO = userService.getUser(user.getUserId());
 
         //then
-        Assertions.assertThat(userDTO.getUserId()).isEqualTo(user.getUserId());
-        Assertions.assertThat(userDTO.getAlarm()).isEqualTo(user.getAlarm());
-        Assertions.assertThat(userDTO.getPhone()).isEqualTo(user.getPhone());
+        Assertions.assertThat(userResDTO.getUserId()).isEqualTo(user.getUserId());
+        Assertions.assertThat(userResDTO.getAlarm()).isEqualTo(user.getAlarm());
+        Assertions.assertThat(userResDTO.getPhone()).isEqualTo(user.getPhone());
 //        Assertions.assertThat(userDTO.getFolderPath()).isEqualTo(user.getFolderPath());
 //        Assertions.assertThat(userDTO.getStoreFilename()).isEqualTo(user.getStoreFilename());
     }
@@ -315,7 +322,7 @@ class UserServiceImplTest {
     void 알람허용_변경_기존_true() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .alarm(true) //알람 허용o
@@ -328,7 +335,7 @@ class UserServiceImplTest {
         userService.modifyAlarm(user.getUserId());
 
         //then
-        Optional<User> result = userRepository.findByUserId("형우");
+        Optional<User> result = userRepository.findById(user.getUserId());
         User savedUser = result.get();
 
         Assertions.assertThat(savedUser.getAlarm()).isFalse();
@@ -338,7 +345,7 @@ class UserServiceImplTest {
     void 알람허용_변경_기존_false() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .alarm(false) //알람 허용x
@@ -351,7 +358,7 @@ class UserServiceImplTest {
         userService.modifyAlarm(user.getUserId());
 
         //then
-        Optional<User> result = userRepository.findByUserId("형우");
+        Optional<User> result = userRepository.findById(user.getUserId());
         User savedUser = result.get();
 
         Assertions.assertThat(savedUser.getAlarm()).isTrue();
@@ -361,7 +368,7 @@ class UserServiceImplTest {
     void 북마크_리스트() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -424,7 +431,7 @@ class UserServiceImplTest {
 
     private UserSignupDTO createSignUpDTO() {
         UserSignupDTO signUpDTOUser = UserSignupDTO.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();

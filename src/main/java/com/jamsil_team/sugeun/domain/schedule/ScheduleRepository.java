@@ -8,7 +8,7 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
     @Query("select s from Schedule s where s.user.userId = :userId")
-    List<Schedule> getScheduleList(String userId);
+    List<Schedule> getScheduleList(Long userId);
 
 
 }

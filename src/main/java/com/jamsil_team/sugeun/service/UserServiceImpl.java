@@ -10,13 +10,12 @@ import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.link.LinkDTO;
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
-import com.jamsil_team.sugeun.dto.user.UserDTO;
+import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
 import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,9 +46,9 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional(readOnly = true)
     @Override
-    public Boolean isDuplicateNickname(String userId) {
+    public Boolean isDuplicateNickname(String nickname) {
 
-        Optional<User> result = userRepository.findById(userId);
+        Optional<User> result = userRepository.findByNickname(nickname);
 
         if(result.isPresent()){
             return false;
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService{
     public User join(UserSignupDTO userSignupDTO) {
 
 
-        Optional<User> result = userRepository.findById(userSignupDTO.getUserId());
+        Optional<User> result = userRepository.findByNickname(userSignupDTO.getNickname());
 
         if(result.isPresent()){
             throw new IllegalStateException("이미 등록된 ID 입니다.");
@@ -91,17 +90,12 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional
     @Override
-    public void UpdateDeviceToken(String userId, String deviceToken) {
+    public void UpdateDeviceToken(Long userId, String deviceToken) {
 
-        Optional<User> result = userRepository.findById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않은 회원입니다."));
 
-        if(result.isPresent()){
-            User user = result.get();
-            user.changeDeviceToken(deviceToken);
-        }
-        else{
-            throw new IllegalStateException("존재하지 않는 ID 입니다.");
-        }
+        user.changeDeviceToken(deviceToken);
     }
 
     /**
@@ -109,9 +103,9 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional
     @Override
-    public void modifyUserImg(String userId, MultipartFile multipartFile) throws IOException {
+    public void modifyUserImg(Long userId, MultipartFile multipartFile) throws IOException {
 
-        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+        User user = userRepository.findById(userId).orElseThrow(() ->
                 new IllegalStateException("존재하는 않은 회원입니다."));
 
         //서버 컴퓨터에 저장된 기존 프로필 사진 삭제
@@ -143,16 +137,15 @@ public class UserServiceImpl implements UserService{
     /**
      *  아이디 변경
      */
-    /*
     @Transactional
     @Override
-    public void modifyUserId(String userId, String updateUserId) {
+    public void modifyUserId(Long userId, String updateNickname) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 회원입니다."));
 
-        user.changeUserId(updateUserId);
-    }*/
+        user.changeUserId(updateNickname);
+    }
 
 
     /**
@@ -160,9 +153,9 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional
     @Override
-    public void modifyPassword(String userId, String password) {
+    public void modifyPassword(Long userId, String password) {
 
-        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+        User user = userRepository.findById(userId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않는 회원입니다."));
 
         //암호화
@@ -177,22 +170,22 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional(readOnly = true)
     @Override
-    public UserDTO getUser(String userId) throws IOException {
+    public UserResDTO getUser(Long userId) throws IOException {
 
-        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+        User user = userRepository.findById(userId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않은 회원입니다."));
 
-        UserDTO userDTO = user.toDTO();
+        UserResDTO userResDTO = user.toDTO();
 
         //이미지 파일 데이터
         if(!(user.getStoreFilename().isBlank())){
             File file = new File(fileStore.getFullPath(user.getFolderPath(), user.getStoreFilename()));
             byte[] bytes = FileCopyUtils.copyToByteArray(file);
-            userDTO.setImageData(bytes);
+            userResDTO.setImageData(bytes);
         }
 
 
-        return userDTO;
+        return userResDTO;
     }
 
     /**
@@ -200,9 +193,9 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional
     @Override
-    public void modifyAlarm(String userId) {
+    public void modifyAlarm(Long userId) {
 
-        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+        User user = userRepository.findById(userId).orElseThrow(() ->
                 new IllegalStateException("존재하지 않은 회원입니다."));
 
         user.changeAlarm();
@@ -213,7 +206,7 @@ public class UserServiceImpl implements UserService{
      */
     @Transactional(readOnly = true)
     @Override
-    public BookmarkDTO getListOfBookmark(String userId) {
+    public BookmarkDTO getListOfBookmark(Long userId) {
 
         //bookmark = true 인 phrase, link 리스트
         List<Phrase> phraseList = phraseRepository.getPhraseBookmarkList(userId);

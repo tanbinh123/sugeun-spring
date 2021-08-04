@@ -24,7 +24,7 @@ public class TimeoutDTO {
 
     private Long timeoutId;
 
-    private String userId;
+    private Long userId;
 
     private String title;
 

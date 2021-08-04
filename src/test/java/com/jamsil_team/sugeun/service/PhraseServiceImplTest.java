@@ -131,7 +131,7 @@ class PhraseServiceImplTest {
 
     private Folder createFolder() {
         User user = User.builder()
-                .userId("형우B")
+                .nickname("형우B")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();
@@ -152,7 +152,7 @@ class PhraseServiceImplTest {
     private User createUser() {
 
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();

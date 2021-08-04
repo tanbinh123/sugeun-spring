@@ -20,7 +20,7 @@ public interface ScheduleSelectRepository extends JpaRepository<ScheduleSelect, 
     @Query("select ss from ScheduleSelect ss " +
             "left join Schedule s on s = ss.schedule " +
             "where s.user.userId = :userId")
-    List<ScheduleSelect> findByUserId(String userId);
+    List<ScheduleSelect> findByUserId(Long userId);
 
     //테스트코드에 사용
     @Query("select ss from ScheduleSelect ss where ss.schedule.scheduleId = :scheduleId")

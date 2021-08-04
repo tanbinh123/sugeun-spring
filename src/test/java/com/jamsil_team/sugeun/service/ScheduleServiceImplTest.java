@@ -171,7 +171,7 @@ class ScheduleServiceImplTest {
         User userA = createUser();
 
         User userB = User.builder()
-                .userId("수근")
+                .nickname("수근")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();
@@ -244,7 +244,7 @@ class ScheduleServiceImplTest {
     private User createUser() {
 
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();

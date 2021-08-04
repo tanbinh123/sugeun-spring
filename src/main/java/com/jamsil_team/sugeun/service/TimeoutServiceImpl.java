@@ -112,7 +112,7 @@ public class TimeoutServiceImpl implements TimeoutService{
      */
     @Transactional(readOnly = true)
     @Override
-    public List<TimeoutDTO> getListOfTimeout(String userId) {
+    public List<TimeoutDTO> getListOfTimeout(Long userId) {
 
         List<Timeout> timeoutList = timeoutRepository.getTimeoutList(userId);
 

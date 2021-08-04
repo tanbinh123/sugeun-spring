@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.domain.user;
 
 import com.jamsil_team.sugeun.domain.userRole.UserRole;
-import com.jamsil_team.sugeun.dto.user.UserDTO;
+import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.*;
 
@@ -17,8 +17,11 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 public class User {
-    @Id
-    private String userId;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
+    @Column(nullable = false, unique = true)
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
@@ -44,9 +47,9 @@ public class User {
     @Builder.Default
     private Set<UserRole> roleSet = new HashSet<UserRole>(Arrays.asList(UserRole.USER));
 
-//    public void changeUserId(String userId){
-//        this.userId = userId;
-//    }
+    public void changeUserId(String nickname){
+        this.nickname = nickname;
+    }
 
     public void changeAlarm() {
         if (this.alarm == false) {
@@ -76,13 +79,14 @@ public class User {
         }
     }
 
-    public UserDTO toDTO(){
-        UserDTO userDTO = UserDTO.builder()
+    public UserResDTO toDTO(){
+        UserResDTO userResDTO = UserResDTO.builder()
                 .userId(userId)
+                .nickname(nickname)
                 .phone(phone)
                 .alarm(alarm)
                 .build();
 
-        return userDTO;
+        return userResDTO;
     }
 }

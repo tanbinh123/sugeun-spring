@@ -19,7 +19,7 @@ public interface FolderService {
 
     void removeFolder(Long folderId);
 
-    List<FolderResDTO> getListOfFolder(String userId, FolderType type, Long parentFolderId);
+    List<FolderResDTO> getListOfFolder(Long userId, FolderType type, Long parentFolderId);
 
-    DetailFolderDTO getFolder(String userId, Long folderId);
+    DetailFolderDTO getFolder(Long userId, Long folderId);
 }

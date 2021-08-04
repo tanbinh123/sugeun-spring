@@ -49,7 +49,7 @@ class FolderRepositoryTest {
         folderRepository.save(folderC); //userId: 형우, type: Link, parentFolder: null
 
         //when
-        List<Folder> result = folderRepository.getListFolder("형우", FolderType.PHRASE, folderA.getFolderId());
+        List<Folder> result = folderRepository.getListFolder(user.getUserId(), FolderType.PHRASE, folderA.getFolderId());
 
         for(Folder folder : result){
             System.out.println(folder);
@@ -65,7 +65,7 @@ class FolderRepositoryTest {
     private User createUser() {
 
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();

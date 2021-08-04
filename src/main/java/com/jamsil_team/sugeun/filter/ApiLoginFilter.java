@@ -3,9 +3,9 @@ package com.jamsil_team.sugeun.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
-import com.jamsil_team.sugeun.dto.folder.FolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
-import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
+import com.jamsil_team.sugeun.dto.user.UserDTO;
+import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -59,14 +59,16 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         System.out.println(messageBody);
 
-        AuthUserDTO authUserDTO = objectMapper.readValue(messageBody, AuthUserDTO.class);
+        UserDTO userDTO = objectMapper.readValue(messageBody, UserDTO.class);
 
-        this.deviceToken = authUserDTO.getDeviceToken();
+        this.deviceToken = request.getHeader("Authorization");
 
-        log.info("authUserDTO: "+authUserDTO);
+        System.out.println(deviceToken);
+
+        log.info("UserDTO: "+ userDTO);
 
         UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(authUserDTO.getUserId(),authUserDTO.getPassword());
+                new UsernamePasswordAuthenticationToken(userDTO.getNickname(), userDTO.getPassword());
 
         return getAuthenticationManager().authenticate(authToken);
     }
@@ -85,14 +87,18 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
         log.info(authResult.getPrincipal());
 
         //로그인 시 받은 deviceToken 갱신
-        String userId = authResult.getName();
+        String nickname = authResult.getName();
 
-        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+        System.out.println("---------------");
+        System.out.println(nickname);
+
+
+        User user = userRepository.findByNickname(nickname).orElseThrow(() ->
                 new IllegalStateException("존재하지 않은 아이디입니다."));
 
         //로그인시 받은 token 과 기존  token 이 다를 경우 갱신
         if(user.getDeviceToken() != this.deviceToken){
-            userService.UpdateDeviceToken(userId, this.deviceToken);
+            userService.UpdateDeviceToken(user.getUserId(), this.deviceToken);
         }
 
         //response json 값
@@ -100,7 +106,7 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setCharacterEncoding("utf-8");
 
 
-        List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, null, null);
+        List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(user.getUserId(), null, null);
 
         String result = objectMapper.writeValueAsString(folderResDTOList);
         response.getWriter().write(result);

@@ -25,7 +25,7 @@ public class ScheduleDTO {
 
     private Long scheduleId;
 
-    private String userId;
+    private Long userId;
 
     private String title;
 

@@ -94,7 +94,7 @@ public class ScheduleServiceImpl implements ScheduleService{
      */
     @Transactional(readOnly = true)
     @Override
-    public List<ScheduleDTO> getListOfSchedule(String userId) {
+    public List<ScheduleDTO> getListOfSchedule(Long userId) {
 
         List<Schedule> scheduleList = scheduleRepository.getScheduleList(userId);
 

@@ -16,7 +16,9 @@ import java.util.Collection;
 @ToString
 public class AuthUserDTO extends User {
 
-    private String userId;
+    private Long userId;
+
+    private String nickname;
 
     private String password;
 
@@ -34,7 +36,7 @@ public class AuthUserDTO extends User {
     public AuthUserDTO(String username, String password,
                        Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
-        this.userId = username;
+        this.nickname = username;
     }
 
 

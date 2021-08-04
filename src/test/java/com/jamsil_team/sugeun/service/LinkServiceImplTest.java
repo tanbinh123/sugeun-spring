@@ -110,7 +110,7 @@ class LinkServiceImplTest {
     private User createUser() {
 
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();

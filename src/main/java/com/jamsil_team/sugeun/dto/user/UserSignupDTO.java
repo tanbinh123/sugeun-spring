@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
 public class UserSignupDTO {
 
     @NotEmpty
-    private String userId;
+    private String nickname;
 
     @NotEmpty
     private String password;
@@ -28,7 +28,7 @@ public class UserSignupDTO {
     public User toEntity(){
 
         User user = User.builder()
-                .userId(userId)
+                .nickname(nickname)
                 .password(password)
                 .phone(phone)
                 .build();

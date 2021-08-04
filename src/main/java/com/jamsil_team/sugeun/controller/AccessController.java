@@ -50,9 +50,9 @@ public class AccessController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserSignupDTO signUpDTOUser){
+    public ResponseEntity<String> signup(@RequestBody UserSignupDTO userSignupDTO){
 
-        User join = userService.join(signUpDTOUser);
+        User join = userService.join(userSignupDTO);
 
         System.out.println(join);
 

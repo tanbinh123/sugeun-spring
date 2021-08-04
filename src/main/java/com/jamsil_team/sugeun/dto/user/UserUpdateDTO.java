@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class UserUpdateDTO {
 
-    //private String updateId;
+    private String nickname;
 
     private String updatePassword;
 

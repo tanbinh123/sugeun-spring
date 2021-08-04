@@ -17,12 +17,12 @@ public interface PhraseRepository extends JpaRepository<Phrase, Long> {
     //글귀 리스트
     @Query("select p from Phrase p where p.user.userId = :userId " +
             "and p.folder.folderId = :folderId")
-    List<Phrase> getPhraseList(@Param("userId") String userId, @Param("folderId") Long folderId);
+    List<Phrase> getPhraseList(@Param("userId") Long userId, @Param("folderId") Long folderId);
 
     //북마크
     @Query("select p from Phrase p where p.user.userId = :userId and " +
             "p.bookmark = true")
-    List<Phrase> getPhraseBookmarkList(String userId);
+    List<Phrase> getPhraseBookmarkList(Long userId);
 
 
 }

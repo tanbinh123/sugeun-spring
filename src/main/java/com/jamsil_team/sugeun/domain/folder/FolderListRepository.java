@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface FolderListRepository {
 
-    List<Folder> getListFolder(String userId, FolderType type, Long parentFolderId);
+    List<Folder> getListFolder(Long userId, FolderType type, Long parentFolderId);
 
 }

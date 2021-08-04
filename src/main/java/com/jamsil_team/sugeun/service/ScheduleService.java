@@ -13,6 +13,6 @@ public interface ScheduleService {
 
     void removeSchedule(Long scheduleId);
 
-    List<ScheduleDTO> getListOfSchedule(String userId);
+    List<ScheduleDTO> getListOfSchedule(Long userId);
 
 }

@@ -20,7 +20,7 @@ public interface TimeoutSelectRepository extends JpaRepository<TimeoutSelect, Lo
     @Query("select ts from TimeoutSelect ts " +
             "left join Timeout t on t.timeoutId = ts.timeout.timeoutId " +
             "where t.user.userId = :userId")
-    List<TimeoutSelect> findByUserId(String userId);
+    List<TimeoutSelect> findByUserId(Long userId);
 
     //테스트코드 사용
     @Query("select ts from TimeoutSelect ts where ts.timeout.timeoutId = :timeoutId")

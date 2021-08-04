@@ -17,7 +17,7 @@ public class FolderListRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public List<Folder> getListFolder(String userId, FolderType type, Long parentFolderId) {
+    public List<Folder> getListFolder(Long userId, FolderType type, Long parentFolderId) {
         QFolder folder = QFolder.folder;
 
         //from절

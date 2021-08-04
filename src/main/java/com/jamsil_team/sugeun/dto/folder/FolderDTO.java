@@ -20,7 +20,7 @@ public class FolderDTO {
 
     private String folderName;
 
-    private String userId;
+    private Long userId;
 
     @Enumerated(EnumType.STRING)
     private FolderType type;
