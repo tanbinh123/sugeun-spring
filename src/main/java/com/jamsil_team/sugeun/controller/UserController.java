@@ -36,7 +36,7 @@ public class UserController {
      */
     @PatchMapping("/image")
     public ResponseEntity<String> modifyUserImg(@PathVariable("user-id") String userId,
-                                                @ModelAttribute UserUpdateDTO userUpdateDTO) throws IOException {
+                                                @RequestBody UserUpdateDTO userUpdateDTO) throws IOException {
 
         userService.modifyUserImg(userId, userUpdateDTO.getImageFile());
 
@@ -61,7 +61,7 @@ public class UserController {
      */
     @PatchMapping("/password")
     public ResponseEntity<String> modifyUserPassword(@PathVariable("user-id") String userId,
-                                                     @ModelAttribute UserUpdateDTO userUpdateDTO){
+                                                     @RequestBody UserUpdateDTO userUpdateDTO){
 
         userService.modifyPassword(userId, userUpdateDTO.getUpdatePassword());
 
@@ -92,10 +92,4 @@ public class UserController {
         return new ResponseEntity<>(bookmarkDTO, HttpStatus.OK);
 
     }
-
-
-
-
-
-
 }

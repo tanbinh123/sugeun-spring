@@ -82,7 +82,9 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     private boolean checkAuthHeader(HttpServletRequest request) {
 
         String deviceToken = request.getHeader("Authorization");
-        String userId = request.getHeader("userID");
+        String userId = request.getHeader("userId");
+
+        log.info(userId);
 
         // DB에 저장된 deviceToken 가져오기
         User user = userRepository.findByUserId(userId).orElseThrow(() ->

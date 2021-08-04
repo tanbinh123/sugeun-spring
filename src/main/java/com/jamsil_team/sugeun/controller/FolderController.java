@@ -24,9 +24,9 @@ public class FolderController {
     /**
      *  폴더 DTO 리스트
      */
-    @GetMapping("{type}")
+    @GetMapping("/{type}")
     public ResponseEntity<List<FolderResDTO>> typeFolderList(@PathVariable("user-id") String userId,
-                                                          @PathVariable("type") FolderType type){
+                                                          @PathVariable(value = "type", required = false) FolderType type){
 
         List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, type, null);
 
@@ -58,4 +58,41 @@ public class FolderController {
         return new ResponseEntity(detailFolderDTO, HttpStatus.OK);
     }
 
+    /**
+     * 폴더 이미지 업로드
+     */
+    @PatchMapping("/{folder-id}/image")
+    public ResponseEntity<String> modifyFolderImg(@PathVariable("user-id") String userId,
+                                                  @PathVariable("folder-id") Long folderId,
+                                                  @ModelAttribute FolderDTO folderDTO) throws IOException {
+
+        folderService.modifyFolderImage(folderId, folderDTO.getImageFile());
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    /**
+     * 폴더 이름 변경
+     */
+    @PatchMapping("/{folder-id}/name")
+    public ResponseEntity<String> modifyFolderName(@PathVariable("user-id") String userId,
+                                                  @PathVariable("folder-id") Long folderId,
+                                                  @RequestBody FolderDTO folderDTO){
+
+        folderService.modifyFolderName(folderId, folderDTO.getFolderName());
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    /**
+     * 폴더 삭제
+     */
+    @DeleteMapping("/{folder-id}")
+    public ResponseEntity<String> removeFolder(@PathVariable("user-id") String userId,
+                                               @PathVariable("folder-id") Long folderId){
+
+        folderService.removeFolder(folderId);
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
 }

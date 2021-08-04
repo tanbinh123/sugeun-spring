@@ -19,6 +19,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,6 +70,26 @@ public class FolderServiceImpl implements FolderService{
 
 
     /**
+     * 폴더 이미지 변경
+     */
+    @Transactional
+    @Override
+    public void modifyFolderImage(Long folderId, MultipartFile multipartFile) throws IOException {
+
+        Folder folder = folderRepository.findById(folderId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 폴더입니다."));
+
+        //서버 컴퓨터에 저장된 기존 폴더 사진 삭제
+        fileRemove(folder);
+
+        ResultFileStore resultFileStore = fileStore.storeFile(multipartFile);
+
+        //사진 저장
+        folder.changeFolderImg(resultFileStore);
+
+    }
+
+    /**
      * 폴더삭제
      */
     @Transactional
@@ -96,7 +117,7 @@ public class FolderServiceImpl implements FolderService{
     }
 
     private void fileRemove(Folder folder) {
-        //storeFilename 이 빈칸이 아닐 경우
+        //사진 등록이 되어 있는 경우
         if(!folder.getStoreFilename().isBlank()){
             String folderPath = folder.getFolderPath();
             String storeFilename = folder.getStoreFilename();

@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService{
                 new IllegalStateException("존재하는 않은 회원입니다."));
 
         //서버 컴퓨터에 저장된 기존 프로필 사진 삭제
-        removeImageFile(user);
+        fileRemove(user);
 
         ResultFileStore resultFileStore = fileStore.storeFile(multipartFile);
 
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService{
         user.changeUserImg(resultFileStore);
     }
 
-    private void removeImageFile(User user) {
+    private void fileRemove(User user) {
 
         //기존 프로필 이미지가 있을 경우
         if(user.getStoreFilename() != null && !(user.getStoreFilename().equals(""))){
