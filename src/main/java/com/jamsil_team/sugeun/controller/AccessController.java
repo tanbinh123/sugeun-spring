@@ -56,7 +56,7 @@ public class AccessController {
 
         System.out.println(join);
 
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
     @PostMapping("/login")

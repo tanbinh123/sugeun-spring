@@ -24,11 +24,11 @@ public class FolderController {
     /**
      *  폴더 DTO 리스트
      */
-    @GetMapping("/{type}")
+    @GetMapping
     public ResponseEntity<List<FolderResDTO>> typeFolderList(@PathVariable("user-id") Long userId,
-                                                          @PathVariable(value = "type", required = false) FolderType type){
+                                                             @RequestParam("type") String type){
 
-        List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, type, null);
+        List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, FolderType.valueOf(type), null);
 
         return new ResponseEntity<>(folderResDTOList, HttpStatus.OK);
     }
@@ -42,14 +42,14 @@ public class FolderController {
 
         folderService.createFolder(folderDTO);
 
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("폴더생성 완료", HttpStatus.OK);
     }
 
 
     /**
      *  폴더 조회
      */
-    @GetMapping("{folder-id}")
+    @GetMapping("/{folder-id}")
     public ResponseEntity<DetailFolderDTO> readFolder(@PathVariable("user-id") Long userId,
                                        @PathVariable("folder-id") Long folderId){
 
@@ -59,29 +59,24 @@ public class FolderController {
     }
 
     /**
-     * 폴더 이미지 업로드
+     * 폴더정보 변경
      */
-    @PatchMapping("/{folder-id}/image")
-    public ResponseEntity<String> modifyFolderImg(@PathVariable("user-id") Long userId,
-                                                  @PathVariable("folder-id") Long folderId,
-                                                  @ModelAttribute FolderDTO folderDTO) throws IOException {
+    @PatchMapping("{folder-id}")
+    public ResponseEntity<String> modifyFolder(@PathVariable("user-id") Long userId,
+                                               @PathVariable("folder-id") Long folderId,
+                                               @RequestBody FolderDTO folderDTO) throws IOException {
 
-        folderService.modifyFolderImage(folderId, folderDTO.getImageFile());
+        if(folderDTO.getImageFile() != null){
+            folderService.modifyFolderImage(folderId, folderDTO.getImageFile());
+            return new ResponseEntity<>("이미지 업로드 완료", HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>("OK", HttpStatus.OK);
-    }
+        if(folderDTO.getFolderName() != null){
+            folderService.modifyFolderName(folderId, folderDTO.getFolderName());
+            return new ResponseEntity<>("폴더이름 변경 완료", HttpStatus.OK);
+        }
 
-    /**
-     * 폴더 이름 변경
-     */
-    @PatchMapping("/{folder-id}/name")
-    public ResponseEntity<String> modifyFolderName(@PathVariable("user-id") Long userId,
-                                                  @PathVariable("folder-id") Long folderId,
-                                                  @RequestBody FolderDTO folderDTO){
-
-        folderService.modifyFolderName(folderId, folderDTO.getFolderName());
-
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return null;
     }
 
     /**
@@ -93,6 +88,6 @@ public class FolderController {
 
         folderService.removeFolder(folderId);
 
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("폴더삭제 완료", HttpStatus.OK);
     }
 }

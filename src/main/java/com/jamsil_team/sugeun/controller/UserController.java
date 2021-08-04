@@ -30,42 +30,28 @@ public class UserController {
         return new ResponseEntity<>(userResDTO, HttpStatus.OK);
     }
 
-
     /**
-     *  이미지 업로드
+     *  회원정보 수정
      */
-    @PatchMapping("/image")
-    public ResponseEntity<String> modifyUserImg(@PathVariable("user-id") Long userId,
-                                                @RequestBody UserUpdateDTO userUpdateDTO) throws IOException {
+    @PatchMapping
+    public ResponseEntity<String> modifyUser(@PathVariable("user-id") Long userId,
+                                             @RequestBody UserUpdateDTO userUpdateDTO) throws IOException {
 
-        userService.modifyUserImg(userId, userUpdateDTO.getImageFile());
+        if(userUpdateDTO.getImageFile() != null){
+            userService.modifyUserImg(userId, userUpdateDTO.getImageFile());
+            return new ResponseEntity<>("이미지 업로드 완료", HttpStatus.OK);
+        }
+        if(userUpdateDTO.getUpdateNickname() != null){
+            userService.modifyUserId(userId, userUpdateDTO.getUpdateNickname());
+            return new ResponseEntity<>("아이디 변경 완료", HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>("OK", HttpStatus.OK);
-    }
+        if(userUpdateDTO.getUpdatePassword() != null){
+            userService.modifyPassword(userId, userUpdateDTO.getUpdatePassword());
+            return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
+        }
 
-    /**
-     *  아이디 변경
-     */
-    /*
-    @PatchMapping("/userId")
-    public ResponseEntity<String> modifyUserId(@PathVariable("user-id") Long userId,
-                                               @ModelAttribute UserUpdateDTO userUpdateDTO){
-
-        userService.modifyUserId(userId, userUpdateDTO.getUpdateId());
-
-        return new ResponseEntity<>("OK", HttpStatus.OK);
-    }*/
-
-    /**
-     *  비밀번호 변경
-     */
-    @PatchMapping("/password")
-    public ResponseEntity<String> modifyUserPassword(@PathVariable("user-id") Long userId,
-                                                     @RequestBody UserUpdateDTO userUpdateDTO){
-
-        userService.modifyPassword(userId, userUpdateDTO.getUpdatePassword());
-
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return null;
     }
 
 
@@ -77,7 +63,7 @@ public class UserController {
 
         userService.modifyAlarm(userId);
 
-        return new ResponseEntity<>("OK",HttpStatus.OK);
+        return new ResponseEntity<>("알림허용 변경 완료",HttpStatus.OK);
     }
 
 
