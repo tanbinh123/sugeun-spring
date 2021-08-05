@@ -8,7 +8,9 @@ import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 
 import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.dto.link.LinkResDTO;
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseResDTO;
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
@@ -233,22 +235,22 @@ public class UserServiceImpl implements UserService{
         List<Link> linkList = linkRepository.getLinkBookmarkList(userId);
 
         //bookmark = true 인 phraseDTO 리스트
-        List<PhraseDTO> phraseDTOList = phraseList.stream().map(phrase -> {
-            PhraseDTO phraseDTO = phrase.toDTO();
-            return phraseDTO;
+        List<PhraseResDTO> phraseResDTOList = phraseList.stream().map(phrase -> {
+            PhraseResDTO phraseResDTO = phrase.toResDTO();
+            return phraseResDTO;
         }).collect(Collectors.toList());
 
 
         //bookmark = true 인 linkDTO 리스트
-        List<LinkDTO> linkDTOList = linkList.stream().map(link -> {
-            LinkDTO linkDTO = link.toDTO();
-            return linkDTO;
+        List<LinkResDTO> linkResDTOList = linkList.stream().map(link -> {
+            LinkResDTO linkResDTO = link.toResDTO();
+            return linkResDTO;
         }).collect(Collectors.toList());
 
 
         return BookmarkDTO.builder()
-                .phraseDTOList(phraseDTOList)
-                .linkDTOList(linkDTOList)
+                .phraseResDTOList(phraseResDTOList)
+                .linkResDTOList(linkResDTOList)
                 .build();
     }
 

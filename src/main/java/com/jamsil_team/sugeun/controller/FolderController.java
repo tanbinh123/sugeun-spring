@@ -51,7 +51,7 @@ public class FolderController {
      */
     @GetMapping("/{folder-id}")
     public ResponseEntity<DetailFolderDTO> readFolder(@PathVariable("user-id") Long userId,
-                                       @PathVariable("folder-id") Long folderId){
+                                                      @PathVariable("folder-id") Long folderId){
 
         DetailFolderDTO detailFolderDTO = folderService.getFolder(userId, folderId);
 

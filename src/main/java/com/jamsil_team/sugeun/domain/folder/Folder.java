@@ -59,24 +59,12 @@ public class Folder {
     }
     public FolderResDTO toResDTO(){
 
-        FolderResDTO folderResDTO;
 
-        if(this.parentFolder != null){
-            folderResDTO = FolderResDTO.builder()
-                    .folderId(this.folderId)
-                    .folderName(this.folderName)
-                    .userId(this.user.getUserId())
-                    .type(this.type)
-                    .parentFolderId(this.parentFolder.folderId)
-                    .build();
-        }else{
-            folderResDTO = FolderResDTO.builder()
-                    .folderId(this.folderId)
-                    .folderName(this.folderName)
-                    .userId(this.user.getUserId())
-                    .type(this.type)
-                    .build();
-        }
+        FolderResDTO folderResDTO = FolderResDTO.builder()
+                .folderId(this.folderId)
+                .folderName(this.folderName)
+                .userId(this.user.getUserId())
+                .build();
 
 
         return folderResDTO;

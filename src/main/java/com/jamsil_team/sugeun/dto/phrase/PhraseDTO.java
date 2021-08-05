@@ -28,12 +28,6 @@ public class PhraseDTO {
 
     private Boolean bookmark;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime regDate;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime modDate;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Asia/Seoul")
     private LocalDate textDate;
 

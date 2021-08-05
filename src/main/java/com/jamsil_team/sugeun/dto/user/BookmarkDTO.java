@@ -2,7 +2,9 @@ package com.jamsil_team.sugeun.dto.user;
 
 
 import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.dto.link.LinkResDTO;
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseResDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +20,8 @@ import java.util.List;
 public class BookmarkDTO {
 
     @Builder.Default
-    private List<PhraseDTO> phraseDTOList = new ArrayList<>();
+    private List<PhraseResDTO> phraseResDTOList = new ArrayList<>();
 
     @Builder.Default
-    private List<LinkDTO> linkDTOList = new ArrayList<>();
+    private List<LinkResDTO> linkResDTOList = new ArrayList<>();
 }

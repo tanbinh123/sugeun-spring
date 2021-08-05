@@ -4,6 +4,7 @@ import com.jamsil_team.sugeun.domain.BaseEntity;
 import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseResDTO;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -54,16 +55,14 @@ public class Phrase extends BaseEntity {
     }
 
 
-    public PhraseDTO toDTO(){
-        PhraseDTO phraseDTO = PhraseDTO.builder()
+    public PhraseResDTO toResDTO(){
+        PhraseResDTO phraseResDTO = PhraseResDTO.builder()
                 .phraseId(this.phraseId)
-                .userId(this.user.getUserId())
-                .folderId(this.folder.getFolderId())
                 .text(this.text)
                 .bookmark(this.bookmark)
                 .textDate(this.textDate)
                 .build();
 
-        return phraseDTO;
+        return phraseResDTO;
     }
 }

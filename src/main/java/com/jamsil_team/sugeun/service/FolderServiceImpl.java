@@ -9,9 +9,9 @@ import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.dto.folder.FolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
-import com.jamsil_team.sugeun.dto.link.LinkDTO;
-import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.dto.link.LinkResDTO;
 import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseResDTO;
 import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
@@ -182,9 +182,9 @@ public class FolderServiceImpl implements FolderService{
             //글귀 리스트
             List<Phrase> phraseList = phraseRepository.getPhraseList(userId, folderId);
 
-            List<PhraseDTO> phraseDTOList = phraseList.stream().map(findPhrase -> {
-                PhraseDTO phraseDTO = findPhrase.toDTO();
-                return phraseDTO;
+            List<PhraseResDTO> phraseResDTOList = phraseList.stream().map(findPhrase -> {
+                PhraseResDTO phraseResDTO = findPhrase.toResDTO();
+                return phraseResDTO;
             }).collect(Collectors.toList());
 
             //폴더 리스트
@@ -196,7 +196,7 @@ public class FolderServiceImpl implements FolderService{
             }).collect(Collectors.toList());
 
             //detailFolderDTO 값 추가
-            detailFolderDTO.setPhraseDTOList(phraseDTOList);
+            detailFolderDTO.setPhraseResDTOList(phraseResDTOList);
             detailFolderDTO.setFolderResDTOList(folderResDTOList);
 
         }
@@ -206,9 +206,9 @@ public class FolderServiceImpl implements FolderService{
             //링크 리스트
             List<Link> linkList = linkRepository.getLinkList(userId, folderId);
 
-            List<LinkDTO> linkDTOList = linkList.stream().map(findLink -> {
-                LinkDTO linkDTO = findLink.toDTO();
-                return linkDTO;
+            List<LinkResDTO> linkDTOResList = linkList.stream().map(findLink -> {
+                LinkResDTO linkResDTO = findLink.toResDTO();
+                return linkResDTO;
             }).collect(Collectors.toList());
 
             //폴더 리스트
@@ -220,7 +220,7 @@ public class FolderServiceImpl implements FolderService{
             }).collect(Collectors.toList());
 
             //detailFolderDTO 값 추가
-            detailFolderDTO.setLinkDTOList(linkDTOList);
+            detailFolderDTO.setLinkResDTOList(linkDTOResList);
             detailFolderDTO.setFolderResDTOList(folderResDTOList);
 
         }
