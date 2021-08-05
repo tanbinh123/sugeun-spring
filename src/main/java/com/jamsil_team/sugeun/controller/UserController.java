@@ -2,6 +2,7 @@ package com.jamsil_team.sugeun.controller;
 
 
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
+import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserUpdateDTO;
 import com.jamsil_team.sugeun.service.UserService;
@@ -28,6 +29,18 @@ public class UserController {
         UserResDTO userResDTO = userService.getUser(userId);
 
         return new ResponseEntity<>(userResDTO, HttpStatus.OK);
+    }
+
+    /**
+     *  기존 비밀번호 검증
+     */
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verifyPassword(@PathVariable("user-id") Long userId,
+                                                  @RequestBody UserDTO userDTO){
+
+        Boolean result = userService.verifyPassword(userId, userDTO.getPassword());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**

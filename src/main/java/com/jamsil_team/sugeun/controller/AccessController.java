@@ -1,6 +1,7 @@
 package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.domain.user.User;
+import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
 import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.SendSmsService;
@@ -46,6 +47,15 @@ public class AccessController {
 
 
         return new ResponseEntity<>(certifyNumber, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/duplicate")
+    public ResponseEntity<Boolean> checkDuplicate(@RequestBody UserDTO userDTO){
+
+        Boolean result = userService.isDuplicateNickname(userDTO.getNickname());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 

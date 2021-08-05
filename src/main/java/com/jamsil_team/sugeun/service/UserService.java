@@ -22,6 +22,8 @@ public interface UserService {
 
     void modifyPassword(Long userId, String password);
 
+    Boolean verifyPassword(Long userId, String password);
+
     UserResDTO getUser(Long userId) throws IOException;
 
     void modifyAlarm(Long userId);

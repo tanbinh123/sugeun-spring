@@ -89,12 +89,12 @@ class UserServiceImplTest {
         Assertions.assertThat(e.getMessage()).isEqualTo("이미 등록된 ID 입니다.");
     }
 
-    /*
+
     @Test
     void 기존비밀번호_검증_성공() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -103,20 +103,20 @@ class UserServiceImplTest {
         userRepository.save(user);
 
         //when
-        Boolean result = userService.verifyPassword("형우2", "1111");
+        Boolean result = userService.verifyPassword(user.getUserId(), "1111");
 
         //then
         Assertions.assertThat(result).isTrue();
     }
-    */
 
 
-    /*
+
+
     @Test
     void 기존비밀번호_검증_실패() throws Exception{
         //given
         User user = User.builder()
-                .userId("형우")
+                .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .deviceToken("adsf1r@Afdfas")
@@ -125,14 +125,14 @@ class UserServiceImplTest {
         userRepository.save(user);
 
         //when
-        Boolean result = userService.verifyPassword("형우", "2222");
+        Boolean result = userService.verifyPassword(user.getUserId(), "2222");
 
         //then
         Assertions.assertThat(result).isFalse();
 
     }
 
-     */
+
     @Test
     void 프로필사진_업데이트_기존x() throws Exception{
         //given

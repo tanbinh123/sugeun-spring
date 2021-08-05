@@ -166,6 +166,26 @@ public class UserServiceImpl implements UserService{
 
 
     /**
+     * 기존 비밀번호 검증
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean verifyPassword(Long userId, String password) {
+
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 회원입니다."));
+
+        System.out.println(password);
+
+        if(passwordEncoder.matches(password, user.getPassword())){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
      * 프로필 조회
      */
     @Transactional(readOnly = true)
@@ -173,7 +193,7 @@ public class UserServiceImpl implements UserService{
     public UserResDTO getUser(Long userId) throws IOException {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않은 회원입니다."));
+                new IllegalStateException("존재하지 않는 회원입니다."));
 
         UserResDTO userResDTO = user.toDTO();
 
