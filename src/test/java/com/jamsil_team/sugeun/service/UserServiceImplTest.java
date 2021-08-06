@@ -411,9 +411,9 @@ class UserServiceImplTest {
         BookmarkDTO bookmarkDTO = userService.getListOfBookmark(user.getUserId());
 
         //then phrase.bookmark = true 인 글귀 1개만 출력, link 빈 리스트 출력
-        Assertions.assertThat(bookmarkDTO.getPhraseDTOList().size()).isEqualTo(1);
-        Assertions.assertThat(bookmarkDTO.getPhraseDTOList().get(0).getBookmark()).isTrue();
-        Assertions.assertThat(bookmarkDTO.getLinkDTOList()).isEmpty();
+        Assertions.assertThat(bookmarkDTO.getPhraseResDTOList().size()).isEqualTo(1);
+        Assertions.assertThat(bookmarkDTO.getPhraseResDTOList().get(0).getBookmark()).isTrue();
+        Assertions.assertThat(bookmarkDTO.getLinkResDTOList()).isEmpty();
     }
 
     private Folder createFolder(User user, FolderType type) {

@@ -13,7 +13,9 @@ import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
 import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.dto.link.LinkResDTO;
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.dto.phrase.PhraseResDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -244,8 +246,6 @@ class FolderServiceImplTest {
         Assertions.assertThat(result.get(0).getFolderId()).isEqualTo(folderA.getFolderId());
         Assertions.assertThat(result.get(0).getFolderName()).isEqualTo(folderA.getFolderName());
         Assertions.assertThat(result.get(0).getUserId()).isEqualTo(folderA.getUser().getUserId());
-        Assertions.assertThat(result.get(0).getParentFolderId()).isNull();
-        Assertions.assertThat(result.get(0).getType()).isEqualTo(folderA.getType());
     }
 
     @Test
@@ -293,10 +293,10 @@ class FolderServiceImplTest {
                 folderService.getFolder(user.getUserId(), folderA.getFolderId());
 
         //then
-        List<PhraseDTO> phraseDTOList = detailFolderDTO.getPhraseDTOList();
+        List<PhraseResDTO> phraseResDTOList = detailFolderDTO.getPhraseResDTOList();
         List<FolderResDTO> folderResDTOList = detailFolderDTO.getFolderResDTOList();
         //글귀 2, 폴더 1
-        Assertions.assertThat(phraseDTOList.size()).isEqualTo(2);
+        Assertions.assertThat(phraseResDTOList.size()).isEqualTo(2);
         Assertions.assertThat(folderResDTOList.size()).isEqualTo(1);
 
     }
@@ -331,10 +331,10 @@ class FolderServiceImplTest {
                 folderService.getFolder(user.getUserId(), folderA.getFolderId());
         
         //then
-        List<LinkDTO> linkDTOList = detailFolderDTO.getLinkDTOList();
+        List<LinkResDTO> linkResDTOList = detailFolderDTO.getLinkResDTOList();
         List<FolderResDTO> folderResDTOList = detailFolderDTO.getFolderResDTOList();
         //링크 0, 폴더 1
-        Assertions.assertThat(linkDTOList.size()).isEqualTo(0);
+        Assertions.assertThat(linkResDTOList.size()).isEqualTo(0);
         Assertions.assertThat(folderResDTOList.size()).isEqualTo(1);
 
     }
