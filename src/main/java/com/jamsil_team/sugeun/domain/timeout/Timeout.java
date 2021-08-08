@@ -3,6 +3,7 @@ package com.jamsil_team.sugeun.domain.timeout;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
+import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -35,11 +36,11 @@ public class Timeout {
     @Column(nullable = false)
     private Boolean isValid = true;
 
-    private String filePath;
+    @Builder.Default
+    private String folderPath = ""; //이미지 저장 폴더 경로
 
-    private String fileName;
-
-    private String uuid;
+    @Builder.Default
+    private String storeFilename = "";
 
     public void isValidFalse(){
         this.isValid = false;
@@ -51,6 +52,18 @@ public class Timeout {
 
     public void changeDeadline(LocalDateTime deadline){
         this.deadline = deadline;
+    }
+
+    public void changeTimeoutImg(ResultFileStore resultFileStore){
+
+        if(resultFileStore == null){
+            this.folderPath = "";
+            this.storeFilename = "";
+        }
+        else{
+            this.folderPath = resultFileStore.getFolderPath();
+            this.storeFilename = resultFileStore.getStoreFilename();
+        }
     }
 
     public TimeoutResDTO toResDTO(){

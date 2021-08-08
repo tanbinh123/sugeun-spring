@@ -112,9 +112,6 @@ class TimeoutServiceImplTest {
                 .user(user)
                 .title("스타벅스 아메리카노")
                 .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
-                .fileName("timeoutImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
                 .build();
 
         timeoutRepository.save(timeout);
@@ -144,9 +141,6 @@ class TimeoutServiceImplTest {
                 .user(user)
                 .title("스타벅스 아메리카노")
                 .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
-                .fileName("timeoutImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
                 .build();
 
         timeoutRepository.save(timeout);
@@ -205,9 +199,7 @@ class TimeoutServiceImplTest {
                 .user(user)
                 .title("스타벅스 아메리카노")
                 .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
-                .fileName("timeoutImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
+                .storeFilename("dfasdfas")
                 .build();
 
         timeoutRepository.save(timeout);

@@ -121,7 +121,6 @@ class FolderServiceImplTest {
                 .user(user)
                 .folderName("폴더A")
                 .type(FolderType.PHRASE)
-                .storeFilename("asdfsfss")
                 .build();
 
         folderRepository.save(folder);

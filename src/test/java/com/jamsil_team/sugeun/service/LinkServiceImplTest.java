@@ -1,6 +1,8 @@
 package com.jamsil_team.sugeun.service;
 
+import com.jamsil_team.sugeun.domain.folder.Folder;
 import com.jamsil_team.sugeun.domain.folder.FolderRepository;
+import com.jamsil_team.sugeun.domain.folder.FolderType;
 import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.link.LinkRepository;
 import com.jamsil_team.sugeun.domain.user.User;
@@ -28,10 +30,13 @@ class LinkServiceImplTest {
     @Test
     void 링크생성() throws Exception{
         //given
-        User user = createUser();
+        Folder folder = createFolder();
+        User user = folder.getUser();
+
 
         LinkDTO linkDTO = LinkDTO.builder()
                 .userId(user.getUserId())
+                .folderId(folder.getFolderId())
                 .link("jamsil_team.com")
                 .build();
 
@@ -42,17 +47,19 @@ class LinkServiceImplTest {
         Assertions.assertThat(link.getLinkId()).isNotNull();
         Assertions.assertThat(link.getLink()).isEqualTo(linkDTO.getLink());
         Assertions.assertThat(link.getBookmark()).isFalse();
-        Assertions.assertThat(link.getFolder()).isNull();
+        Assertions.assertThat(link.getFolder().getFolderId()).isEqualTo(folder.getFolderId());
         Assertions.assertThat(link.getUser().getUserId()).isEqualTo(user.getUserId());
     }
 
     @Test
     void 링크_북마크등록() throws Exception{
         //given
-        User user = createUser();
+        Folder folder = createFolder();
+        User user = folder.getUser();
 
         Link link = Link.builder()
                 .user(user)
+                .folder(folder)
                 .link("jamsil_team.com")
                 .build();
 
@@ -68,10 +75,12 @@ class LinkServiceImplTest {
     @Test
     void 링크_북마크취소() throws Exception{
         //given
-        User user = createUser();
+        Folder folder = createFolder();
+        User user = folder.getUser();
 
         Link link = Link.builder()
                 .user(user)
+                .folder(folder)
                 .link("jamsil_team.com")
                 .bookmark(true)
                 .build();
@@ -88,10 +97,12 @@ class LinkServiceImplTest {
     @Test
     void 링크삭제() throws Exception{
         //given
-        User user = createUser();
+        Folder folder = createFolder();
+        User user = folder.getUser();
 
         Link link = Link.builder()
                 .user(user)
+                .folder(folder)
                 .link("jamsil_team.com")
                 .build();
 
@@ -107,16 +118,23 @@ class LinkServiceImplTest {
         Assertions.assertThat(e.getMessage()).isEqualTo("No value present");
     }
 
-    private User createUser() {
-
+    private Folder createFolder() {
         User user = User.builder()
-                .nickname("형우")
+                .nickname("형우B")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();
 
         userRepository.save(user);
 
-        return user;
+        Folder folder = Folder.builder().
+                folderName("파일A")
+                .user(user)
+                .type(FolderType.LINK)
+                .build();
+
+        folderRepository.save(folder);
+
+        return folder;
     }
 }

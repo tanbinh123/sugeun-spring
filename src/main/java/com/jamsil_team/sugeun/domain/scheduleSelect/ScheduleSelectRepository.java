@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ScheduleSelectRepository extends JpaRepository<ScheduleSelect, Long> {
 
-    @Modifying(clearAutomatically = true) //쿼리 실행시 JPA 캐싱 clear
+    @Modifying(clearAutomatically = true, flushAutomatically = true) //쿼리 실행시 JPA 캐싱 clear
     @Query("delete from ScheduleSelect ss where ss.schedule.scheduleId = :scheduleId")
     void deleteByScheduleId(Long scheduleId);
 

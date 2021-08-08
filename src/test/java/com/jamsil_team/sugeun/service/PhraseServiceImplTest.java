@@ -31,8 +31,8 @@ class PhraseServiceImplTest {
     @Test
     void 글귀생성() throws Exception{
         //given
-        User user = createUser();
         Folder folder = createFolder();
+        User user = folder.getUser();
 
         PhraseDTO phraseDTO = PhraseDTO.builder()
                 .userId(user.getUserId())
@@ -54,10 +54,12 @@ class PhraseServiceImplTest {
     @Test
     void 글귀_TEXT변경() throws Exception{
         //given
-        User user = createUser();
+        Folder folder = createFolder();
+        User user = folder.getUser();
 
         Phrase phrase = Phrase.builder()
                 .user(user)
+                .folder(folder)
                 .text("나의 첫 글귀")
                 .textDate(LocalDate.of(2021,07,16))
                 .build();
@@ -74,10 +76,12 @@ class PhraseServiceImplTest {
     @Test
     void 북마크_등록() throws Exception{
         //given
-        User user = createUser();
+        Folder folder = createFolder();
+        User user = folder.getUser();
 
         Phrase phrase = Phrase.builder()
                 .user(user)
+                .folder(folder)
                 .build();
         phraseRepository.save(phrase);
 
@@ -92,10 +96,12 @@ class PhraseServiceImplTest {
     @Test
     void 북마크_취소() throws Exception{
         //given
-        User user = createUser();
+        Folder folder = createFolder();
+        User user = folder.getUser();
 
         Phrase phrase = Phrase.builder()
                 .user(user)
+                .folder(folder)
                 .bookmark(true)
                 .build();
         phraseRepository.save(phrase);
@@ -110,10 +116,12 @@ class PhraseServiceImplTest {
     @Test
     void 글귀삭제() throws Exception{
         //given
-        User user = createUser();
+        Folder folder = createFolder();
+        User user = folder.getUser();
 
         Phrase phrase = Phrase.builder()
                 .user(user)
+                .folder(folder)
                 .text("나의 첫 글귀")
                 .build();
         phraseRepository.save(phrase);
@@ -147,18 +155,5 @@ class PhraseServiceImplTest {
         folderRepository.save(folder);
 
         return folder;
-    }
-
-    private User createUser() {
-
-        User user = User.builder()
-                .nickname("형우")
-                .password("1111")
-                .phone("010-0000-0000")
-                .build();
-
-        userRepository.save(user);
-
-        return user;
     }
 }

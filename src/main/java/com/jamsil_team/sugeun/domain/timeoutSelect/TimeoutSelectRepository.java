@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TimeoutSelectRepository extends JpaRepository<TimeoutSelect, Long> {
 
-    @Modifying(clearAutomatically = true) //쿼리 실행시 JPA 캐싱 clear
+    @Modifying(clearAutomatically = true, flushAutomatically = true) //쿼리 실행시 JPA 캐싱 clear
     @Query("delete from TimeoutSelect ts where ts.timeout.timeoutId = :timeoutId")
     void deleteByTimoutId(Long timeoutId);
 

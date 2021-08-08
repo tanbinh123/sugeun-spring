@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,12 +34,10 @@ public class TimeoutDTO {
 
     private Boolean isValid;
 
-    private String folderPath;
-
-    private String storeFilename;
-
     @Builder.Default
     private List<Integer> selected = new ArrayList<>();
+
+    private MultipartFile imageFile;
 
 
     public Map<String, Object> toEntity(){
