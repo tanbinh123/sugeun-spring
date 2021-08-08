@@ -2,6 +2,7 @@ package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.schedule.Schedule;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
+import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
 
 import java.util.List;
 
@@ -13,6 +14,6 @@ public interface ScheduleService {
 
     void removeSchedule(Long scheduleId);
 
-    List<ScheduleDTO> getListOfSchedule(Long userId);
+    List<ScheduleResDTO> getListOfSchedule(Long userId);
 
 }

@@ -5,6 +5,7 @@ import com.jamsil_team.sugeun.domain.timeout.TimeoutRepository;
 import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelect;
 import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelectRepository;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
+import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -112,23 +113,23 @@ public class TimeoutServiceImpl implements TimeoutService{
      */
     @Transactional(readOnly = true)
     @Override
-    public List<TimeoutDTO> getListOfTimeout(Long userId) {
+    public List<TimeoutResDTO> getListOfTimeout(Long userId) {
 
         List<Timeout> timeoutList = timeoutRepository.getTimeoutList(userId);
 
-        List<TimeoutDTO> timeoutDTOList = timeoutList.stream().map(timeout -> {
+        List<TimeoutResDTO> timeoutResDTOList = timeoutList.stream().map(timeout -> {
 
             //타임아웃 select 리스트
             List<Integer> selected = timeoutSelectRepository.selectedByTimeoutId(timeout.getTimeoutId());
 
-            TimeoutDTO timeoutDTO = timeout.toDTO();
+            TimeoutResDTO timeoutResDTO = timeout.toResDTO();
 
-            timeoutDTO.setSelected(selected);
+            timeoutResDTO.setSelected(selected);
 
-            return timeoutDTO;
+            return timeoutResDTO;
         }).collect(Collectors.toList());
 
-        return timeoutDTOList;
+        return timeoutResDTOList;
     }
 
 

@@ -7,6 +7,7 @@ import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelectRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
+import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,7 +230,7 @@ class ScheduleServiceImplTest {
         * */
 
         //when
-        List<ScheduleDTO> result = scheduleService.getListOfSchedule(userA.getUserId());
+        List<ScheduleResDTO> result = scheduleService.getListOfSchedule(userA.getUserId());
 
         //then
         Assertions.assertThat(result.size()).isEqualTo(2);

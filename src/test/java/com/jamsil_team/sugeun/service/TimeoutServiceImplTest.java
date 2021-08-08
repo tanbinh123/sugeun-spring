@@ -7,6 +7,7 @@ import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelectRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
+import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,6 @@ class TimeoutServiceImplTest {
                 .title("스타벅스 아메리카노")
                 .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
                 .selected(selected)
-                .fileName("timeoutImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
                 .build();
 
 
@@ -85,9 +83,6 @@ class TimeoutServiceImplTest {
                 .userId(user.getUserId())
                 .title("스타벅스 아메리카노")
                 .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
-                .fileName("timeoutImg")
-                .filePath("/hyeongwoo")
-                .uuid(UUID.randomUUID().toString())
                 .build();
 
 
@@ -295,7 +290,7 @@ class TimeoutServiceImplTest {
         timeoutSelectRepository.save(timeoutSelectB);
 
         //when
-        List<TimeoutDTO> result = timeoutService.getListOfTimeout(user.getUserId());
+        List<TimeoutResDTO> result = timeoutService.getListOfTimeout(user.getUserId());
 
         //then
         //timeoutBDTO(3번째) 가 제일 뒤 순서

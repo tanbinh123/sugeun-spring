@@ -2,6 +2,7 @@ package com.jamsil_team.sugeun.domain.schedule;
 
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
+import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,15 +39,15 @@ public class Schedule {
         this.scheduleDate = scheduleDate;
     }
 
-    public ScheduleDTO toDTO(){
+    public ScheduleResDTO toResDTO(){
 
-        ScheduleDTO scheduleDTO = ScheduleDTO.builder()
+        ScheduleResDTO scheduleResDTO = ScheduleResDTO.builder()
                 .scheduleId(this.scheduleId)
                 .userId(this.user.getUserId())
                 .title(this.title)
                 .scheduleDate(this.scheduleDate)
                 .build();
 
-        return scheduleDTO;
+        return scheduleResDTO;
     }
 }

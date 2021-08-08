@@ -2,6 +2,7 @@ package com.jamsil_team.sugeun.service;
 
 import com.jamsil_team.sugeun.domain.timeout.Timeout;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
+import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface TimeoutService {
 
     void removeTimeout(Long timeoutId);
 
-    List<TimeoutDTO> getListOfTimeout(Long userId);
+    List<TimeoutResDTO> getListOfTimeout(Long userId);
 
 
 }

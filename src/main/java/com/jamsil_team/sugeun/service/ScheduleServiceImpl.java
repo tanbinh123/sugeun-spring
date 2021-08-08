@@ -5,6 +5,7 @@ import com.jamsil_team.sugeun.domain.schedule.ScheduleRepository;
 import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelect;
 import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelectRepository;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
+import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,20 +95,20 @@ public class ScheduleServiceImpl implements ScheduleService{
      */
     @Transactional(readOnly = true)
     @Override
-    public List<ScheduleDTO> getListOfSchedule(Long userId) {
+    public List<ScheduleResDTO> getListOfSchedule(Long userId) {
 
         List<Schedule> scheduleList = scheduleRepository.getScheduleList(userId);
 
-        List<ScheduleDTO> scheduleDTOList = scheduleList.stream().map(schedule -> {
+        List<ScheduleResDTO> scheduleResDTOList = scheduleList.stream().map(schedule -> {
 
             List<Integer> selected = scheduleSelectRepository.selectedByScheduleId(schedule.getScheduleId());
 
-            ScheduleDTO scheduleDTO = schedule.toDTO();
-            scheduleDTO.setSelected(selected);
+            ScheduleResDTO scheduleResDTO = schedule.toResDTO();
+            scheduleResDTO.setSelected(selected);
 
-            return scheduleDTO;
+            return scheduleResDTO;
         }).collect(Collectors.toList());
 
-        return scheduleDTOList;
+        return scheduleResDTOList;
     }
 }

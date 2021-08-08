@@ -25,7 +25,7 @@ public class FolderController {
      *  폴더 DTO 리스트
      */
     @GetMapping
-    public ResponseEntity<List<FolderResDTO>> typeFolderList(@PathVariable("user-id") Long userId,
+    public ResponseEntity<List<FolderResDTO>> folderList(@PathVariable("user-id") Long userId,
                                                              @RequestParam("type") String type){
 
         List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, FolderType.valueOf(type), null);

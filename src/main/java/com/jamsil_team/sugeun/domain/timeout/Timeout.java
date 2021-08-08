@@ -2,6 +2,7 @@ package com.jamsil_team.sugeun.domain.timeout;
 
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
+import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -52,20 +53,17 @@ public class Timeout {
         this.deadline = deadline;
     }
 
-    public TimeoutDTO toDTO(){
+    public TimeoutResDTO toResDTO(){
 
-        TimeoutDTO timeoutDTO = TimeoutDTO.builder()
+        TimeoutResDTO timeoutResDTO = TimeoutResDTO.builder()
                 .timeoutId(this.timeoutId)
                 .userId(this.user.getUserId())
                 .title(this.title)
                 .deadline(this.deadline)
                 .isValid(this.isValid)
-                .filePath(this.filePath)
-                .fileName(this.fileName)
-                .uuid(this.uuid)
                 .build();
 
-        return timeoutDTO;
+        return timeoutResDTO;
     }
 
 

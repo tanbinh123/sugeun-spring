@@ -33,11 +33,9 @@ public class TimeoutDTO {
 
     private Boolean isValid;
 
-    private String filePath;
+    private String folderPath;
 
-    private String fileName;
-
-    private String uuid;
+    private String storeFilename;
 
     @Builder.Default
     private List<Integer> selected = new ArrayList<>();
