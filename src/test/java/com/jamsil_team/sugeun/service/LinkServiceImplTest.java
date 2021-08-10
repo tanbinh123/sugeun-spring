@@ -37,6 +37,7 @@ class LinkServiceImplTest {
         LinkDTO linkDTO = LinkDTO.builder()
                 .userId(user.getUserId())
                 .folderId(folder.getFolderId())
+                .title("링크제목 test")
                 .link("jamsil_team.com")
                 .build();
 
@@ -45,6 +46,7 @@ class LinkServiceImplTest {
 
         //then
         Assertions.assertThat(link.getLinkId()).isNotNull();
+        Assertions.assertThat(link.getTitle()).isEqualTo(linkDTO.getTitle());
         Assertions.assertThat(link.getLink()).isEqualTo(linkDTO.getLink());
         Assertions.assertThat(link.getBookmark()).isFalse();
         Assertions.assertThat(link.getFolder().getFolderId()).isEqualTo(folder.getFolderId());
@@ -60,6 +62,7 @@ class LinkServiceImplTest {
         Link link = Link.builder()
                 .user(user)
                 .folder(folder)
+                .title("링크제목 test")
                 .link("jamsil_team.com")
                 .build();
 
@@ -81,6 +84,7 @@ class LinkServiceImplTest {
         Link link = Link.builder()
                 .user(user)
                 .folder(folder)
+                .title("링크제목 test")
                 .link("jamsil_team.com")
                 .bookmark(true)
                 .build();
@@ -103,6 +107,7 @@ class LinkServiceImplTest {
         Link link = Link.builder()
                 .user(user)
                 .folder(folder)
+                .title("링크제목 test")
                 .link("jamsil_team.com")
                 .build();
 

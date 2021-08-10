@@ -30,6 +30,10 @@ public class Link extends BaseEntity {
 
     @Builder.Default
     @Column(nullable = false)
+    private String title = "";
+
+    @Builder.Default
+    @Column(nullable = false)
     private String link = "";
 
     @Builder.Default
@@ -48,6 +52,7 @@ public class Link extends BaseEntity {
 
         LinkResDTO linkResDTO = LinkResDTO.builder()
                 .linkId(this.linkId)
+                .title(this.title)
                 .link(this.link)
                 .bookmark(this.bookmark)
                 .build();

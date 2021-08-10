@@ -14,6 +14,8 @@ public class LinkResDTO {
 
     private Long linkId;
 
+    private String title;
+
     private String link;
 
     private Boolean bookmark;

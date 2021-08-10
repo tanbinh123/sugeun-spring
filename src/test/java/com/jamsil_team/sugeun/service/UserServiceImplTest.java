@@ -401,6 +401,7 @@ class UserServiceImplTest {
         Link linkFalse = Link.builder()
                 .user(user)
                 .folder(folderB)
+                .title("링크제목 test")
                 .link("북마크 테스트")
                 .bookmark(false) //false
                 .build();

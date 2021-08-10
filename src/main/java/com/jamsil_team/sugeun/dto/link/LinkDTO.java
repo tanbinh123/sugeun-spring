@@ -23,6 +23,8 @@ public class LinkDTO {
 
     private Long folderId;
 
+    private String title;
+
     private String link;
 
     private Boolean bookmark;
@@ -34,12 +36,14 @@ public class LinkDTO {
         if (folderId == null) {
             link = Link.builder()
                     .user(User.builder().userId(this.userId).build())
+                    .title(this.title)
                     .link(this.link)
                     .build();
         } else {
             link = Link.builder()
                     .user(User.builder().userId(this.userId).build())
                     .folder(Folder.builder().folderId(this.folderId).build())
+                    .title(this.title)
                     .link(this.link)
                     .build();
         }

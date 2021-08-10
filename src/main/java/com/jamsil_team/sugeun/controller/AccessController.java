@@ -21,10 +21,10 @@ public class AccessController {
 
     private final SendSmsService sendSmsService;
     private final UserService userService;
-    private final FolderService folderService;
 
-
-
+    /**
+     * sms 인증번호 보내기
+     */
     @GetMapping("/send-sms")
     public ResponseEntity<String> sendSms(@RequestBody String toNumber){
 
@@ -50,6 +50,9 @@ public class AccessController {
 
     }
 
+    /**
+     * 아이디 중복확인
+     */
     @PostMapping("/duplicate")
     public ResponseEntity<Boolean> checkDuplicate(@RequestBody UserDTO userDTO){
 
@@ -59,6 +62,9 @@ public class AccessController {
 
     }
 
+    /**
+     * 회원가입
+     */
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserSignupDTO userSignupDTO){
 
@@ -69,6 +75,10 @@ public class AccessController {
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
+
+    /**
+     * 로그인
+     */
     @PostMapping("/login")
     public void login(){
 
