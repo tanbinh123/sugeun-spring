@@ -26,11 +26,16 @@ public class FolderController {
      */
     @GetMapping
     public ResponseEntity<List<FolderResDTO>> folderList(@PathVariable("user-id") Long userId,
-                                                             @RequestParam("type") String type){
+                                                             @RequestParam(value = "type",required = false) String type){
+        //폴더 전체보기일 경우
+        if(type == null){
+            List<FolderResDTO> folderResDTOListA = folderService.getListOfFolder(userId, null, null);
+            return new ResponseEntity<>(folderResDTOListA, HttpStatus.OK);
+        }
 
-        List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, FolderType.valueOf(type), null);
+        List<FolderResDTO> folderResDTOListB = folderService.getListOfFolder(userId, FolderType.valueOf(type), null);
 
-        return new ResponseEntity<>(folderResDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(folderResDTOListB, HttpStatus.OK);
     }
 
     /**
@@ -38,7 +43,7 @@ public class FolderController {
      */
     @PostMapping
     public ResponseEntity<String> createFolder(@PathVariable("user-id") Long userId,
-                                               @RequestBody FolderDTO folderDTO) throws IOException {
+                                               FolderDTO folderDTO) throws IOException {
 
         folderService.createFolder(folderDTO);
 
