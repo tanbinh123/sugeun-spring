@@ -34,9 +34,7 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        System.out.println(request.getPathTranslated());
-        System.out.println(request.getServletPath());
-        System.out.println(request.getPathInfo());
+
         log.info("REQUESTURI: " + request.getRequestURI() );
         log.info(antPathMatcher.match(pattern, request.getRequestURI()));
 

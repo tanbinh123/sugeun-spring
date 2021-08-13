@@ -1,5 +1,6 @@
 package com.jamsil_team.sugeun.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
@@ -9,8 +10,13 @@ import com.jamsil_team.sugeun.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 
@@ -26,7 +32,7 @@ public class AccessController {
      * sms 인증번호 보내기
      */
     @GetMapping("/send-sms")
-    public ResponseEntity<String> sendSms(@RequestBody String toNumber){
+    public ResponseEntity<String> sendSms(@RequestParam("toNumber") String toNumber){
 
 
         System.out.println(toNumber);
@@ -66,13 +72,13 @@ public class AccessController {
      * 회원가입
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserSignupDTO userSignupDTO){
+    public ResponseEntity<Long> signup(@RequestBody UserSignupDTO userSignupDTO){
 
         User join = userService.join(userSignupDTO);
 
         System.out.println(join);
 
-        return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
+        return new ResponseEntity<>(join.getUserId(), HttpStatus.OK);
     }
 
 
