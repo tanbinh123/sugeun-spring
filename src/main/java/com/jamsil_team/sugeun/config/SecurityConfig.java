@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired private UserRepository userRepository;
     @Autowired private UserService userService;
-    
+
     @Autowired private FolderService folderService;
 
     @Bean

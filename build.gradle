@@ -43,6 +43,8 @@ dependencies {
 
 	//querydsl
 	implementation 'com.querydsl:querydsl-jpa'  //qdsl 추가 내용
+
+	compile("org.mariadb.jdbc:mariadb-java-client")
 }
 
 test {
