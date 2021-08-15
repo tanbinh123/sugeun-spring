@@ -19,6 +19,7 @@ import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -252,6 +253,19 @@ public class UserServiceImpl implements UserService{
                 .phraseResDTOList(phraseResDTOList)
                 .linkResDTOList(linkResDTOList)
                 .build();
+    }
+
+    /**
+     * 아이디 찾기
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public String findNickname(String phone) {
+
+        String nickname = userRepository.nicknameFindByPhone(phone).orElseThrow(() ->
+                new IllegalStateException("존재하지 않은 회원입니다."));
+
+        return nickname;
     }
 
 

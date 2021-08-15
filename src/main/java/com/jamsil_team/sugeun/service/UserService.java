@@ -29,4 +29,6 @@ public interface UserService {
     void modifyAlarm(Long userId);
 
     BookmarkDTO getListOfBookmark(Long userId);
+
+    String findNickname(String phone);
 }
