@@ -48,7 +48,7 @@ public class UserController {
      */
     @PatchMapping
     public ResponseEntity<String> modifyUser(@PathVariable("user-id") Long userId,
-                                             UserUpdateDTO userUpdateDTO) throws IOException {
+                                             @RequestBody UserUpdateDTO userUpdateDTO) throws IOException {
 
         if(userUpdateDTO.getImageFile() != null){
             userService.modifyUserImg(userId, userUpdateDTO.getImageFile());
@@ -64,7 +64,7 @@ public class UserController {
             return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
         }
 
-        return null;
+        return new ResponseEntity<>("회원정보 변경 실패", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
