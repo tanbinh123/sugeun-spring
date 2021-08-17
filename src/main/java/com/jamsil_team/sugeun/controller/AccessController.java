@@ -94,13 +94,26 @@ public class AccessController {
     /**
      * 아이디 찾기
      */
-    @GetMapping("/find-nickname")
+    @PostMapping("/find-nickname")
     public ResponseEntity<String> findUsername(@RequestBody UserDTO userDTO){
 
         String nickname = userService.findNickname(userDTO.getPhone());
 
         return new ResponseEntity<>(nickname, HttpStatus.OK);
     }
+
+
+    /**
+     * 비밀번호 찾기
+     */
+    /*
+    @PostMapping("/find-password")
+    public ResponseEntity<String> findPassword(){
+
+
+
+    }
+    */
 
 
 
