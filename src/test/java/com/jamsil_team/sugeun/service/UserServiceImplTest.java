@@ -417,6 +417,37 @@ class UserServiceImplTest {
         Assertions.assertThat(bookmarkDTO.getLinkResDTOList()).isEmpty();
     }
 
+    @Test
+    void 아이디찾기_회원_존재o() throws Exception{
+        //given
+        User user = User.builder()
+                .nickname("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        String nickname = userService.findNickname(user.getPhone());
+
+        //then
+        Assertions.assertThat(nickname).isEqualTo(user.getNickname());
+    }
+
+    @Test
+    void 아이디찾기_회원_존재x() throws Exception{
+        //given
+        //폰 넘버: 010-0000-0000 인 회원은 존재하지 않는다.
+        //when
+        IllegalStateException e = assertThrows(IllegalStateException.class,
+                () -> userService.findNickname("010-0000-0000"));
+
+        //then
+        Assertions.assertThat(e.getMessage()).isEqualTo("존재하지 않은 회원입니다.");
+    }
+
     private Folder createFolder(User user, FolderType type) {
         Folder folder = Folder.builder()
                 .user(user)
