@@ -64,6 +64,7 @@ public class Folder {
                 .folderId(this.folderId)
                 .folderName(this.folderName)
                 .userId(this.user.getUserId())
+                .type(this.type)
                 .build();
 
 

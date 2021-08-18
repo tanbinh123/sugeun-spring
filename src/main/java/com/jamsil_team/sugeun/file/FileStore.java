@@ -59,6 +59,10 @@ public class FileStore {
 
         //서버 컴퓨터에 이미지 저장 (upload/sugeun/연/월/일/uuid + "_" + originalFilename)
         File imageFile = new File(getFullPath(folderPath, storeFilename));
+
+        System.out.println("================");
+        System.out.println(imageFile.getAbsolutePath());
+
         multipartFile.transferTo(imageFile);
 
         //서버 컴퓨터에 썸네일 이미지 저장 (upload/sugeun/연/월/일/"s_"+ uuid + "_" + originalFilename)

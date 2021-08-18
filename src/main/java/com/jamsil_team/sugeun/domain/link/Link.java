@@ -40,6 +40,24 @@ public class Link extends BaseEntity {
     @Column(nullable = false)
     private Boolean bookmark = false;
 
+    public void changeTitle(String title){
+
+        if(title == null){
+            this.title = "";
+        }
+
+        this.title = title;
+    }
+
+    public void changeLink(String link){
+
+        if(link== null){
+            this.link = "";
+        }
+
+        this.link = link;
+    }
+
     public void registerBookmark(){
         this.bookmark = true;
     }

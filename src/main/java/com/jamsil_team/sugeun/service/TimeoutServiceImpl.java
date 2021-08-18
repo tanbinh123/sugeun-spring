@@ -71,7 +71,7 @@ public class TimeoutServiceImpl implements TimeoutService{
 
         //제목, 유효기간 수정
         timeout.changeTitle(timeoutDTO.getTitle());
-        timeout.changeDeadline(timeoutDTO.getDeadline());
+        timeout.changeDeadline(timeoutDTO.getDeadline().toLocalDate().atTime(23,59));
 
         //알람 수정
         //기존 해당 알람 모두 삭제

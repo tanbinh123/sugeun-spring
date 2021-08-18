@@ -33,16 +33,13 @@ public class LinkServiceImpl implements LinkService{
      */
     @Transactional
     @Override
-    public void modifyBookmark(Long linkId) {
+    public void modifyLink(LinkDTO linkDTO) {
 
-        Link link = linkRepository.findById(linkId).orElseThrow(() ->
+        Link link = linkRepository.findById(linkDTO.getLinkId()).orElseThrow(() ->
                 new IllegalStateException("존재하는 링크가 없습니다."));
 
-        if (link.getBookmark() == true){
-            link.cancelBookmark();
-        }else{
-            link.registerBookmark();
-        }
+        link.changeTitle(linkDTO.getTitle());
+        link.changeLink(linkDTO.getLink());
 
     }
 
@@ -54,6 +51,24 @@ public class LinkServiceImpl implements LinkService{
     public void removeLink(Long linkId) {
 
         linkRepository.deleteById(linkId);
+
+    }
+
+    /**
+     * 링크 북마크 기능
+     */
+    @Transactional
+    @Override
+    public void modifyBookmark(Long linkId) {
+
+        Link link = linkRepository.findById(linkId).orElseThrow(() ->
+                new IllegalStateException("존재하는 링크가 없습니다."));
+
+        if (link.getBookmark() == true){
+            link.cancelBookmark();
+        }else{
+            link.registerBookmark();
+        }
 
     }
 }

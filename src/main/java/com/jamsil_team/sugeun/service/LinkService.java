@@ -8,8 +8,9 @@ public interface LinkService {
 
     Link createLink(LinkDTO linkDTO);
 
-    void modifyBookmark(Long linkId);
+    void modifyLink(LinkDTO linkDTO);
 
     void removeLink(Long linkId);
 
+    void modifyBookmark(Long linkId);
 }

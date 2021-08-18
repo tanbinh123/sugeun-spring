@@ -30,6 +30,21 @@ public class LinkController {
 
 
     /**
+     *  링크 수정
+     */
+    @PutMapping("/users/{user-id}/folders/{folder-id}/links/{link-id}")
+    public ResponseEntity<String> modifyLink(@PathVariable("user-id") Long userId,
+                                             @PathVariable("folder-id") Long folderId,
+                                             @PathVariable("link-id") Long linkId,
+                                             @RequestBody LinkDTO linkDTO){
+        linkService.modifyLink(linkDTO);
+
+        return new ResponseEntity<>("링크수정 완료", HttpStatus.OK);
+
+    }
+
+
+    /**
      *  링크 삭제
      */
     @DeleteMapping("/users/{user-id}/folders/{folder-id}/links/{link-id}")

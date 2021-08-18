@@ -49,7 +49,7 @@ public class TimeoutDTO {
         Timeout timeout = Timeout.builder()
                 .user(User.builder().userId(this.userId).build())
                 .title(this.title)
-                .deadline(this.deadline)
+                .deadline(this.deadline.toLocalDate().atTime(23,59))
                 .build();
 
         entityMap.put("timeout", timeout);
@@ -69,7 +69,7 @@ public class TimeoutDTO {
                 TimeoutSelect timeoutSelect = TimeoutSelect.builder()
                         .timeout(timeout)
                         .selected(integer)
-                        .alarmDateTime(this.deadline.minusDays(integer.longValue()).minusHours(11).minusMinutes(59))
+                        .alarmDateTime(this.deadline.minusDays(integer.longValue()).toLocalDate().atTime(12,00))
                         .build();
                 return timeoutSelect;
             }).collect(Collectors.toList());

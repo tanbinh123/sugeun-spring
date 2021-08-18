@@ -22,7 +22,7 @@ public class FolderController {
 
 
     /**
-     *  폴더 DTO 리스트
+     *  폴더 목록
      */
     @GetMapping
     public ResponseEntity<List<FolderResDTO>> folderList(@PathVariable("user-id") Long userId,

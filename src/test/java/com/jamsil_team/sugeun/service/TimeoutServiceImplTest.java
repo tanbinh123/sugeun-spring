@@ -40,7 +40,7 @@ class TimeoutServiceImplTest {
         TimeoutDTO timeoutDTO = TimeoutDTO.builder()
                 .userId(user.getUserId())
                 .title("스타벅스 아메리카노")
-                .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
+                .deadline(LocalDateTime.of(2021, 8, 11, 00, 59))
                 .selected(selected)
                 .build();
 
@@ -51,7 +51,7 @@ class TimeoutServiceImplTest {
         //then
         //timeout 검증
         Assertions.assertThat(timeout.getTimeoutId()).isNotNull();
-        Assertions.assertThat(timeout.getDeadline()).isEqualTo(timeoutDTO.getDeadline());
+        Assertions.assertThat(timeout.getDeadline()).isEqualTo(LocalDateTime.of(2021, 8, 11, 23, 59));
         Assertions.assertThat(timeout.getIsValid()).isTrue();
 
         //timeoutSelect 검증
@@ -62,14 +62,10 @@ class TimeoutServiceImplTest {
 
         //마감일: 21.08.11 23:59 -> selected.get(0) == 1 -> 알람일: 21.08.10 12:00
         Assertions.assertThat(result.get(0).getAlarmDateTime())
-                .isEqualTo(timeoutDTO.getDeadline()
-                        .minusDays(selected.get(0)).minusHours(11).minusMinutes(59))
                 .isEqualTo(LocalDateTime.of(2021,8,10,12,00));
 
         //마감일: 21.08.11 23:59 -> selected.get(1) == 3 -> 알람일: 21.08.08 12:00
         Assertions.assertThat(result.get(1).getAlarmDateTime())
-                .isEqualTo(timeoutDTO.getDeadline()
-                        .minusDays(selected.get(1)).minusHours(11).minusMinutes(59))
                 .isEqualTo(LocalDateTime.of(2021,8,8,12,00));
 
     }
@@ -82,7 +78,7 @@ class TimeoutServiceImplTest {
         TimeoutDTO timeoutDTO = TimeoutDTO.builder()
                 .userId(user.getUserId())
                 .title("스타벅스 아메리카노")
-                .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
+                .deadline(LocalDateTime.of(2021, 8, 11, 00, 00))
                 .build();
 
 
@@ -92,7 +88,7 @@ class TimeoutServiceImplTest {
         //then
         //timeout 검증
         Assertions.assertThat(timeout.getTimeoutId()).isNotNull();
-        Assertions.assertThat(timeout.getDeadline()).isEqualTo(timeoutDTO.getDeadline());
+        Assertions.assertThat(timeout.getDeadline()).isEqualTo(LocalDateTime.of(2021, 8, 11, 23, 59));
         Assertions.assertThat(timeout.getIsValid()).isTrue();
 
         //timeoutSelect 검증
@@ -111,7 +107,7 @@ class TimeoutServiceImplTest {
         Timeout timeout = Timeout.builder()
                 .user(user)
                 .title("스타벅스 아메리카노")
-                .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
+                .deadline(LocalDateTime.of(2021, 8, 11, 00, 00))
                 .build();
 
         timeoutRepository.save(timeout);
@@ -140,7 +136,7 @@ class TimeoutServiceImplTest {
         Timeout timeout = Timeout.builder()
                 .user(user)
                 .title("스타벅스 아메리카노")
-                .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
+                .deadline(LocalDateTime.of(2021, 8, 11, 00, 59))
                 .build();
 
         timeoutRepository.save(timeout);
@@ -169,7 +165,7 @@ class TimeoutServiceImplTest {
                 .timeoutId(timeout.getTimeoutId())
                 .userId(user.getUserId())
                 .title("스타벅스 아메리카노")
-                .deadline(LocalDateTime.of(2021, 8, 10, 23, 59))//11일 -> 10일
+                .deadline(LocalDateTime.of(2021, 8, 10, 00, 00))//11일 -> 10일
                 .build();//알람 선택 x
 
         //제목 "스타벅스 아메리카노", 스케줄 날짜 "2021/08/10 23:59", 알람일 x
@@ -180,7 +176,7 @@ class TimeoutServiceImplTest {
         //timeout 변경 검증
         Assertions.assertThat(timeout.getUser()).isEqualTo(user);
         Assertions.assertThat(timeout.getTitle()).isEqualTo(timeoutDTO.getTitle());
-        Assertions.assertThat(timeout.getDeadline()).isEqualTo(timeoutDTO.getDeadline());
+        Assertions.assertThat(timeout.getDeadline()).isEqualTo(LocalDateTime.of(2021, 8, 10, 23, 59));
         Assertions.assertThat(timeout.getIsValid()).isTrue();
 
         //timeoutSelect 변경 검증

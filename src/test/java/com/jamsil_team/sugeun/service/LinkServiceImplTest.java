@@ -53,6 +53,63 @@ class LinkServiceImplTest {
         Assertions.assertThat(link.getUser().getUserId()).isEqualTo(user.getUserId());
     }
 
+
+    @Test
+    void 링크수정() throws Exception {
+        //given
+        Folder folder = createFolder();
+        User user = folder.getUser();
+
+        Link link = Link.builder()
+                .user(user)
+                .folder(folder)
+                .title("링크제목 test")
+                .link("jamsil_team.com")
+                .build();
+
+        linkRepository.save(link);
+
+        LinkDTO linkDTO = LinkDTO.builder()
+                .linkId(link.getLinkId())
+                .title("수정 title")
+                .link("수정Jamsil_team.com")
+                .build();
+        //when
+        linkService.modifyLink(linkDTO);
+
+        //then
+        Assertions.assertThat(link.getTitle()).isEqualTo(linkDTO.getTitle());
+        Assertions.assertThat(link.getLink()).isEqualTo(linkDTO.getLink());
+        Assertions.assertThat(link.getBookmark()).isFalse();
+    }
+
+
+    @Test
+    void 링크삭제() throws Exception{
+        //given
+        Folder folder = createFolder();
+        User user = folder.getUser();
+
+        Link link = Link.builder()
+                .user(user)
+                .folder(folder)
+                .title("링크제목 test")
+                .link("jamsil_team.com")
+                .build();
+
+        linkRepository.save(link);
+
+        //when
+        linkService.removeLink(link.getLinkId());
+
+        //then
+        NoSuchElementException e = assertThrows(NoSuchElementException.class,
+                () -> (linkRepository.findById(link.getLinkId())).get());
+
+        Assertions.assertThat(e.getMessage()).isEqualTo("No value present");
+    }
+
+
     @Test
     void 링크_북마크등록() throws Exception{
         //given
@@ -96,31 +153,6 @@ class LinkServiceImplTest {
 
         //then
         Assertions.assertThat(link.getBookmark()).isFalse();
-    }
-
-    @Test
-    void 링크삭제() throws Exception{
-        //given
-        Folder folder = createFolder();
-        User user = folder.getUser();
-
-        Link link = Link.builder()
-                .user(user)
-                .folder(folder)
-                .title("링크제목 test")
-                .link("jamsil_team.com")
-                .build();
-
-        linkRepository.save(link);
-
-        //when
-        linkService.removeLink(link.getLinkId());
-
-        //then
-        NoSuchElementException e = assertThrows(NoSuchElementException.class,
-                () -> (linkRepository.findById(link.getLinkId())).get());
-
-        Assertions.assertThat(e.getMessage()).isEqualTo("No value present");
     }
 
     private Folder createFolder() {
