@@ -46,7 +46,7 @@ public class ScheduleController {
     /**
      *  스케줄 변경
      */
-    @PatchMapping("{schedule-id}")
+    @PutMapping("{schedule-id}")
     public ResponseEntity<String> modifySchedule(@PathVariable("user-id") Long userId,
                                                  @PathVariable("schedule-id") Long scheduleId,
                                                  @RequestBody ScheduleDTO scheduleDTO){

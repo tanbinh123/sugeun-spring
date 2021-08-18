@@ -48,7 +48,7 @@ public class UserController {
      */
     @PatchMapping
     public ResponseEntity<String> modifyUser(@PathVariable("user-id") Long userId,
-                                             @RequestBody UserUpdateDTO userUpdateDTO) throws IOException {
+                                             UserUpdateDTO userUpdateDTO) throws IOException {
 
         if(userUpdateDTO.getImageFile() != null){
             userService.modifyUserImg(userId, userUpdateDTO.getImageFile());

@@ -69,7 +69,7 @@ public class FolderController {
     @PatchMapping("{folder-id}")
     public ResponseEntity<String> modifyFolder(@PathVariable("user-id") Long userId,
                                                @PathVariable("folder-id") Long folderId,
-                                               @RequestBody FolderDTO folderDTO) throws IOException {
+                                               FolderDTO folderDTO) throws IOException {
 
         if(folderDTO.getImageFile() != null){
             folderService.modifyFolderImage(folderId, folderDTO.getImageFile());

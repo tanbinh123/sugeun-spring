@@ -33,7 +33,7 @@ public class TimeoutController {
      */
     @PostMapping("/users/{user-id}/timeouts")
     public ResponseEntity<String> createTimeout(@PathVariable("user-id") Long userId,
-                                                @RequestBody TimeoutDTO timeoutDTO) throws IOException {
+                                                TimeoutDTO timeoutDTO) throws IOException {
 
         timeoutService.createTimeout(timeoutDTO);
 
@@ -46,7 +46,7 @@ public class TimeoutController {
     @PatchMapping("/users/{user-id}/timeouts/{timeout-id}")
     public ResponseEntity<String> modifyTimeout(@PathVariable("user-id") Long userId,
                                                 @PathVariable("timeout-id") Long timeoutId,
-                                                @RequestBody TimeoutDTO timeoutDTO) throws IOException {
+                                                TimeoutDTO timeoutDTO) throws IOException {
 
         //이미지 변경일 경우
         if(timeoutDTO.getImageFile() != null){
