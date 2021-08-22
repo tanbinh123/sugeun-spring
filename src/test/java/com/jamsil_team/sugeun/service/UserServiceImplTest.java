@@ -478,7 +478,7 @@ class UserServiceImplTest {
         Long userId = userService.checkNickname("형우");
 
         //then
-        Assertions.assertThat(userId).isNull();
+        Assertions.assertThat(userId).isEqualTo(-1);
     }
     
     @Test

@@ -275,7 +275,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public Long checkNickname(String nickname) {
 
-        User user = userRepository.findByNickname(nickname).orElseGet(() -> new User());
+        User user = userRepository.findByNickname(nickname).orElseGet(() ->
+                User.builder().userId(-1L).build());
 
         return user.getUserId();
     }

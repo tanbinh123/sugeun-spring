@@ -116,9 +116,6 @@ public class AccessController {
 
         Long userId = userService.checkNickname(nickname);
 
-        String property = System.getProperty("user.dir");
-        System.out.println(property);
-
         return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 
@@ -133,7 +130,7 @@ public class AccessController {
 
         if(result == true){
             String phone = userDTO.getPhone().replace("-", "");
-            System.out.println(phone);
+
             response.sendRedirect("/api/send-sms?toNumber="+ phone);
         }
 
