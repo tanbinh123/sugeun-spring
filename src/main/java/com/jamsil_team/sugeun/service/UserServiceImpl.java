@@ -268,5 +268,36 @@ public class UserServiceImpl implements UserService{
         return nickname;
     }
 
+    /**
+     * 아이디 체크 (비밀번호 찾기)
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Long checkNickname(String nickname) {
+
+        User user = userRepository.findByNickname(nickname).orElseGet(() ->
+                User.builder().userId(-1L).build());
+
+        return user.getUserId();
+    }
+
+    /**
+     * 핸드폰 번호 검증 (비밀번호 찾기)
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean verifyPhone(Long userId, String phone) {
+
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 ID 입니다."));
+
+        if(user.getPhone().equals(phone)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
 }

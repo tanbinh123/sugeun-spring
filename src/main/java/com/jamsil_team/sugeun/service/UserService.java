@@ -31,4 +31,8 @@ public interface UserService {
     BookmarkDTO getListOfBookmark(Long userId);
 
     String findNickname(String phone);
+
+    Long checkNickname(String nickname);
+
+    Boolean verifyPhone(Long userId, String phone);
 }

@@ -172,7 +172,7 @@ class ScheduleServiceImplTest {
         User userA = createUser();
 
         User userB = User.builder()
-                .nickname("수근")
+                .nickname("수근수근")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();
