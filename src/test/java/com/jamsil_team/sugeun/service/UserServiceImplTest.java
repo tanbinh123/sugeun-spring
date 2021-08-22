@@ -448,6 +448,77 @@ class UserServiceImplTest {
         Assertions.assertThat(e.getMessage()).isEqualTo("존재하지 않은 회원입니다.");
     }
 
+    @Test
+    void 비밀번호찾기_아이디체크_존재O(){
+
+        //given
+        User user = User.builder()
+                .nickname("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        Long userId = userService.checkNickname("형우");
+
+        //then
+        Assertions.assertThat(userId).isEqualTo(user.getUserId());
+
+    }
+
+    @Test
+    void 비밀번호찾기_아이디체크_존재x() throws Exception{
+        //given
+        //nickname: 형우 인 회원은 존재하지 않는다.
+
+        //when
+        Long userId = userService.checkNickname("형우");
+
+        //then
+        Assertions.assertThat(userId).isNull();
+    }
+    
+    @Test
+    void 비밀번호찾기_핸드폰번호검증_동일o() throws Exception{
+        //given
+        User user = User.builder()
+                .nickname("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        Boolean result = userService.verifyPhone(user.getUserId(), "010-0000-0000");
+
+        //then
+        Assertions.assertThat(result).isTrue();
+    }
+
+    @Test
+    void 비밀번호찾기_핸드폰번호검증_동일x() throws Exception{
+        //given
+        User user = User.builder()
+                .nickname("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .deviceToken("adsf1r@Afdfas")
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        Boolean result = userService.verifyPhone(user.getUserId(), "010-1111-1111");
+
+        //then
+        Assertions.assertThat(result).isFalse();
+    }
+
     private Folder createFolder(User user, FolderType type) {
         Folder folder = Folder.builder()
                 .user(user)

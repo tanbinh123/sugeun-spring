@@ -10,14 +10,20 @@ import com.jamsil_team.sugeun.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
+
 
 
 @RequestMapping("/api")
@@ -102,18 +108,51 @@ public class AccessController {
         return new ResponseEntity<>(nickname, HttpStatus.OK);
     }
 
+    /**
+     * 아이디 체크 (비밀번호 찾기)
+     */
+    @GetMapping("/check-nickname")
+    public ResponseEntity<Long> checkNickname(@RequestParam("nickname") String nickname){
+
+        Long userId = userService.checkNickname(nickname);
+
+        String property = System.getProperty("user.dir");
+        System.out.println(property);
+
+        return new ResponseEntity<>(userId, HttpStatus.OK);
+    }
 
     /**
-     * 비밀번호 찾기
+     *  phone 검증 (비밀번호 찾기)
      */
-    /*
-    @PostMapping("/find-password")
-    public ResponseEntity<String> findPassword(){
+    @PostMapping("/verify-phone")
+    public ResponseEntity<Boolean> verifyPhone(@RequestBody UserDTO userDTO, HttpServletResponse response) throws IOException {
+        Boolean result = userService.verifyPhone(userDTO.getUserId(), userDTO.getPhone());
 
 
+
+        if(result == true){
+            String phone = userDTO.getPhone().replace("-", "");
+            System.out.println(phone);
+            response.sendRedirect("/api/send-sms?toNumber="+ phone);
+        }
+
+        //저장된 핸드폰 번호와 입력 받은 번호가 다를 경우
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
-    */
+
+    /**
+     *  새 비밀번호 저장 (비밀번호 찾기)
+     */
+    @PostMapping("/new-password")
+    public ResponseEntity<String> newPassword(@RequestBody UserDTO userDTO){
+
+        userService.modifyPassword(userDTO.getUserId(), userDTO.getPassword());
+
+        return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
+    }
+
 
 
 
