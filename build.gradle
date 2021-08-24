@@ -44,6 +44,9 @@ dependencies {
 	//querydsl
 	implementation 'com.querydsl:querydsl-jpa'  //qdsl 추가 내용
 
+	//jwt 토큰
+	compile group: "io.jsonwebtoken", name: 'jjwt', version: '0.9.1'
+
 }
 
 test {

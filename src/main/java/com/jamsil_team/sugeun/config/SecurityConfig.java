@@ -4,6 +4,7 @@ import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.filter.ApiCheckFilter;
 import com.jamsil_team.sugeun.filter.ApiLoginFilter;
 import com.jamsil_team.sugeun.security.UserDetailsServiceImpl;
+import com.jamsil_team.sugeun.security.util.JWTUtil;
 import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired private UserRepository userRepository;
-    @Autowired private UserService userService;
-
     @Autowired private FolderService folderService;
 
     @Bean
@@ -33,8 +32,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public JWTUtil jwtUtil(){
+        return new JWTUtil();
+    }
+
+    @Bean
     public ApiLoginFilter apiLoginFilter() throws Exception{
-        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", userRepository, userService, folderService);
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", jwtUtil(), folderService);
         apiLoginFilter.setAuthenticationManager(authenticationManager());
 
         return apiLoginFilter;

@@ -1,11 +1,15 @@
 package com.jamsil_team.sugeun.filter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
+import com.jamsil_team.sugeun.dto.login.LoginResDTO;
 import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
+import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
+import com.jamsil_team.sugeun.security.util.JWTUtil;
 import com.jamsil_team.sugeun.service.FolderService;
 import com.jamsil_team.sugeun.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -30,19 +35,15 @@ import java.util.List;
 @Log4j2
 public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    private UserRepository userRepository;
-    private UserService userService;
+    private JWTUtil jwtUtil;
     private FolderService folderService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public ApiLoginFilter(String defaultFilterProcessesUrl, UserRepository userRepository, UserService userService, FolderService folderService) {
+    public ApiLoginFilter(String defaultFilterProcessesUrl, JWTUtil jwtUtil, FolderService folderService) {
         super(defaultFilterProcessesUrl);
-        this.userRepository = userRepository;
-        this.userService =userService;
+        this.jwtUtil = jwtUtil;
         this.folderService = folderService;
     }
-
-    private String deviceToken;
 
     /**
      * 로그인 인증토큰 생성
@@ -61,10 +62,6 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         UserDTO userDTO = objectMapper.readValue(messageBody, UserDTO.class);
 
-        this.deviceToken = request.getHeader("Authorization");
-
-        System.out.println(deviceToken);
-
         log.info("UserDTO: "+ userDTO);
 
         UsernamePasswordAuthenticationToken authToken =
@@ -79,37 +76,38 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult)
-            throws IOException, ServletException {
+            throws IOException {
 
         log.info("---------------successfulAuthentication--------------------");
         log.info("successfulAuthentication: " + authResult);
 
         log.info(authResult.getPrincipal());
 
-        //로그인 시 받은 deviceToken 갱신
-        String nickname = authResult.getName();
+        Long userId = ((AuthUserDTO) authResult.getPrincipal()).getUserId();
 
-        System.out.println("---------------");
-        System.out.println(nickname);
+        String token = null;
 
+        try {
+            token = jwtUtil.generateToken(userId);
 
-        User user = userRepository.findByNickname(nickname).orElseThrow(() ->
-                new IllegalStateException("존재하지 않은 아이디입니다."));
+            List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, null, null);
 
-        //로그인시 받은 token 과 기존  token 이 다를 경우 갱신
-        if(user.getDeviceToken() != this.deviceToken){
-            userService.UpdateDeviceToken(user.getUserId(), this.deviceToken);
+            LoginResDTO loginResDTO = LoginResDTO.builder()
+                    .userId(userId)
+                    .folderResDTOList(folderResDTOList)
+                    .build();
+
+            //response json 값
+            response.setHeader("content-type", "application/json");
+            response.setCharacterEncoding("utf-8");
+
+            String result = objectMapper.writeValueAsString(loginResDTO);
+            response.getWriter().write(result);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
-        //response json 값
-        response.setHeader("content-type", "application/json");
-        response.setCharacterEncoding("utf-8");
-
-
-        List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(user.getUserId(), null, null);
-
-        String result = objectMapper.writeValueAsString(folderResDTOList);
-        response.getWriter().write(result);
 
     }
 
