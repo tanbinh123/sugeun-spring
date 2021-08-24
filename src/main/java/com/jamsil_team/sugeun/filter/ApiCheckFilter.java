@@ -3,9 +3,12 @@ package com.jamsil_team.sugeun.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
+import com.jamsil_team.sugeun.security.util.JWTUtil;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 import org.json.simple.JSONObject;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -20,13 +23,13 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
     private AntPathMatcher antPathMatcher;
     private String pattern;
-    private UserRepository userRepository;
+    private JWTUtil jwtUtil;
     private ObjectMapper objectMapper;
 
-    public ApiCheckFilter(String pattern, UserRepository userRepository) {
+    public ApiCheckFilter(String pattern, JWTUtil jwtUtil) {
         this.antPathMatcher = new AntPathMatcher();
         this.pattern = pattern;
-        this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -53,12 +56,11 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
             boolean checkHeader = checkAuthHeader(request);
 
-            //deviceToken 같을 경우
+
             if(checkHeader){
                 filterChain.doFilter(request,response);
                 return;
             }
-            //deviceToken 다를 경우우
             else{
                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
@@ -79,21 +81,26 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
     private boolean checkAuthHeader(HttpServletRequest request) {
 
-        String deviceToken = request.getHeader("Authorization");
+        boolean checkResult = false;
 
-        Long userId = Long.parseLong(request.getHeader("userId"));
 
-        // DB에 저장된 deviceToken 가져오기
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 회원입니다."));
 
-        log.info("headerDeviceToken(): " + deviceToken);
-        log.info("User.getDeviceToken(): " + user.getDeviceToken());
 
-        //request 로 받은 deviceToken 과 DB에 저장된 deviceToken 동일 체크
-        boolean checkResult = deviceToken.equals(user.getDeviceToken());
+        String authHeader = request.getHeader("Authorization");
 
-        System.out.println(checkResult);
+        System.out.println("==========================");
+        System.out.println(authHeader);
+
+
+        if(StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")){
+            log.info("Authorization exist: " + authHeader);
+
+            Long userId = jwtUtil.validateAndExtract(authHeader.substring(7));
+
+            log.info("userId: " + userId);
+            checkResult = userId > 0L;
+
+        }
 
         return checkResult;
 

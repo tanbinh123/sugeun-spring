@@ -20,6 +20,9 @@ public class LoginResDTO {
     @NotEmpty
     private Long userId;
 
+    @NotEmpty
+    private String jwtToken;
+
     @Builder.Default
     private List<FolderResDTO> folderResDTOList = new ArrayList<>();
 
