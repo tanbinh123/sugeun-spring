@@ -1,17 +1,12 @@
 package com.jamsil_team.sugeun.filter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jamsil_team.sugeun.domain.user.User;
-import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
 import com.jamsil_team.sugeun.dto.login.LoginResDTO;
 import com.jamsil_team.sugeun.dto.user.UserDTO;
-import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.security.util.JWTUtil;
-import com.jamsil_team.sugeun.service.FolderService;
-import com.jamsil_team.sugeun.service.UserService;
+import com.jamsil_team.sugeun.service.folder.FolderService;
 import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

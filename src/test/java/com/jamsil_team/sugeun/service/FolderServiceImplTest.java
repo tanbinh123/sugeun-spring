@@ -12,10 +12,9 @@ import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
-import com.jamsil_team.sugeun.dto.link.LinkDTO;
 import com.jamsil_team.sugeun.dto.link.LinkResDTO;
-import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
 import com.jamsil_team.sugeun.dto.phrase.PhraseResDTO;
+import com.jamsil_team.sugeun.service.folder.FolderService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class FolderServiceImplTest {
 
-    @Autowired FolderService folderService;
+    @Autowired
+    FolderService folderService;
     @Autowired UserRepository userRepository;
     @Autowired FolderRepository folderRepository;
     @Autowired PhraseRepository phraseRepository;

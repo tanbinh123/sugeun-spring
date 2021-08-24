@@ -12,6 +12,7 @@ import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
+import com.jamsil_team.sugeun.service.user.UserService;
 import org.assertj.core.api.Assertions;
 
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 class UserServiceImplTest {
 
-    @Autowired UserService userService;
+    @Autowired
+    UserService userService;
     @Autowired UserRepository userRepository;
     @Autowired PasswordEncoder passwordEncoder;
     @Autowired FolderRepository folderRepository;

@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.service;
+package com.jamsil_team.sugeun.service.user;
 
 import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.link.LinkRepository;
@@ -7,9 +7,7 @@ import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 
-import com.jamsil_team.sugeun.dto.link.LinkDTO;
 import com.jamsil_team.sugeun.dto.link.LinkResDTO;
-import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
 import com.jamsil_team.sugeun.dto.phrase.PhraseResDTO;
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
@@ -19,7 +17,6 @@ import com.jamsil_team.sugeun.file.ResultFileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

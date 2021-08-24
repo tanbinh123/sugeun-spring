@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.link.LinkDTO;
-import com.jamsil_team.sugeun.service.LinkService;
+import com.jamsil_team.sugeun.service.link.LinkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

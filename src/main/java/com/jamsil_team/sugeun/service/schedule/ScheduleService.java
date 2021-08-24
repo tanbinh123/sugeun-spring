@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.service;
+package com.jamsil_team.sugeun.service.schedule;
 
 import com.jamsil_team.sugeun.domain.schedule.Schedule;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;

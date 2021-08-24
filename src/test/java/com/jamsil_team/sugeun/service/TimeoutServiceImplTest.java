@@ -8,6 +8,7 @@ import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
+import com.jamsil_team.sugeun.service.timeout.TimeoutService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class TimeoutServiceImplTest {
 
-    @Autowired TimeoutService timeoutService;
+    @Autowired
+    TimeoutService timeoutService;
     @Autowired UserRepository userRepository;
     @Autowired TimeoutRepository timeoutRepository;
     @Autowired TimeoutSelectRepository timeoutSelectRepository;

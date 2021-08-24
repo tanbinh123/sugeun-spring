@@ -8,6 +8,7 @@ import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.service.phrase.PhraseService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class PhraseServiceImplTest {
 
-    @Autowired PhraseService phraseService;
+    @Autowired
+    PhraseService phraseService;
     @Autowired UserRepository userRepository;
     @Autowired FolderRepository folderRepository;
     @Autowired PhraseRepository phraseRepository;

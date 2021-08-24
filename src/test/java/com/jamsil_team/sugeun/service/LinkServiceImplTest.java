@@ -8,6 +8,7 @@ import com.jamsil_team.sugeun.domain.link.LinkRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.service.link.LinkService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class LinkServiceImplTest {
 
-    @Autowired LinkService linkService;
+    @Autowired
+    LinkService linkService;
     @Autowired UserRepository userRepository;
     @Autowired FolderRepository folderRepository;
     @Autowired LinkRepository linkRepository;

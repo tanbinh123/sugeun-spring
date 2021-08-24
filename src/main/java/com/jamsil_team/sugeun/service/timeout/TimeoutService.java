@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.service;
+package com.jamsil_team.sugeun.service.timeout;
 
 import com.jamsil_team.sugeun.domain.timeout.Timeout;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;

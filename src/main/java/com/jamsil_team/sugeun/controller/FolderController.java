@@ -4,7 +4,7 @@ import com.jamsil_team.sugeun.domain.folder.FolderType;
 import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
-import com.jamsil_team.sugeun.service.FolderService;
+import com.jamsil_team.sugeun.service.folder.FolderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

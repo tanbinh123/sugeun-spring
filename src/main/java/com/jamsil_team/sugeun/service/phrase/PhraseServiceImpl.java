@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.service;
+package com.jamsil_team.sugeun.service.phrase;
 
 import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;

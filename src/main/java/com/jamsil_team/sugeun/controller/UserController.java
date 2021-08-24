@@ -5,7 +5,7 @@ import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserUpdateDTO;
-import com.jamsil_team.sugeun.service.UserService;
+import com.jamsil_team.sugeun.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

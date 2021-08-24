@@ -2,7 +2,7 @@ package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
-import com.jamsil_team.sugeun.service.ScheduleService;
+import com.jamsil_team.sugeun.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

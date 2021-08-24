@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.service;
+package com.jamsil_team.sugeun.service.sms;
 
 public interface SendSmsService {
 

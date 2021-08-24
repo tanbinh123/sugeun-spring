@@ -2,7 +2,7 @@ package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
-import com.jamsil_team.sugeun.service.TimeoutService;
+import com.jamsil_team.sugeun.service.timeout.TimeoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

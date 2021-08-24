@@ -1,7 +1,7 @@
 package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
-import com.jamsil_team.sugeun.service.PhraseService;
+import com.jamsil_team.sugeun.service.phrase.PhraseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

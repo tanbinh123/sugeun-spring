@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.service;
+package com.jamsil_team.sugeun.service.link;
 
 import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.link.LinkRepository;

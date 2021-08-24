@@ -1,4 +1,4 @@
-package com.jamsil_team.sugeun.service;
+package com.jamsil_team.sugeun.service.user;
 
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;

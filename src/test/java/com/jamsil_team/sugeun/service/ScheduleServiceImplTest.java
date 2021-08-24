@@ -8,6 +8,7 @@ import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
+import com.jamsil_team.sugeun.service.schedule.ScheduleService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ScheduleServiceImplTest {
 
-    @Autowired ScheduleService scheduleService;
+    @Autowired
+    ScheduleService scheduleService;
     @Autowired UserRepository userRepository;
     @Autowired ScheduleSelectRepository scheduleSelectRepository;
     @Autowired ScheduleRepository scheduleRepository;

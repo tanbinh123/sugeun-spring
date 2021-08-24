@@ -3,10 +3,8 @@ package com.jamsil_team.sugeun.config;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.filter.ApiCheckFilter;
 import com.jamsil_team.sugeun.filter.ApiLoginFilter;
-import com.jamsil_team.sugeun.security.UserDetailsServiceImpl;
 import com.jamsil_team.sugeun.security.util.JWTUtil;
-import com.jamsil_team.sugeun.service.FolderService;
-import com.jamsil_team.sugeun.service.UserService;
+import com.jamsil_team.sugeun.service.folder.FolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)

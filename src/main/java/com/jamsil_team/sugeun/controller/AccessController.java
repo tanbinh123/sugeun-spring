@@ -1,27 +1,17 @@
 package com.jamsil_team.sugeun.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
-import com.jamsil_team.sugeun.service.FolderService;
-import com.jamsil_team.sugeun.service.SendSmsService;
-import com.jamsil_team.sugeun.service.UserService;
+import com.jamsil_team.sugeun.service.sms.SendSmsService;
+import com.jamsil_team.sugeun.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Random;
 
 
