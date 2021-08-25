@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -161,8 +162,8 @@ public class TimeoutServiceImpl implements TimeoutService{
             File file = new File(fileStore.getFullPath(folderPath, storeFilename));
             file.delete();
 
-//            File thumbnail = new File(fileStore.getThumbnailFullPath(folderPath, "s_" + storeFilename));
-//            thumbnail.delete();
+            File thumbnail = new File(fileStore.getThumbnailFullPath(folderPath, "s_" + storeFilename));
+            thumbnail.delete();
         }
     }
 
@@ -183,6 +184,20 @@ public class TimeoutServiceImpl implements TimeoutService{
             TimeoutResDTO timeoutResDTO = timeout.toResDTO();
 
             timeoutResDTO.setSelected(selected);
+
+            //이미지 파일 데이터
+            if(!(timeout.getStoreFilename().isBlank())){
+
+                File file = new File(fileStore.getThumbnailFullPath(timeout.getFolderPath(), timeout.getStoreFilename()));
+                byte[] bytes = new byte[0];
+
+                try {
+                    bytes = FileCopyUtils.copyToByteArray(file);
+                    timeoutResDTO.setImageData(bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             return timeoutResDTO;
         }).collect(Collectors.toList());

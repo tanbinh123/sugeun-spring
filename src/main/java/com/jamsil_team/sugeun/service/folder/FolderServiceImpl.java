@@ -125,8 +125,8 @@ public class FolderServiceImpl implements FolderService{
             File file = new File(fileStore.getFullPath(folderPath, storeFilename));
             file.delete();
 
-//            File thumbnail = new File(fileStore.getThumbnailFullPath(folderPath, "s_" + storeFilename));
-//            thumbnail.delete();
+            File thumbnail = new File(fileStore.getThumbnailFullPath(folderPath, "s_" + storeFilename));
+            thumbnail.delete();
         }
     }
 

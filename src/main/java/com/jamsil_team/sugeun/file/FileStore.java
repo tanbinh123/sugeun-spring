@@ -66,8 +66,7 @@ public class FileStore {
 
         File thumbnailFile = new File(getThumbnailFullPath(folderPath, storeThumbnailFile));
 
-        //TODO 실제 이미지 파일로 넣어야 생성됨
-        //Thumbnailator.createThumbnail(imageFile, thumbnailFile, 100, 100);
+        Thumbnailator.createThumbnail(imageFile, thumbnailFile, 100, 100);
 
         return new ResultFileStore(folderPath, storeFilename);
     }

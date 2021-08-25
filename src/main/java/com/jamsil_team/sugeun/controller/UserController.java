@@ -36,7 +36,7 @@ public class UserController {
      */
     @PostMapping("/verify")
     public ResponseEntity<Boolean> verifyPassword(@PathVariable("user-id") Long userId,
-                                                  @RequestBody UserDTO userDTO){
+                                                  UserDTO userDTO){
 
         Boolean result = userService.verifyPassword(userId, userDTO.getPassword());
 
