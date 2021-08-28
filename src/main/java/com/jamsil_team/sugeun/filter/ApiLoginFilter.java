@@ -90,7 +90,6 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
             LoginResDTO loginResDTO = LoginResDTO.builder()
                     .userId(userId)
                     .jwtToken(jwtToken)
-                    .folderResDTOList(folderResDTOList)
                     .build();
 
             //response json 값

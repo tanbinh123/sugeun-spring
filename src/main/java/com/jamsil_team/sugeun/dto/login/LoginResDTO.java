@@ -23,7 +23,5 @@ public class LoginResDTO {
     @NotEmpty
     private String jwtToken;
 
-    @Builder.Default
-    private List<FolderResDTO> folderResDTOList = new ArrayList<>();
 
 }

@@ -184,6 +184,7 @@ public class FolderServiceImpl implements FolderService{
 
             List<PhraseResDTO> phraseResDTOList = phraseList.stream().map(findPhrase -> {
                 PhraseResDTO phraseResDTO = findPhrase.toResDTO();
+
                 return phraseResDTO;
             }).collect(Collectors.toList());
 
