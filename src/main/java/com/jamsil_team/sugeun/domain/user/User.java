@@ -33,8 +33,6 @@ public class User {
     @Column(nullable = false)
     private Boolean alarm = true;
 
-    private String deviceToken;
-
     @Builder.Default
     @Column(nullable = false)
     private String folderPath = "";
@@ -57,10 +55,6 @@ public class User {
         } else {
             this.alarm = false;
         }
-    }
-
-    public void changeDeviceToken(String deviceToken){
-        this.deviceToken = deviceToken;
     }
 
     public void changePassword(String password){

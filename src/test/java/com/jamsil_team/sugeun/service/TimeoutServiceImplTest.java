@@ -223,6 +223,9 @@ class TimeoutServiceImplTest {
         //삭제된 스케줄 검색
         NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
                 () -> (timeoutRepository.findById(timeout.getTimeoutId())).get());
+
+        Assertions.assertThat(e1.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e2.getMessage()).isEqualTo("No value present");
     }
 
     @Test

@@ -85,8 +85,6 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
         try {
             jwtToken = jwtUtil.generateToken(userId);
 
-            List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, null, null);
-
             LoginResDTO loginResDTO = LoginResDTO.builder()
                     .userId(userId)
                     .jwtToken(jwtToken)

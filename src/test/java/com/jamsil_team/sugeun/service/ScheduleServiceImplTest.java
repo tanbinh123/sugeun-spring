@@ -166,6 +166,9 @@ class ScheduleServiceImplTest {
         //삭제된 스케줄 검색
         NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
                 () -> (scheduleRepository.findById(schedule.getScheduleId())).get());
+
+        Assertions.assertThat(e1.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e2.getMessage()).isEqualTo("No value present");
     }
 
     @Test

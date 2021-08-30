@@ -7,6 +7,14 @@ import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.link.LinkRepository;
 import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
+import com.jamsil_team.sugeun.domain.schedule.Schedule;
+import com.jamsil_team.sugeun.domain.schedule.ScheduleRepository;
+import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelect;
+import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelectRepository;
+import com.jamsil_team.sugeun.domain.timeout.Timeout;
+import com.jamsil_team.sugeun.domain.timeout.TimeoutRepository;
+import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelect;
+import com.jamsil_team.sugeun.domain.timeoutSelect.TimeoutSelectRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
@@ -20,8 +28,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,6 +49,14 @@ class UserServiceImplTest {
     @Autowired FolderRepository folderRepository;
     @Autowired PhraseRepository phraseRepository;
     @Autowired LinkRepository linkRepository;
+    @Autowired
+    TimeoutRepository timeoutRepository;
+    @Autowired
+    ScheduleRepository scheduleRepository;
+    @Autowired
+    TimeoutSelectRepository timeoutSelectRepository;
+    @Autowired
+    ScheduleSelectRepository scheduleSelectRepository;
 
     @Test
     void 중복확인() throws Exception{
@@ -69,7 +89,6 @@ class UserServiceImplTest {
         boolean matches = passwordEncoder.matches(rawPassword, user.getPassword());
         Assertions.assertThat(matches).isTrue();
 
-        Assertions.assertThat(user.getDeviceToken()).isNull();
     }
 
     @Test
@@ -99,7 +118,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -121,7 +139,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -142,7 +159,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -168,7 +184,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -203,7 +218,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -227,7 +241,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -250,7 +263,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -268,7 +280,6 @@ class UserServiceImplTest {
         Assertions.assertThat(matches).isTrue();
 
         Assertions.assertThat(savedUser.getPhone()).isEqualTo("010-0000-0000");
-        Assertions.assertThat(savedUser.getDeviceToken()).isEqualTo("adsf1r@Afdfas");
     }
 
 
@@ -280,7 +291,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -304,7 +314,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -328,7 +337,6 @@ class UserServiceImplTest {
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .alarm(true) //알람 허용o
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -351,7 +359,6 @@ class UserServiceImplTest {
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
                 .alarm(false) //알람 허용x
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -373,7 +380,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -426,7 +432,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -458,7 +463,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -490,7 +494,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -509,7 +512,6 @@ class UserServiceImplTest {
                 .nickname("형우")
                 .password(passwordEncoder.encode("1111"))
                 .phone("010-0000-0000")
-                .deviceToken("adsf1r@Afdfas")
                 .build();
 
         userRepository.save(user);
@@ -519,6 +521,156 @@ class UserServiceImplTest {
 
         //then
         Assertions.assertThat(result).isFalse();
+    }
+
+    @Commit
+    @Test
+    void 회원탈퇴() throws Exception{
+        //given
+        //user 생성
+        User user = User.builder()
+                .nickname("형우")
+                .password(passwordEncoder.encode("1111"))
+                .phone("010-0000-0000")
+                .build();
+
+        userRepository.save(user);
+
+        //타임아웃 생성
+        Timeout timeout = Timeout.builder()
+                .title("나")
+                .user(user)
+                .deadline(LocalDateTime.of(2021, 8, 01, 23, 59))
+                .isValid(true)
+                .build();
+
+        timeoutRepository.save(timeout);
+
+        //timeout 1,3일전 알람 생성
+        LocalDateTime before1 = timeout.getDeadline().minusDays(1).toLocalDate().atTime(12, 00);
+        LocalDateTime before3 = timeout.getDeadline().minusDays(3).toLocalDate().atTime(12, 00);
+
+        TimeoutSelect timeoutSelectA = TimeoutSelect.builder()
+                .timeout(timeout) //timeout
+                .alarmDateTime(before1) //1일전
+                .selected(1)
+                .build();
+
+        timeoutSelectRepository.save(timeoutSelectA);
+
+        TimeoutSelect timeoutSelectB = TimeoutSelect.builder()
+                .timeout(timeout) //timeout
+                .alarmDateTime(before3) //3일전
+                .selected(3)
+                .build();
+
+        timeoutSelectRepository.save(timeoutSelectB);
+
+        //schedule 생성
+        Schedule schedule = Schedule.builder()
+                .user(user)
+                .title("2시 30분 잠실역")
+                .scheduleDate(LocalDateTime.of(2021, 7, 28, 14, 30))
+                .build();
+
+        scheduleRepository.save(schedule);
+
+        //schedule 1,3일전 알람 생성
+        ScheduleSelect scheduleSelectA = ScheduleSelect.builder()
+                .schedule(schedule) //schedule
+                .alarmDateTime(before1) //1일전
+                .selected(1)
+                .build();
+
+        scheduleSelectRepository.save(scheduleSelectA);
+
+        ScheduleSelect scheduleSelectB = ScheduleSelect.builder()
+                .schedule(schedule) //schedule
+                .alarmDateTime(before3) //3일전
+                .selected(3)
+                .build();
+
+        scheduleSelectRepository.save(scheduleSelectB);
+
+        //folder 생성
+        Folder folderA = createFolder(user, FolderType.PHRASE);
+        Folder folderB = createFolder(user, FolderType.LINK);
+
+        //phrase 생성
+        Phrase phrase = Phrase.builder()
+                .folder(folderA)
+                .user(user)
+                .text("글귀A")
+                .build();
+
+        phraseRepository.save(phrase);
+
+        //link 생성
+        Link link = Link.builder()
+                .folder(folderB)
+                .user(user)
+                .title("링크제목")
+                .link("naver.com")
+                .build();
+
+        linkRepository.save(link);
+
+        /**
+         * user 해당 -
+         * timeout 1개, timeoutSelect 2개, schedule 1개, scheduleSelect 2개,
+         * folder 2개, phrase 1개, link 1개 생성
+         */
+
+        //when
+        userService.removeUser(user.getUserId());
+
+        //then
+        //삭제된 스케줄의 알람 검색
+        NoSuchElementException e1 = assertThrows(NoSuchElementException.class,
+                () -> (scheduleSelectRepository.findById(scheduleSelectA.getScheduleSelectId())).get());
+        NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
+                () -> (scheduleSelectRepository.findById(scheduleSelectB.getScheduleSelectId())).get());
+        //삭제된 스케줄 검색
+        NoSuchElementException e3 = assertThrows(NoSuchElementException.class,
+                () -> (scheduleRepository.findById(schedule.getScheduleId())).get());
+        //삭제된 타임아웃의 알람 검색
+        NoSuchElementException e4 = assertThrows(NoSuchElementException.class,
+                () -> (timeoutSelectRepository.findById(timeoutSelectA.getTimeoutSelectId())).get());
+        NoSuchElementException e5 = assertThrows(NoSuchElementException.class,
+                () -> (timeoutSelectRepository.findById(timeoutSelectB.getTimeoutSelectId())).get());
+        //삭제된 스케줄 검색
+        System.out.println(timeoutRepository.findById(timeout.getTimeoutId()));
+
+//        NoSuchElementException e6 = assertThrows(NoSuchElementException.class,
+//                () -> (timeoutRepository.findById(timeout.getTimeoutId())).get());
+        //삭제된 글귀 검색
+        NoSuchElementException e7 = assertThrows(NoSuchElementException.class,
+                () -> (phraseRepository.findById(phrase.getPhraseId())).get());
+        //삭제된 링크 검색
+        NoSuchElementException e8 = assertThrows(NoSuchElementException.class,
+                () -> (linkRepository.findById(link.getLinkId())).get());
+        //삭제된 폴더 검색
+//        NoSuchElementException e9 = assertThrows(NoSuchElementException.class,
+//                () -> folderRepository.findById(folderA.getFolderId()).get());
+        NoSuchElementException e10 = assertThrows(NoSuchElementException.class,
+                () -> folderRepository.findById(folderB.getFolderId()).get());
+        //삭제된 회원 검색
+        NoSuchElementException e11 = assertThrows(NoSuchElementException.class,
+                () -> userRepository.findById(user.getUserId()).get());
+
+        Assertions.assertThat(e1.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e2.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e3.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e4.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e5.getMessage()).isEqualTo("No value present");
+        //Assertions.assertThat(e6.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e7.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e8.getMessage()).isEqualTo("No value present");
+        //Assertions.assertThat(e9.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e10.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e11.getMessage()).isEqualTo("No value present");
+
+
     }
 
     private Folder createFolder(User user, FolderType type) {

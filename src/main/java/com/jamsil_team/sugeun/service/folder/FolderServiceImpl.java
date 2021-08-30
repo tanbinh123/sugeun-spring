@@ -193,6 +193,19 @@ public class FolderServiceImpl implements FolderService{
 
             List<FolderResDTO> folderResDTOList = folderList.stream().map(findFolder -> {
                 FolderResDTO folderResDTO = findFolder.toResDTO();
+                //이미지 파일 데이터
+                if(!(findFolder.getStoreFilename().isBlank())){
+
+                    File file = new File(fileStore.getThumbnailFullPath(findFolder.getFolderPath(), findFolder.getStoreFilename()));
+                    byte[] bytes = new byte[0];
+
+                    try {
+                        bytes = FileCopyUtils.copyToByteArray(file);
+                        folderResDTO.setImageData(bytes);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 return folderResDTO;
             }).collect(Collectors.toList());
 
@@ -217,6 +230,19 @@ public class FolderServiceImpl implements FolderService{
 
             List<FolderResDTO> folderResDTOList = folderList.stream().map(findFolder -> {
                 FolderResDTO folderResDTO = findFolder.toResDTO();
+                //이미지 파일 데이터
+                if(!(findFolder.getStoreFilename().isBlank())){
+
+                    File file = new File(fileStore.getThumbnailFullPath(findFolder.getFolderPath(), findFolder.getStoreFilename()));
+                    byte[] bytes = new byte[0];
+
+                    try {
+                        bytes = FileCopyUtils.copyToByteArray(file);
+                        folderResDTO.setImageData(bytes);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 return folderResDTO;
             }).collect(Collectors.toList());
 

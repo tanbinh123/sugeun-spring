@@ -1,9 +1,15 @@
 package com.jamsil_team.sugeun.service.user;
 
+import com.jamsil_team.sugeun.domain.folder.Folder;
+import com.jamsil_team.sugeun.domain.folder.FolderRepository;
 import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.link.LinkRepository;
 import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
+import com.jamsil_team.sugeun.domain.schedule.Schedule;
+import com.jamsil_team.sugeun.domain.schedule.ScheduleRepository;
+import com.jamsil_team.sugeun.domain.timeout.Timeout;
+import com.jamsil_team.sugeun.domain.timeout.TimeoutRepository;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
 
@@ -14,6 +20,9 @@ import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
 import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
+import com.jamsil_team.sugeun.service.folder.FolderService;
+import com.jamsil_team.sugeun.service.schedule.ScheduleService;
+import com.jamsil_team.sugeun.service.timeout.TimeoutService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -40,6 +49,12 @@ public class UserServiceImpl implements UserService{
     private final FileStore fileStore;
     private final PhraseRepository phraseRepository;
     private final LinkRepository linkRepository;
+    private final TimeoutService timeoutService;
+    private final TimeoutRepository timeoutRepository;
+    private final ScheduleService scheduleService;
+    private final ScheduleRepository scheduleRepository;
+    private final FolderService folderService;
+    private final FolderRepository folderRepository;
 
     /**
      * 아이디 중복확인
@@ -84,20 +99,6 @@ public class UserServiceImpl implements UserService{
 
     }
 
-
-    /**
-     * 로그인 시 deviceToken 갱신
-     */
-    @Transactional
-    @Override
-    public void UpdateDeviceToken(Long userId, String deviceToken) {
-
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않은 회원입니다."));
-
-        user.changeDeviceToken(deviceToken);
-    }
-
     /**
      * 프로필사진 업데이트
      */
@@ -117,22 +118,6 @@ public class UserServiceImpl implements UserService{
         user.changeUserImg(resultFileStore);
     }
 
-    private void fileRemove(User user) {
-
-        //기존 프로필 이미지가 있을 경우
-        if(user.getStoreFilename() != null && !(user.getStoreFilename().equals(""))){
-            String folderPath = user.getFolderPath();
-            String storeFilename = user.getStoreFilename();
-
-            //원본 이미지 삭제
-            File file = new File(fileStore.getFullPath(folderPath, storeFilename));
-            file.delete();
-
-            //썸네일 이미지 삭제
-            File thumbnail = new File(fileStore.getThumbnailFullPath(folderPath, storeFilename));
-            thumbnail.delete();
-        }
-    }
 
     /**
      *  아이디 변경
@@ -293,6 +278,57 @@ public class UserServiceImpl implements UserService{
         }
         else{
             return false;
+        }
+    }
+
+
+    /**
+     * 회원 탈퇴
+     */
+    @Override
+    public void removeUser(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalStateException("존재하지 않는 회원입니다."));
+
+        //scheduleSelect -> schedule -> timeoutSelect -> 서버컴퓨터 timeout 사진 -> timeout ->
+        // phrase -> link -> 서버컴퓨터 folder 사진 -> folder ->
+        // userRoleSet -> 서버컴퓨터 user 사진 -> user 순으로 삭제
+
+        //scheduleSelect, schedule 삭제
+        List<Schedule> scheduleList = scheduleRepository.getScheduleList(userId);
+        scheduleList.stream().forEach(schedule -> scheduleService.removeSchedule(schedule.getScheduleId()));
+
+        //timeoutSelect, 서버 컴퓨터 timeout 사진, timeout 삭제
+        List<Timeout> timeoutList = timeoutRepository.getTimeoutList(userId);
+        timeoutList.stream().forEach(timeout -> timeoutService.removeTimeout(timeout.getTimeoutId()));
+
+
+        //phrase, link, 서버 컴퓨터 folder 사진, folder 삭제
+        List<Folder> folderList = folderRepository.findByUserId(userId);
+        folderList.stream().forEach(folder -> folderService.removeFolder(folder.getFolderId()));
+
+        //서버 컴퓨터 user 사진 삭제
+        fileRemove(user);
+
+        //user 삭제
+        //userRepository.deleteById(userId);
+    }
+
+    private void fileRemove(User user) {
+
+        //기존 프로필 이미지가 있을 경우
+        if(user.getStoreFilename() != null && !(user.getStoreFilename().equals(""))){
+            String folderPath = user.getFolderPath();
+            String storeFilename = user.getStoreFilename();
+
+            //원본 이미지 삭제
+            File file = new File(fileStore.getFullPath(folderPath, storeFilename));
+            file.delete();
+
+            //썸네일 이미지 삭제
+            File thumbnail = new File(fileStore.getThumbnailFullPath(folderPath, storeFilename));
+            thumbnail.delete();
         }
     }
 
