@@ -196,7 +196,6 @@ class TimeoutServiceImplTest {
                 .user(user)
                 .title("스타벅스 아메리카노")
                 .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
-                .storeFilename("dfasdfas")
                 .build();
 
         timeoutRepository.save(timeout);

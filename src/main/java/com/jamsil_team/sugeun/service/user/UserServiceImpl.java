@@ -285,6 +285,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 회원 탈퇴
      */
+    @Transactional
     @Override
     public void removeUser(Long userId) {
 
@@ -295,6 +296,7 @@ public class UserServiceImpl implements UserService{
         // phrase -> link -> 서버컴퓨터 folder 사진 -> folder ->
         // userRoleSet -> 서버컴퓨터 user 사진 -> user 순으로 삭제
 
+
         //scheduleSelect, schedule 삭제
         List<Schedule> scheduleList = scheduleRepository.getScheduleList(userId);
         scheduleList.stream().forEach(schedule -> scheduleService.removeSchedule(schedule.getScheduleId()));
@@ -303,16 +305,18 @@ public class UserServiceImpl implements UserService{
         List<Timeout> timeoutList = timeoutRepository.getTimeoutList(userId);
         timeoutList.stream().forEach(timeout -> timeoutService.removeTimeout(timeout.getTimeoutId()));
 
-
         //phrase, link, 서버 컴퓨터 folder 사진, folder 삭제
         List<Folder> folderList = folderRepository.findByUserId(userId);
         folderList.stream().forEach(folder -> folderService.removeFolder(folder.getFolderId()));
+
+
+
 
         //서버 컴퓨터 user 사진 삭제
         fileRemove(user);
 
         //user 삭제
-        //userRepository.deleteById(userId);
+        userRepository.deleteById(userId);
     }
 
     private void fileRemove(User user) {

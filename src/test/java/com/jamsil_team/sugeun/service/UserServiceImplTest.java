@@ -31,6 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -523,25 +524,23 @@ class UserServiceImplTest {
         Assertions.assertThat(result).isFalse();
     }
 
-    @Commit
     @Test
     void 회원탈퇴() throws Exception{
         //given
         //user 생성
         User user = User.builder()
-                .nickname("형우")
+                .nickname("형우1")
                 .password(passwordEncoder.encode("1111"))
-                .phone("010-0000-0000")
+                .phone("010-0000-0001")
                 .build();
 
         userRepository.save(user);
 
         //타임아웃 생성
         Timeout timeout = Timeout.builder()
-                .title("나")
                 .user(user)
+                .title("나")
                 .deadline(LocalDateTime.of(2021, 8, 01, 23, 59))
-                .isValid(true)
                 .build();
 
         timeoutRepository.save(timeout);
@@ -630,6 +629,8 @@ class UserServiceImplTest {
                 () -> (scheduleSelectRepository.findById(scheduleSelectA.getScheduleSelectId())).get());
         NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
                 () -> (scheduleSelectRepository.findById(scheduleSelectB.getScheduleSelectId())).get());
+        System.out.println("----------------");
+        System.out.println(scheduleRepository.findById(schedule.getScheduleId()));
         //삭제된 스케줄 검색
         NoSuchElementException e3 = assertThrows(NoSuchElementException.class,
                 () -> (scheduleRepository.findById(schedule.getScheduleId())).get());
@@ -638,11 +639,13 @@ class UserServiceImplTest {
                 () -> (timeoutSelectRepository.findById(timeoutSelectA.getTimeoutSelectId())).get());
         NoSuchElementException e5 = assertThrows(NoSuchElementException.class,
                 () -> (timeoutSelectRepository.findById(timeoutSelectB.getTimeoutSelectId())).get());
-        //삭제된 스케줄 검색
-        System.out.println(timeoutRepository.findById(timeout.getTimeoutId()));
 
-//        NoSuchElementException e6 = assertThrows(NoSuchElementException.class,
-//                () -> (timeoutRepository.findById(timeout.getTimeoutId())).get());
+        //삭제된 타임아웃 검색
+        System.out.println("-----------------");
+        System.out.println(timeoutRepository.findById(timeout.getTimeoutId()));
+        NoSuchElementException e6 = assertThrows(NoSuchElementException.class,
+                () -> (timeoutRepository.findById(timeout.getTimeoutId())).get());
+
         //삭제된 글귀 검색
         NoSuchElementException e7 = assertThrows(NoSuchElementException.class,
                 () -> (phraseRepository.findById(phrase.getPhraseId())).get());
@@ -650,8 +653,8 @@ class UserServiceImplTest {
         NoSuchElementException e8 = assertThrows(NoSuchElementException.class,
                 () -> (linkRepository.findById(link.getLinkId())).get());
         //삭제된 폴더 검색
-//        NoSuchElementException e9 = assertThrows(NoSuchElementException.class,
-//                () -> folderRepository.findById(folderA.getFolderId()).get());
+        NoSuchElementException e9 = assertThrows(NoSuchElementException.class,
+                () -> folderRepository.findById(folderA.getFolderId()).get());
         NoSuchElementException e10 = assertThrows(NoSuchElementException.class,
                 () -> folderRepository.findById(folderB.getFolderId()).get());
         //삭제된 회원 검색
@@ -663,10 +666,10 @@ class UserServiceImplTest {
         Assertions.assertThat(e3.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e4.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e5.getMessage()).isEqualTo("No value present");
-        //Assertions.assertThat(e6.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e6.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e7.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e8.getMessage()).isEqualTo("No value present");
-        //Assertions.assertThat(e9.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e9.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e10.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e11.getMessage()).isEqualTo("No value present");
 

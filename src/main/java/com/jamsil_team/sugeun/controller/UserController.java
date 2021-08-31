@@ -69,6 +69,19 @@ public class UserController {
 
 
     /**
+     *  회원탈퇴
+     */
+    @DeleteMapping
+    public ResponseEntity<String> removeUser(@PathVariable("user-id") Long userId){
+
+        userService.removeUser(userId);
+
+        return new ResponseEntity<>("회원탈퇴 완료", HttpStatus.OK);
+
+    }
+
+
+    /**
      *  알림 허용 변경
      */
     @PatchMapping("/alarm")
