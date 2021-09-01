@@ -14,8 +14,6 @@ public interface UserService {
 
     User join(UserSignupDTO signUpDTOUser);
 
-    void UpdateDeviceToken(Long userId, String deviceToken);
-
     void modifyUserImg(Long userId, MultipartFile multipartFile) throws IOException;
 
     void modifyUserId(Long userId, String updateUserId);

@@ -1,43 +1,60 @@
 package com.jamsil_team.sugeun.security.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import com.jamsil_team.sugeun.domain.user.User;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.Collection;
 
-@Log4j2
-@Getter
-@Setter
-@ToString
-public class AuthUserDTO extends User {
+@Data
+public class AuthUserDTO implements UserDetails {
 
-    private Long userId;
+    private User user;
 
-    private String nickname;
-
-    private String password;
-
-    private String phone;
-
-    private String deviceToken;
-
-    private Boolean alarm;
-
-    private String folderPath;
-
-    private String storeFilename;
-
-
-    public AuthUserDTO(String username, String password,
-                       Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
-        this.nickname = username;
+    public AuthUserDTO(User user) {
+        this.user = user;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
 
+        user.getRoleSet().forEach(r -> {
+            authorities.add(() -> "ROLE_" + r.name());
+        });
+
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getNickname();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

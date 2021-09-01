@@ -86,19 +86,6 @@ public class UserServiceImpl implements UserService{
 
 
     /**
-     * 로그인 시 deviceToken 갱신
-     */
-    @Transactional
-    @Override
-    public void UpdateDeviceToken(Long userId, String deviceToken) {
-
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않은 회원입니다."));
-
-        user.changeDeviceToken(deviceToken);
-    }
-
-    /**
      * 프로필사진 업데이트
      */
     @Transactional

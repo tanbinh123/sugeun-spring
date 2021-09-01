@@ -3,10 +3,14 @@ package com.jamsil_team.sugeun.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamsil_team.sugeun.domain.user.User;
 import com.jamsil_team.sugeun.domain.user.UserRepository;
+import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.security.util.JWTUtil;
 import lombok.extern.log4j.Log4j2;
-import lombok.val;
 import org.json.simple.JSONObject;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.stream.Collectors;
 
 @Log4j2
 public class ApiCheckFilter extends OncePerRequestFilter {
@@ -24,13 +29,13 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     private AntPathMatcher antPathMatcher;
     private String pattern;
     private JWTUtil jwtUtil;
-    private ObjectMapper objectMapper;
+    private UserRepository userRepository;
 
-    public ApiCheckFilter(String pattern, JWTUtil jwtUtil) {
+    public ApiCheckFilter(String pattern, JWTUtil jwtUtil, UserRepository userRepository) {
         this.antPathMatcher = new AntPathMatcher();
         this.pattern = pattern;
         this.jwtUtil = jwtUtil;
-        this.objectMapper = new ObjectMapper();
+        this.userRepository = userRepository;
     }
 
 
@@ -95,11 +100,20 @@ public class ApiCheckFilter extends OncePerRequestFilter {
         if(StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")){
             log.info("Authorization exist: " + authHeader);
 
-            Long userId = jwtUtil.validateAndExtract(authHeader.substring(7));
+            String nickname = jwtUtil.validateAndExtract(authHeader.substring(7));
 
-            log.info("userId: " + userId);
-            checkResult = userId > 0L;
+            log.info("nickname: " + nickname);
+            checkResult = nickname.length() > 0 ;
 
+            User user = userRepository.findByNickname(nickname).get();
+
+            AuthUserDTO authUserDTO = new AuthUserDTO(user);
+
+            //강제로 Authentication 만들기
+            Authentication authentication = new UsernamePasswordAuthenticationToken(authUserDTO,null, authUserDTO.getAuthorities());
+
+            //강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장.
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         return checkResult;

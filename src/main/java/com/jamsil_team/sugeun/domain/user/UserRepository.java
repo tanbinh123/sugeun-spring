@@ -15,7 +15,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph(attributePaths = {"roleSet"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<User> findByNickname(String nickname);
-
-    @Query("select u.deviceToken from User u where u.deviceToken = :userId")
-    String deviceTokenFindByUserId(@Param("userId") String userId);
 }

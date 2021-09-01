@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired private UserRepository userRepository;
-    @Autowired private FolderService folderService;
 
     @Bean
     public PasswordEncoder encode(){
@@ -35,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public ApiLoginFilter apiLoginFilter() throws Exception{
-        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", jwtUtil(), folderService);
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", jwtUtil());
         apiLoginFilter.setAuthenticationManager(authenticationManager());
 
         return apiLoginFilter;
@@ -45,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public ApiCheckFilter apiCheckFilter(){
-        return new ApiCheckFilter("/api/**/*", jwtUtil());
+        return new ApiCheckFilter("/api/**/*", jwtUtil(), userRepository);
     }
 
 
@@ -53,13 +52,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected  void configure(HttpSecurity http) throws Exception{
         http.httpBasic().disable(); // rest api 이므로 기본설정 안함. 기본설정은 비인증시 로그인폼 화면으로 리다이렉트
 
-        // deviceToken 으로 인증하기 때문에 세션 필요 x
+        //세션 사용 x (
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.csrf().disable(); //세션 사용 x
 
         http.authorizeRequests()
-                .anyRequest().permitAll(); //접근 권한은 filter 에서 검증
+                .antMatchers("/users/**","/phrases/**","/links/**","/timeouts/**")
+                .access("hasRole('ROLE_USER')")
+                .anyRequest().permitAll();
+
+        http.addFilterBefore(apiCheckFilter(),
+                UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterBefore(apiLoginFilter(),
                 UsernamePasswordAuthenticationFilter.class); //로그인 필터를  인증필터 전에 실행

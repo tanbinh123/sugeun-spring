@@ -1,7 +1,6 @@
 package com.jamsil_team.sugeun.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
 import com.jamsil_team.sugeun.dto.login.LoginResDTO;
 import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
@@ -24,20 +23,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 
 @Log4j2
 public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private JWTUtil jwtUtil;
-    private FolderService folderService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public ApiLoginFilter(String defaultFilterProcessesUrl, JWTUtil jwtUtil, FolderService folderService) {
+    public ApiLoginFilter(String defaultFilterProcessesUrl, JWTUtil jwtUtil) {
         super(defaultFilterProcessesUrl);
         this.jwtUtil = jwtUtil;
-        this.folderService = folderService;
     }
 
     /**
@@ -78,17 +74,15 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         log.info(authResult.getPrincipal());
 
-        Long userId = ((AuthUserDTO) authResult.getPrincipal()).getUserId();
+        AuthUserDTO authUserDTO = (AuthUserDTO) authResult.getPrincipal();
 
         String jwtToken = null;
 
         try {
-            jwtToken = jwtUtil.generateToken(userId);
-
-            List<FolderResDTO> folderResDTOList = folderService.getListOfFolder(userId, null, null);
+            jwtToken = jwtUtil.generateToken(authUserDTO.getUsername());
 
             LoginResDTO loginResDTO = LoginResDTO.builder()
-                    .userId(userId)
+                    .userId(authUserDTO.getUser().getUserId())
                     .jwtToken(jwtToken)
                     .build();
 

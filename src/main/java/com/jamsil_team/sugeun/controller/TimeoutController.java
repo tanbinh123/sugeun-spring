@@ -2,10 +2,12 @@ package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
+import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.timeout.TimeoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -75,12 +77,16 @@ public class TimeoutController {
     /**
      *  타임아웃 사용완료
      */
-    @PatchMapping("timeouts/{timeout-id}/valid")
-    public ResponseEntity<String> modifyIsValid(@PathVariable("timeout-id") Long timeoutId){
+    @PatchMapping("/timeouts/{timeout-id}/valid")
+    public ResponseEntity<String> modifyIsValid(@PathVariable("timeout-id") Long timeoutId,
+                                                @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        System.out.println("------------------");
+        System.out.println(authUserDTO);
 
         timeoutService.finishUse(timeoutId);
 
         return new ResponseEntity<>("타임아웃 사용 완료", HttpStatus.OK);
     }
 
-}
+   }
