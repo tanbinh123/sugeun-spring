@@ -33,4 +33,6 @@ public interface UserService {
     Long checkNickname(String nickname);
 
     Boolean verifyPhone(Long userId, String phone);
+
+    void removeUser(Long userId);
 }

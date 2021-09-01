@@ -196,7 +196,6 @@ class TimeoutServiceImplTest {
                 .user(user)
                 .title("스타벅스 아메리카노")
                 .deadline(LocalDateTime.of(2021, 8, 11, 23, 59))
-                .storeFilename("dfasdfas")
                 .build();
 
         timeoutRepository.save(timeout);
@@ -223,6 +222,9 @@ class TimeoutServiceImplTest {
         //삭제된 스케줄 검색
         NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
                 () -> (timeoutRepository.findById(timeout.getTimeoutId())).get());
+
+        Assertions.assertThat(e1.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e2.getMessage()).isEqualTo("No value present");
     }
 
     @Test

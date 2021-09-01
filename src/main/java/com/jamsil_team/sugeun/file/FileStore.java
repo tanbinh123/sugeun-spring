@@ -62,7 +62,7 @@ public class FileStore {
         multipartFile.transferTo(imageFile);
 
         //서버 컴퓨터에 썸네일 이미지 저장 (upload/sugeun/연/월/일/"s_"+ uuid + "_" + originalFilename)
-        String storeThumbnailFile = createStoreThumbnailFile(storeFilename);
+        String storeThumbnailFile = createStoreThumbnailFilename(storeFilename);
 
         File thumbnailFile = new File(getThumbnailFullPath(folderPath, storeThumbnailFile));
 
@@ -97,7 +97,7 @@ public class FileStore {
         return uuid + "_" + originalFilename;
     }
 
-    private String createStoreThumbnailFile(String storeFilename) {
+    private String createStoreThumbnailFilename(String storeFilename) {
 
         return "s_" + storeFilename;
     }
