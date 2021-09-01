@@ -1,10 +1,12 @@
 package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.link.LinkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -19,9 +21,12 @@ public class LinkController {
      *  링크 생성
      */
     @PostMapping("/users/{user-id}/folders/{folder-id}/links")
-    public ResponseEntity<String> createLink(@PathVariable("user-id") Long userId,
-                                             @PathVariable("folder-id") Long folderId,
-                                             @RequestBody LinkDTO linkDTO){
+    public ResponseEntity<String> createLink(@RequestBody LinkDTO linkDTO,
+                                             @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!linkDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("생성 권한이 없습니다.");
+        }
 
         linkService.createLink(linkDTO);
 
@@ -34,9 +39,13 @@ public class LinkController {
      */
     @PutMapping("/users/{user-id}/folders/{folder-id}/links/{link-id}")
     public ResponseEntity<String> modifyLink(@PathVariable("user-id") Long userId,
-                                             @PathVariable("folder-id") Long folderId,
-                                             @PathVariable("link-id") Long linkId,
-                                             @RequestBody LinkDTO linkDTO){
+                                             @RequestBody LinkDTO linkDTO,
+                                             @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("수정 권한이 없습니다.");
+        }
+
         linkService.modifyLink(linkDTO);
 
         return new ResponseEntity<>("링크수정 완료", HttpStatus.OK);
@@ -49,8 +58,12 @@ public class LinkController {
      */
     @DeleteMapping("/users/{user-id}/folders/{folder-id}/links/{link-id}")
     public ResponseEntity<String> removeLink(@PathVariable("user-id") Long userId,
-                                             @PathVariable("folder-id") Long folderId,
-                                             @PathVariable("link-id") Long linkId){
+                                             @PathVariable("link-id") Long linkId,
+                                             @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("삭제 권한이 없습니다.");
+        }
 
         linkService.removeLink(linkId);
 

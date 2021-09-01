@@ -4,10 +4,12 @@ import com.jamsil_team.sugeun.domain.folder.FolderType;
 import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
+import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.folder.FolderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -26,14 +28,22 @@ public class FolderController {
      */
     @GetMapping
     public ResponseEntity<List<FolderResDTO>> folderList(@PathVariable("user-id") Long userId,
-                                                             @RequestParam(value = "type",required = false) String type){
+                                                         @RequestParam(value = "type",required = false) String type,
+                                                         @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        Long tokenUserId = authUserDTO.getUser().getUserId();
+
+        if(!userId.equals(tokenUserId)){
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
+
         //폴더 전체보기일 경우
         if(type == null){
-            List<FolderResDTO> folderResDTOListA = folderService.getListOfFolder(userId, null, null);
+            List<FolderResDTO> folderResDTOListA = folderService.getListOfFolder(tokenUserId, null, null);
             return new ResponseEntity<>(folderResDTOListA, HttpStatus.OK);
         }
 
-        List<FolderResDTO> folderResDTOListB = folderService.getListOfFolder(userId, FolderType.valueOf(type), null);
+        List<FolderResDTO> folderResDTOListB = folderService.getListOfFolder(tokenUserId, FolderType.valueOf(type), null);
 
         return new ResponseEntity<>(folderResDTOListB, HttpStatus.OK);
     }
@@ -42,8 +52,12 @@ public class FolderController {
      *  폴더 생성
      */
     @PostMapping
-    public ResponseEntity<String> createFolder(@PathVariable("user-id") Long userId,
-                                               FolderDTO folderDTO) throws IOException {
+    public ResponseEntity<String> createFolder(FolderDTO folderDTO,
+                                               @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
+
+        if(!folderDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("생성 권한이 없습니다.");
+        }
 
         folderService.createFolder(folderDTO);
 
@@ -56,9 +70,16 @@ public class FolderController {
      */
     @GetMapping("/{folder-id}")
     public ResponseEntity<DetailFolderDTO> readFolder(@PathVariable("user-id") Long userId,
-                                                      @PathVariable("folder-id") Long folderId){
+                                                      @PathVariable("folder-id") Long folderId,
+                                                      @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
-        DetailFolderDTO detailFolderDTO = folderService.getFolder(userId, folderId);
+        Long tokenUserId = authUserDTO.getUser().getUserId();
+
+        if(!userId.equals(tokenUserId)){
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
+
+        DetailFolderDTO detailFolderDTO = folderService.getFolder(tokenUserId, folderId);
 
         return new ResponseEntity(detailFolderDTO, HttpStatus.OK);
     }
@@ -69,7 +90,12 @@ public class FolderController {
     @PatchMapping("{folder-id}")
     public ResponseEntity<String> modifyFolder(@PathVariable("user-id") Long userId,
                                                @PathVariable("folder-id") Long folderId,
-                                               FolderDTO folderDTO) throws IOException {
+                                               FolderDTO folderDTO,
+                                               @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("변경 권한이 없습니다.");
+        }
 
         if(folderDTO.getImageFile() != null){
             folderService.modifyFolderImage(folderId, folderDTO.getImageFile());
@@ -89,7 +115,12 @@ public class FolderController {
      */
     @DeleteMapping("/{folder-id}")
     public ResponseEntity<String> removeFolder(@PathVariable("user-id") Long userId,
-                                               @PathVariable("folder-id") Long folderId){
+                                               @PathVariable("folder-id") Long folderId,
+                                               @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("삭제 권한이 없습니다.");
+        }
 
         folderService.removeFolder(folderId);
 

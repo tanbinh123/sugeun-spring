@@ -57,10 +57,6 @@ public class User {
         }
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
     public void changePassword(String password){
         this.password = password;
     }

@@ -38,35 +38,9 @@ class FolderServiceImplTest {
     @Autowired PhraseRepository phraseRepository;
     @Autowired LinkRepository linkRepository;
 
-    @Test
-    void 폴더생성_이미지o() throws Exception{
-        //given
-        User user = createUser();
-
-        MockMultipartFile file = new MockMultipartFile("file", "filename-1.jpeg", "image/jpeg", "some-image".getBytes());
-
-        FolderDTO folderDTO = FolderDTO.builder()
-                .folderName("파일A")
-                .userId(user.getUserId())
-                .type(FolderType.PHRASE)
-                .imageFile(file)
-                .build();
-
-        //when
-        Folder folder = folderService.createFolder(folderDTO);
-
-        //then
-        Assertions.assertThat(folder.getFolderId()).isNotNull();
-        Assertions.assertThat(folder.getFolderName()).isEqualTo("파일A");
-        Assertions.assertThat(folder.getUser().getUserId()).isEqualTo(user.getUserId());
-        Assertions.assertThat(folder.getType()).isEqualTo(FolderType.PHRASE);
-        Assertions.assertThat(folder.getFolderPath()).isNotBlank();
-        Assertions.assertThat(folder.getStoreFilename().substring(folder.getStoreFilename().lastIndexOf("_")+1))
-                .isEqualTo(file.getOriginalFilename());
-    }
 
     @Test
-    void 폴더생성_이미지x() throws Exception{
+    void 폴더생성() throws Exception{
         //given
         User user = createUser();
 
@@ -294,6 +268,7 @@ class FolderServiceImplTest {
         //then
         List<PhraseResDTO> phraseResDTOList = detailFolderDTO.getPhraseResDTOList();
         List<FolderResDTO> folderResDTOList = detailFolderDTO.getFolderResDTOList();
+
         //글귀 2, 폴더 1
         Assertions.assertThat(phraseResDTOList.size()).isEqualTo(2);
         Assertions.assertThat(folderResDTOList.size()).isEqualTo(1);

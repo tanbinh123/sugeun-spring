@@ -79,7 +79,7 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
         String jwtToken = null;
 
         try {
-            jwtToken = jwtUtil.generateToken(authUserDTO.getUsername());
+            jwtToken = jwtUtil.generateToken(authUserDTO.getUser().getUserId());
 
 
             LoginResDTO loginResDTO = LoginResDTO.builder()

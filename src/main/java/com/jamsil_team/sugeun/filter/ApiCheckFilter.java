@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -39,6 +40,7 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     }
 
 
+    @Transactional
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -55,7 +57,7 @@ public class ApiCheckFilter extends OncePerRequestFilter {
         }
 
         /**
-         * this.pattern 이외의 모든 호출에 실행 (deviceToken 검증)
+         * this.pattern 이외의 모든 호출에 실행 (token 검증)
          */
         else{
 
@@ -88,9 +90,6 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
         boolean checkResult = false;
 
-
-
-
         String authHeader = request.getHeader("Authorization");
 
         System.out.println("==========================");
@@ -100,12 +99,12 @@ public class ApiCheckFilter extends OncePerRequestFilter {
         if(StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")){
             log.info("Authorization exist: " + authHeader);
 
-            String nickname = jwtUtil.validateAndExtract(authHeader.substring(7));
+            Long userId = jwtUtil.validateAndExtract(authHeader.substring(7));
 
-            log.info("nickname: " + nickname);
-            checkResult = nickname.length() > 0 ;
+            log.info("userId: " + userId);
+            checkResult = userId > 0 ;
 
-            User user = userRepository.findByNickname(nickname).get();
+            User user = userRepository.findByUserId(userId).get();
 
             AuthUserDTO authUserDTO = new AuthUserDTO(user);
 

@@ -21,7 +21,8 @@ class JWTUtilTest {
 
     @Test
     void testEncode() throws UnsupportedEncodingException {
-        Long userId = 3L;
+
+        Long userId = 1L;
 
         String tokenStr = jwtUtil.generateToken(userId);
 
@@ -30,17 +31,18 @@ class JWTUtilTest {
 
     @Test
     void testValidate() throws Exception {
-        Long userId = 3L;
+
+        Long userId = 1L;
 
         String tokenStr = jwtUtil.generateToken(userId);
 
         Thread.sleep(5000);
 
-        Long result = jwtUtil.validateAndExtract(tokenStr);
+        Long result = jwtUtil.validateAndExtract(tokenStr.substring(7));
 
         System.out.println(result);
 
-        Assertions.assertThat(result).isEqualTo(userId);
+        Assertions.assertThat(result).isEqualTo(1L);
     }
 
 }

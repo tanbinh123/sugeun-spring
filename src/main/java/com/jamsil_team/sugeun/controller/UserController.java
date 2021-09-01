@@ -5,10 +5,12 @@ import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserUpdateDTO;
+import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -24,9 +26,9 @@ public class UserController {
      *  프로필 조회
      */
     @GetMapping
-    public ResponseEntity<UserResDTO> getUserProfile(@PathVariable("user-id") Long userId) throws IOException {
+    public ResponseEntity<UserResDTO> getUserProfile(@AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
-        UserResDTO userResDTO = userService.getUser(userId);
+        UserResDTO userResDTO = userService.getUser(authUserDTO.getUser().getUserId());
 
         return new ResponseEntity<>(userResDTO, HttpStatus.OK);
     }
@@ -35,10 +37,10 @@ public class UserController {
      *  기존 비밀번호 검증
      */
     @PostMapping("/verify")
-    public ResponseEntity<Boolean> verifyPassword(@PathVariable("user-id") Long userId,
-                                                  UserDTO userDTO){
+    public ResponseEntity<Boolean> verifyPassword(@RequestBody UserDTO userDTO,
+                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
-        Boolean result = userService.verifyPassword(userId, userDTO.getPassword());
+        Boolean result = userService.verifyPassword(authUserDTO.getUser().getUserId(), userDTO.getPassword());
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -47,20 +49,20 @@ public class UserController {
      *  회원정보 수정
      */
     @PatchMapping
-    public ResponseEntity<String> modifyUser(@PathVariable("user-id") Long userId,
-                                             UserUpdateDTO userUpdateDTO) throws IOException {
+    public ResponseEntity<String> modifyUser(UserUpdateDTO userUpdateDTO,
+                                             @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
         if(userUpdateDTO.getImageFile() != null){
-            userService.modifyUserImg(userId, userUpdateDTO.getImageFile());
+            userService.modifyUserImg(authUserDTO.getUser().getUserId(), userUpdateDTO.getImageFile());
             return new ResponseEntity<>("이미지 업로드 완료", HttpStatus.OK);
         }
         if(userUpdateDTO.getUpdateNickname() != null){
-            userService.modifyUserId(userId, userUpdateDTO.getUpdateNickname());
+            userService.modifyUserId(authUserDTO.getUser().getUserId(), userUpdateDTO.getUpdateNickname());
             return new ResponseEntity<>("아이디 변경 완료", HttpStatus.OK);
         }
 
         if(userUpdateDTO.getUpdatePassword() != null){
-            userService.modifyPassword(userId, userUpdateDTO.getUpdatePassword());
+            userService.modifyPassword(authUserDTO.getUser().getUserId(), userUpdateDTO.getUpdatePassword());
             return new ResponseEntity<>("비밀번호 변경 완료", HttpStatus.OK);
         }
 
@@ -72,9 +74,9 @@ public class UserController {
      *  회원탈퇴
      */
     @DeleteMapping
-    public ResponseEntity<String> removeUser(@PathVariable("user-id") Long userId){
+    public ResponseEntity<String> removeUser(@AuthenticationPrincipal AuthUserDTO authUserDTO){
 
-        userService.removeUser(userId);
+        userService.removeUser(authUserDTO.getUser().getUserId());
 
         return new ResponseEntity<>("회원탈퇴 완료", HttpStatus.OK);
 
@@ -85,9 +87,9 @@ public class UserController {
      *  알림 허용 변경
      */
     @PatchMapping("/alarm")
-    public ResponseEntity<String> modifyUserAlarm(@PathVariable("user-id") Long userId){
+    public ResponseEntity<String> modifyUserAlarm(@AuthenticationPrincipal AuthUserDTO authUserDTO){
 
-        userService.modifyAlarm(userId);
+        userService.modifyAlarm(authUserDTO.getUser().getUserId());
 
         return new ResponseEntity<>("알림허용 변경 완료",HttpStatus.OK);
     }
@@ -97,9 +99,9 @@ public class UserController {
      *  북마크 조회
      */
     @GetMapping("/bookmark")
-    public ResponseEntity<BookmarkDTO> getBookmark(@PathVariable("user-id") Long userId){
+    public ResponseEntity<BookmarkDTO> getBookmark(@AuthenticationPrincipal AuthUserDTO authUserDTO){
 
-        BookmarkDTO bookmarkDTO = userService.getListOfBookmark(userId);
+        BookmarkDTO bookmarkDTO = userService.getListOfBookmark(authUserDTO.getUser().getUserId());
 
         return new ResponseEntity<>(bookmarkDTO, HttpStatus.OK);
 

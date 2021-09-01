@@ -18,18 +18,18 @@ public class JWTUtil {
     private long expire = 60 * 24 * 30;
 
     //토큰 생성
-    public String generateToken(String nickname) throws UnsupportedEncodingException {
+    public String generateToken(Long userId) throws UnsupportedEncodingException {
 
         return "Bearer " + Jwts.builder()
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(expire).toInstant()))
-                .claim("nickname", nickname)
+                .claim("userId", userId)
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes("UTF-8"))
                 .compact();
     }
 
-    public String validateAndExtract(String tokenStr){
-       String nickname = null;
+    public Long validateAndExtract(String tokenStr){
+       Long userId = null;
 
         try {
             DefaultJws defaultJws = (DefaultJws) Jwts.parser().setSigningKey(secretKey.getBytes("UTF-8"))
@@ -41,16 +41,16 @@ public class JWTUtil {
             DefaultClaims claims = (DefaultClaims) defaultJws.getBody();
 
             log.info("--------------------");
-            log.info("nickname: " + claims.get("nickname", String.class));
+            log.info("nickname: " + claims.get("userId", Long.class));
 
-            nickname = claims.get("nickname", String.class);
+            userId = claims.get("userId", Long.class);
 
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            nickname = null;
+            userId = null;
         }
 
-        return nickname;
+        return userId;
     }
 }

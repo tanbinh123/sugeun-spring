@@ -1,10 +1,12 @@
 package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.phrase.PhraseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -18,9 +20,12 @@ public class PhraseController {
      *  글귀 생성
      */
     @PostMapping("/users/{user-id}/folders/{folder-id}/phrases")
-    public ResponseEntity<String> createPhrase(@PathVariable("user-id") Long userId,
-                                               @PathVariable("folder-id") Long folderId,
-                                               @RequestBody PhraseDTO phraseDTO){
+    public ResponseEntity<String> createPhrase(@RequestBody PhraseDTO phraseDTO,
+                                               @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!phraseDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("생성 권한이 없습니다.");
+        }
 
         phraseService.createPhrase(phraseDTO);
 
@@ -32,9 +37,13 @@ public class PhraseController {
      */
     @PatchMapping("/users/{user-id}/folders/{folder-id}/phrases/{phrase-id}")
     public ResponseEntity<String> modifyPhrase(@PathVariable("user-id") Long userId,
-                                               @PathVariable("folder-id") Long folderId,
                                                @PathVariable("phrase-id") Long phraseId,
-                                               @RequestBody PhraseDTO phraseDTO){
+                                               @RequestBody PhraseDTO phraseDTO,
+                                               @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("변경 권한이 없습니다.");
+        }
 
         phraseService.ModifyPhraseText(phraseId, phraseDTO.getText());
 
@@ -47,8 +56,12 @@ public class PhraseController {
      */
     @DeleteMapping("/users/{user-id}/folders/{folder-id}/phrases/{phrase-id}")
     public ResponseEntity<String> removePhrase(@PathVariable("user-id") Long userId,
-                                               @PathVariable("folder-id") Long folderId,
-                                               @PathVariable("phrase-id") Long phraseId){
+                                               @PathVariable("phrase-id") Long phraseId,
+                                               @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("삭제 권한이 없습니다.");
+        }
 
         phraseService.removePhrase(phraseId);
 
