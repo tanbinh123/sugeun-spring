@@ -23,7 +23,12 @@ public class TimeoutController {
      *  타임아웃 목록
      */
     @GetMapping("/users/{user-id}/timeouts")
-    public ResponseEntity<List<TimeoutResDTO>> timeoutList(@PathVariable("user-id") Long userId){
+    public ResponseEntity<List<TimeoutResDTO>> timeoutList(@PathVariable("user-id") Long userId,
+                                                           @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
 
         List<TimeoutResDTO> timeoutResDTOList = timeoutService.getListOfTimeout(userId);
 
@@ -34,8 +39,12 @@ public class TimeoutController {
      *  타임아웃 생성
      */
     @PostMapping("/users/{user-id}/timeouts")
-    public ResponseEntity<String> createTimeout(@PathVariable("user-id") Long userId,
-                                                TimeoutDTO timeoutDTO) throws IOException {
+    public ResponseEntity<String> createTimeout(TimeoutDTO timeoutDTO,
+                                                @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
+
+        if(!timeoutDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("생성 권한이 없습니다.");
+        }
 
         timeoutService.createTimeout(timeoutDTO);
 
@@ -48,7 +57,11 @@ public class TimeoutController {
     @PatchMapping("/users/{user-id}/timeouts/{timeout-id}")
     public ResponseEntity<String> modifyTimeout(@PathVariable("user-id") Long userId,
                                                 @PathVariable("timeout-id") Long timeoutId,
-                                                TimeoutDTO timeoutDTO) throws IOException {
+                                                TimeoutDTO timeoutDTO,
+                                                @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("변경 권한이 없습니다.");
+        }
 
         //이미지 변경일 경우
         if(timeoutDTO.getImageFile() != null){
@@ -67,7 +80,12 @@ public class TimeoutController {
      */
     @DeleteMapping("/users/{user-id}/timeouts/{timeout-id}")
     public ResponseEntity<String> removeTimeout(@PathVariable("user-id") Long userId,
-                                                @PathVariable("timeout-id") Long timeoutId){
+                                                @PathVariable("timeout-id") Long timeoutId,
+                                                @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("삭제 권한이 없습니다.");
+        }
 
         timeoutService.removeTimeout(timeoutId);
 
@@ -80,9 +98,6 @@ public class TimeoutController {
     @PatchMapping("/timeouts/{timeout-id}/valid")
     public ResponseEntity<String> modifyIsValid(@PathVariable("timeout-id") Long timeoutId,
                                                 @AuthenticationPrincipal AuthUserDTO authUserDTO){
-
-        System.out.println("------------------");
-        System.out.println(authUserDTO);
 
         timeoutService.finishUse(timeoutId);
 

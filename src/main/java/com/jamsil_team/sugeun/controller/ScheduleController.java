@@ -2,10 +2,12 @@ package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
+import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,12 @@ public class ScheduleController {
      *  스케줄 목록
      */
     @GetMapping
-    public ResponseEntity<List<ScheduleResDTO>> scheduleList(@PathVariable("user-id") Long userId){
+    public ResponseEntity<List<ScheduleResDTO>> scheduleList(@PathVariable("user-id") Long userId,
+                                                             @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
 
         List<ScheduleResDTO> scheduleDTOList = scheduleService.getListOfSchedule(userId);
 
@@ -34,8 +41,12 @@ public class ScheduleController {
      *  스케줄 생성
      */
     @PostMapping
-    public ResponseEntity<String> createSchedule(@PathVariable("user-id") Long userId,
-                                                 @RequestBody ScheduleDTO scheduleDTO){
+    public ResponseEntity<String> createSchedule(@RequestBody ScheduleDTO scheduleDTO,
+                                                 @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!scheduleDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("생성 권한이 없습니다.");
+        }
 
         scheduleService.createSchedule(scheduleDTO);
 
@@ -47,9 +58,12 @@ public class ScheduleController {
      *  스케줄 변경
      */
     @PutMapping("{schedule-id}")
-    public ResponseEntity<String> modifySchedule(@PathVariable("user-id") Long userId,
-                                                 @PathVariable("schedule-id") Long scheduleId,
-                                                 @RequestBody ScheduleDTO scheduleDTO){
+    public ResponseEntity<String> modifySchedule(@RequestBody ScheduleDTO scheduleDTO,
+                                                 @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!scheduleDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("변경 권한이 없습니다.");
+        }
 
         scheduleService.modifySchedule(scheduleDTO);
 
@@ -62,7 +76,12 @@ public class ScheduleController {
      */
     @DeleteMapping("{schedule-id}")
     public ResponseEntity<String> removeSchedule(@PathVariable("user-id") Long userId,
-                                                 @PathVariable("schedule-id") Long scheduleId){
+                                                 @PathVariable("schedule-id") Long scheduleId,
+                                                 @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("삭제 권한이 없습니다.");
+        }
 
         scheduleService.removeSchedule(scheduleId);
 
