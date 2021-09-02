@@ -306,10 +306,8 @@ public class UserServiceImpl implements UserService{
         timeoutList.stream().forEach(timeout -> timeoutService.removeTimeout(timeout.getTimeoutId()));
 
         //phrase, link, 서버 컴퓨터 folder 사진, folder 삭제
-        List<Folder> folderList = folderRepository.findByUserId(userId);
+        List<Folder> folderList = folderRepository.topFolderList(userId); //최상위폴더 삭제 (재귀)
         folderList.stream().forEach(folder -> folderService.removeFolder(folder.getFolderId()));
-
-
 
 
         //서버 컴퓨터 user 사진 삭제

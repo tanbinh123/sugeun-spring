@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface LinkRepository extends JpaRepository<Link, Long> {
 
-    @Modifying(clearAutomatically = true) //쿼리 실행시 JPA 캐싱 clear
+    @Modifying(clearAutomatically = true, flushAutomatically = true) //쿼리 실행시 JPA 캐싱 clear
     @Query("delete from Link l where l.folder = :folder")
     void deleteByFolder(Folder folder);
 

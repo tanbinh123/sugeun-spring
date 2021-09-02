@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface FolderRepository extends JpaRepository<Folder, Long>, FolderListRepository {
 
-    @Query("select f from Folder f where f.user.userId = :userId")
-    List<Folder> findByUserId(Long userId);
+    @Query("select f from Folder f where f.parentFolder.folderId is null and f.user.userId = :userId")
+    List<Folder> topFolderList(Long userId);
+
+    @Query("select f from Folder f where f.parentFolder.folderId = :parentFolderId")
+    List<Folder> childFolderList(Long parentFolderId);
 
 }

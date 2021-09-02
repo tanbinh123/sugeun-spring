@@ -110,6 +110,43 @@ class FolderServiceImplTest {
     }
 
     @Test
+    void 하위폴더존재_폴더삭제() throws Exception{
+        //given
+        User user = createUser();
+
+        Folder parentFolder = Folder.builder()
+                .user(user)
+                .folderName("상위폴더")
+                .type(FolderType.PHRASE)
+                .build();
+
+        folderRepository.save(parentFolder);
+
+        Folder childFolder = Folder.builder()
+                .user(user)
+                .parentFolder(parentFolder)
+                .folderName("하위폴더")
+                .type(FolderType.PHRASE)
+                .build();
+
+        folderRepository.save(childFolder);
+
+        //when
+        folderService.removeFolder(parentFolder.getFolderId());
+
+        //then
+
+        NoSuchElementException e1 = assertThrows(NoSuchElementException.class,
+                () -> folderRepository.findById(childFolder.getFolderId()).get());
+        NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
+                () -> folderRepository.findById(parentFolder.getFolderId()).get());
+
+        Assertions.assertThat(e1.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e2.getMessage()).isEqualTo("No value present");
+
+    }
+
+    @Test
     void 글귀존재_폴더삭제() throws Exception{
         //given
         User user = createUser();

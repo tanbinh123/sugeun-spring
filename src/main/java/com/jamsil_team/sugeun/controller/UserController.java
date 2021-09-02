@@ -26,7 +26,12 @@ public class UserController {
      *  프로필 조회
      */
     @GetMapping
-    public ResponseEntity<UserResDTO> getUserProfile(@AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
+    public ResponseEntity<UserResDTO> getUserProfile(@PathVariable("user-id") Long userId,
+                                                     @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
 
         UserResDTO userResDTO = userService.getUser(authUserDTO.getUser().getUserId());
 
@@ -46,11 +51,16 @@ public class UserController {
     }
 
     /**
-     *  회원정보 수정
+     *  회원정보 변경
      */
     @PatchMapping
-    public ResponseEntity<String> modifyUser(UserUpdateDTO userUpdateDTO,
+    public ResponseEntity<String> modifyUser(@PathVariable("user-id") Long userId,
+                                             UserUpdateDTO userUpdateDTO,
                                              @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("변경 권한이 없습니다.");
+        }
 
         if(userUpdateDTO.getImageFile() != null){
             userService.modifyUserImg(authUserDTO.getUser().getUserId(), userUpdateDTO.getImageFile());
@@ -74,7 +84,12 @@ public class UserController {
      *  회원탈퇴
      */
     @DeleteMapping
-    public ResponseEntity<String> removeUser(@AuthenticationPrincipal AuthUserDTO authUserDTO){
+    public ResponseEntity<String> removeUser(@PathVariable("user-id") Long userId,
+                                             @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("탈퇴 권한이 없습니다.");
+        }
 
         userService.removeUser(authUserDTO.getUser().getUserId());
 
@@ -87,7 +102,12 @@ public class UserController {
      *  알림 허용 변경
      */
     @PatchMapping("/alarm")
-    public ResponseEntity<String> modifyUserAlarm(@AuthenticationPrincipal AuthUserDTO authUserDTO){
+    public ResponseEntity<String> modifyUserAlarm(@PathVariable("user-id") Long userId,
+                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("변경 권한이 없습니다.");
+        }
 
         userService.modifyAlarm(authUserDTO.getUser().getUserId());
 
@@ -99,7 +119,12 @@ public class UserController {
      *  북마크 조회
      */
     @GetMapping("/bookmark")
-    public ResponseEntity<BookmarkDTO> getBookmark(@AuthenticationPrincipal AuthUserDTO authUserDTO){
+    public ResponseEntity<BookmarkDTO> getBookmark(@PathVariable("user-id") Long userId,
+                                                   @AuthenticationPrincipal AuthUserDTO authUserDTO){
+
+        if(!userId.equals(authUserDTO.getUser().getUserId())){
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
 
         BookmarkDTO bookmarkDTO = userService.getListOfBookmark(authUserDTO.getUser().getUserId());
 

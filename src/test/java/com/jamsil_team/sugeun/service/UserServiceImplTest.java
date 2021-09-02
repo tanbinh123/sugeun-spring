@@ -595,6 +595,16 @@ class UserServiceImplTest {
         Folder folderA = createFolder(user, FolderType.PHRASE);
         Folder folderB = createFolder(user, FolderType.LINK);
 
+        //folderA 하위 폴더 생성
+        Folder folderC = Folder.builder()
+                .type(FolderType.PHRASE)
+                .user(user)
+                .parentFolder(folderA)
+                .folderName("하위폴더")
+                .build();
+
+        folderRepository.save(folderC);
+
         //phrase 생성
         Phrase phrase = Phrase.builder()
                 .folder(folderA)
@@ -614,10 +624,11 @@ class UserServiceImplTest {
 
         linkRepository.save(link);
 
+
         /**
          * user 해당 -
          * timeout 1개, timeoutSelect 2개, schedule 1개, scheduleSelect 2개,
-         * folder 2개, phrase 1개, link 1개 생성
+         * folder 3개 - (folderC는 folderA의 하위폴더), phrase 1개, link 1개 생성
          */
 
         //when
@@ -629,8 +640,7 @@ class UserServiceImplTest {
                 () -> (scheduleSelectRepository.findById(scheduleSelectA.getScheduleSelectId())).get());
         NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
                 () -> (scheduleSelectRepository.findById(scheduleSelectB.getScheduleSelectId())).get());
-        System.out.println("----------------");
-        System.out.println(scheduleRepository.findById(schedule.getScheduleId()));
+
         //삭제된 스케줄 검색
         NoSuchElementException e3 = assertThrows(NoSuchElementException.class,
                 () -> (scheduleRepository.findById(schedule.getScheduleId())).get());
@@ -641,8 +651,6 @@ class UserServiceImplTest {
                 () -> (timeoutSelectRepository.findById(timeoutSelectB.getTimeoutSelectId())).get());
 
         //삭제된 타임아웃 검색
-        System.out.println("-----------------");
-        System.out.println(timeoutRepository.findById(timeout.getTimeoutId()));
         NoSuchElementException e6 = assertThrows(NoSuchElementException.class,
                 () -> (timeoutRepository.findById(timeout.getTimeoutId())).get());
 
@@ -657,8 +665,11 @@ class UserServiceImplTest {
                 () -> folderRepository.findById(folderA.getFolderId()).get());
         NoSuchElementException e10 = assertThrows(NoSuchElementException.class,
                 () -> folderRepository.findById(folderB.getFolderId()).get());
-        //삭제된 회원 검색
         NoSuchElementException e11 = assertThrows(NoSuchElementException.class,
+                () -> folderRepository.findById(folderC.getFolderId()).get());
+
+        //삭제된 회원 검색
+        NoSuchElementException e12 = assertThrows(NoSuchElementException.class,
                 () -> userRepository.findById(user.getUserId()).get());
 
         Assertions.assertThat(e1.getMessage()).isEqualTo("No value present");
@@ -672,6 +683,7 @@ class UserServiceImplTest {
         Assertions.assertThat(e9.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e10.getMessage()).isEqualTo("No value present");
         Assertions.assertThat(e11.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e12.getMessage()).isEqualTo("No value present");
 
 
     }

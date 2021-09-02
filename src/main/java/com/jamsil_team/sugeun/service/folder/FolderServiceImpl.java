@@ -103,12 +103,18 @@ public class FolderServiceImpl implements FolderService{
 
         if(folder.getType() == FolderType.PHRASE){
 
+            //하위 글귀 삭제
             phraseRepository.deleteByFolder(folder);
 
         }else if (folder.getType() == FolderType.LINK){
 
             linkRepository.deleteByFolder(folder);
         }
+
+        //하위 폴더 삭제 (재귀)
+        List<Folder> childFolderList = folderRepository.childFolderList(folderId);
+
+        childFolderList.stream().forEach(childFolder -> removeFolder(childFolder.getFolderId()));
 
         //서버컴퓨터에 있는 폴더 이미지 삭제
         fileRemove(folder);
