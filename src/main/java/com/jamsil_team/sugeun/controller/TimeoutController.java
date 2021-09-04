@@ -1,5 +1,6 @@
 package com.jamsil_team.sugeun.controller;
 
+import com.jamsil_team.sugeun.domain.timeout.Timeout;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
@@ -39,16 +40,16 @@ public class TimeoutController {
      *  타임아웃 생성
      */
     @PostMapping("/users/{user-id}/timeouts")
-    public ResponseEntity<String> createTimeout(TimeoutDTO timeoutDTO,
-                                                @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
+    public ResponseEntity<Long> createTimeout(TimeoutDTO timeoutDTO,
+                                              @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
         if(!timeoutDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
             throw new IllegalStateException("생성 권한이 없습니다.");
         }
 
-        timeoutService.createTimeout(timeoutDTO);
+        Timeout timeout = timeoutService.createTimeout(timeoutDTO);
 
-        return new ResponseEntity<>("타임아웃 생성 완료", HttpStatus.OK);
+        return new ResponseEntity<>(timeout.getTimeoutId(), HttpStatus.OK);
     }
 
     /**

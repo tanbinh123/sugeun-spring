@@ -1,5 +1,6 @@
 package com.jamsil_team.sugeun.controller;
 
+import com.jamsil_team.sugeun.domain.schedule.Schedule;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
@@ -41,16 +42,16 @@ public class ScheduleController {
      *  스케줄 생성
      */
     @PostMapping
-    public ResponseEntity<String> createSchedule(@RequestBody ScheduleDTO scheduleDTO,
+    public ResponseEntity<Long> createSchedule(@RequestBody ScheduleDTO scheduleDTO,
                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!scheduleDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
             throw new IllegalStateException("생성 권한이 없습니다.");
         }
 
-        scheduleService.createSchedule(scheduleDTO);
+        Schedule schedule = scheduleService.createSchedule(scheduleDTO);
 
-        return new ResponseEntity<>("스케줄생성 완료", HttpStatus.OK);
+        return new ResponseEntity<>(schedule.getScheduleId(), HttpStatus.OK);
     }
 
 

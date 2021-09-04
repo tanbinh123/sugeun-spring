@@ -74,7 +74,7 @@ public class AccessController {
 
         System.out.println(join);
 
-        return new ResponseEntity<>(join.getUserId(), HttpStatus.OK);
+        return new ResponseEntity<Long>(join.getUserId(), HttpStatus.OK);
     }
 
 

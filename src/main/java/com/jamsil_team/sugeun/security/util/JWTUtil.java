@@ -41,7 +41,7 @@ public class JWTUtil {
             DefaultClaims claims = (DefaultClaims) defaultJws.getBody();
 
             log.info("--------------------");
-            log.info("nickname: " + claims.get("userId", Long.class));
+            log.info("userId: " + claims.get("userId", Long.class));
 
             userId = claims.get("userId", Long.class);
 
