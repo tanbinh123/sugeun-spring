@@ -212,7 +212,7 @@ class UserServiceImplTest {
         Assertions.assertThat(storeFilename.substring(storeFilename.lastIndexOf("_")+1)).isEqualTo(file2.getOriginalFilename());
     }
     */
- 
+
 
     @Test
     void 프로필사진_업데이트_기존o_변경값NULL() throws Exception{
