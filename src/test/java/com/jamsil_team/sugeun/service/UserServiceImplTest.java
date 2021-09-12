@@ -86,6 +86,7 @@ class UserServiceImplTest {
         //then
         Assertions.assertThat(user.getUserId()).isNotNull();
         Assertions.assertThat(user.getNickname()).isEqualTo(signUpDTOUser.getNickname());
+        Assertions.assertThat(user.getAlarm()).isTrue();
 
         boolean matches = passwordEncoder.matches(rawPassword, user.getPassword());
         Assertions.assertThat(matches).isTrue();
@@ -705,7 +706,7 @@ class UserServiceImplTest {
 
     private UserSignupDTO createSignUpDTO() {
         UserSignupDTO signUpDTOUser = UserSignupDTO.builder()
-                .nickname("형우")
+                .nickname("아무개")
                 .password("1111")
                 .phone("010-0000-0000")
                 .build();
