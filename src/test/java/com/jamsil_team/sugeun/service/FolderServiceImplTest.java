@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class FolderServiceImplTest {
 
-    @Autowired
-    FolderService folderService;
+    @Autowired FolderService folderService;
     @Autowired UserRepository userRepository;
     @Autowired FolderRepository folderRepository;
     @Autowired PhraseRepository phraseRepository;
