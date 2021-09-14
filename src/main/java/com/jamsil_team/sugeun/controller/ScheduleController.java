@@ -3,6 +3,7 @@ package com.jamsil_team.sugeun.controller;
 import com.jamsil_team.sugeun.domain.schedule.Schedule;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class ScheduleController {
                                                              @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("조회 권한이 없습니다.");
+            throw new CustomApiException("조회 권한이 없습니다.");
         }
 
         List<ScheduleResDTO> scheduleDTOList = scheduleService.getListOfSchedule(userId);
@@ -46,7 +47,7 @@ public class ScheduleController {
                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!scheduleDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("생성 권한이 없습니다.");
+            throw new CustomApiException("생성 권한이 없습니다.");
         }
 
         Schedule schedule = scheduleService.createSchedule(scheduleDTO);
@@ -63,7 +64,7 @@ public class ScheduleController {
                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!scheduleDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("변경 권한이 없습니다.");
+            throw new CustomApiException("변경 권한이 없습니다.");
         }
 
         scheduleService.modifySchedule(scheduleDTO);
@@ -81,7 +82,7 @@ public class ScheduleController {
                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("삭제 권한이 없습니다.");
+            throw new CustomApiException("삭제 권한이 없습니다.");
         }
 
         scheduleService.removeSchedule(scheduleId);

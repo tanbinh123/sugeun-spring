@@ -6,6 +6,7 @@ import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelect;
 import com.jamsil_team.sugeun.domain.scheduleSelect.ScheduleSelectRepository;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleDTO;
 import com.jamsil_team.sugeun.dto.schedule.ScheduleResDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void modifySchedule(ScheduleDTO scheduleDTO) {
 
         Schedule schedule = scheduleRepository.findById(scheduleDTO.getScheduleId()).orElseThrow(() ->
-                new IllegalStateException("존재하는 않는 스케줄 입니다."));
+                new CustomApiException("존재하는 않는 스케줄 입니다."));
 
         //제목, 스케줄 날짜 수정
         schedule.changeTitle(scheduleDTO.getTitle());

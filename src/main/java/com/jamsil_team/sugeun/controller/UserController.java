@@ -5,6 +5,7 @@ import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.user.UserDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserUpdateDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class UserController {
                                                      @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("조회 권한이 없습니다.");
+            throw new CustomApiException("조회 권한이 없습니다.");
         }
 
         UserResDTO userResDTO = userService.getUser(authUserDTO.getUser().getUserId());
@@ -59,7 +60,7 @@ public class UserController {
                                              @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("변경 권한이 없습니다.");
+            throw new CustomApiException("변경 권한이 없습니다.");
         }
 
         if(userUpdateDTO.getImageFile() != null){
@@ -88,7 +89,7 @@ public class UserController {
                                              @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("탈퇴 권한이 없습니다.");
+            throw new CustomApiException("탈퇴 권한이 없습니다.");
         }
 
         userService.removeUser(authUserDTO.getUser().getUserId());
@@ -106,7 +107,7 @@ public class UserController {
                                                   @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("변경 권한이 없습니다.");
+            throw new CustomApiException("변경 권한이 없습니다.");
         }
 
         userService.modifyAlarm(authUserDTO.getUser().getUserId());

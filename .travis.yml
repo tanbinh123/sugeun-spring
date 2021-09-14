@@ -1,7 +1,12 @@
 language: java
 
 jdk:
-  - openjdk8
+  - openjdk11
+
+deploy:
+  api_key:
+    secure:
+      
 
 branches:
   only:

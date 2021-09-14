@@ -4,6 +4,7 @@ import com.jamsil_team.sugeun.domain.folder.FolderType;
 import com.jamsil_team.sugeun.dto.folder.DetailFolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderDTO;
 import com.jamsil_team.sugeun.dto.folder.FolderResDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.folder.FolderService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class FolderController {
         Long tokenUserId = authUserDTO.getUser().getUserId();
 
         if(!userId.equals(tokenUserId)){
-            throw new IllegalStateException("조회 권한이 없습니다.");
+            throw new CustomApiException("조회 권한이 없습니다.");
         }
 
         //폴더 전체보기일 경우
@@ -56,7 +57,7 @@ public class FolderController {
                                                @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
         if(!folderDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("생성 권한이 없습니다.");
+            throw new CustomApiException("생성 권한이 없습니다.");
         }
 
         folderService.createFolder(folderDTO);
@@ -76,7 +77,7 @@ public class FolderController {
         Long tokenUserId = authUserDTO.getUser().getUserId();
 
         if(!userId.equals(tokenUserId)){
-            throw new IllegalStateException("조회 권한이 없습니다.");
+            throw new CustomApiException("조회 권한이 없습니다.");
         }
 
         DetailFolderDTO detailFolderDTO = folderService.getFolder(tokenUserId, folderId);
@@ -94,7 +95,7 @@ public class FolderController {
                                                @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("변경 권한이 없습니다.");
+            throw new CustomApiException("변경 권한이 없습니다.");
         }
 
         if(folderDTO.getImageFile() != null){
@@ -119,7 +120,7 @@ public class FolderController {
                                                @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("삭제 권한이 없습니다.");
+            throw new CustomApiException("삭제 권한이 없습니다.");
         }
 
         folderService.removeFolder(folderId);

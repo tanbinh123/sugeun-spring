@@ -1,6 +1,7 @@
 package com.jamsil_team.sugeun.controller;
 
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.phrase.PhraseService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class PhraseController {
                                                @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!phraseDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("생성 권한이 없습니다.");
+            throw new CustomApiException("생성 권한이 없습니다.");
         }
 
         phraseService.createPhrase(phraseDTO);
@@ -42,7 +43,7 @@ public class PhraseController {
                                                @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("변경 권한이 없습니다.");
+            throw new CustomApiException("변경 권한이 없습니다.");
         }
 
         phraseService.ModifyPhraseText(phraseId, phraseDTO.getText());
@@ -60,7 +61,7 @@ public class PhraseController {
                                                @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("삭제 권한이 없습니다.");
+            throw new CustomApiException("삭제 권한이 없습니다.");
         }
 
         phraseService.removePhrase(phraseId);

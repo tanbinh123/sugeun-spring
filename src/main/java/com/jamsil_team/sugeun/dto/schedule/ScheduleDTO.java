@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,14 +26,17 @@ public class ScheduleDTO {
 
     private Long scheduleId;
 
+    @NotBlank
     private Long userId;
 
+    @NotBlank
     private String title;
 
     @Builder.Default
     private List<Integer> selected = new ArrayList<>();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
+    @NotBlank
     private LocalDateTime scheduleDate;
 
     public Map<String, Object> toEntity(){

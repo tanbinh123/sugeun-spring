@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class LoginResDTO {
 
-    @NotEmpty
     private Long userId;
 
-    @NotEmpty
     private String jwtToken;
 
 

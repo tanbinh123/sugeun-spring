@@ -3,6 +3,7 @@ package com.jamsil_team.sugeun.service.link;
 import com.jamsil_team.sugeun.domain.link.Link;
 import com.jamsil_team.sugeun.domain.link.LinkRepository;
 import com.jamsil_team.sugeun.dto.link.LinkDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,7 @@ public class LinkServiceImpl implements LinkService{
     public void modifyLink(LinkDTO linkDTO) {
 
         Link link = linkRepository.findById(linkDTO.getLinkId()).orElseThrow(() ->
-                new IllegalStateException("존재하는 링크가 없습니다."));
+                new CustomApiException("존재하는 링크가 없습니다."));
 
         link.changeTitle(linkDTO.getTitle());
         link.changeLink(linkDTO.getLink());
@@ -62,7 +63,7 @@ public class LinkServiceImpl implements LinkService{
     public void modifyBookmark(Long linkId) {
 
         Link link = linkRepository.findById(linkId).orElseThrow(() ->
-                new IllegalStateException("존재하는 링크가 없습니다."));
+                new CustomApiException("존재하는 링크가 없습니다."));
 
         if (link.getBookmark() == true){
             link.cancelBookmark();

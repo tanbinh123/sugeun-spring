@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -20,10 +21,13 @@ public class PhraseDTO {
 
     private Long phraseId;
 
+    @NotBlank
     private Long userId;
 
+    @NotBlank
     private Long folderId;
 
+    @NotBlank
     private String text;
 
     private Boolean bookmark;

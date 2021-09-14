@@ -8,6 +8,7 @@ import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
 import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -68,7 +69,7 @@ public class TimeoutServiceImpl implements TimeoutService{
     public void modifyTimeout(TimeoutDTO timeoutDTO) {
 
         Timeout timeout = timeoutRepository.findById(timeoutDTO.getTimeoutId()).orElseThrow(() ->
-                new IllegalStateException("존재하지 않은 타임아웃입니다."));
+                new CustomApiException("존재하지 않은 타임아웃입니다."));
 
         //제목, 유효기간 수정
         timeout.changeTitle(timeoutDTO.getTitle());
@@ -98,7 +99,7 @@ public class TimeoutServiceImpl implements TimeoutService{
     public void modifyTimeoutImage(Long timeoutId, MultipartFile multipartFile) throws IOException {
 
         Timeout timeout = timeoutRepository.findById(timeoutId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 타임아웃입니다."));
+                new CustomApiException("존재하지 않은 타임아웃입니다."));
 
         //서버 컴퓨터에 저장된 기존 타임아웃 사진 삭제
         fileRemove(timeout);
@@ -118,7 +119,7 @@ public class TimeoutServiceImpl implements TimeoutService{
     @Override
     public void finishUse(Long timeoutId) {
         Timeout timeout = timeoutRepository.findById(timeoutId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 타임아웃 입니다."));
+                new CustomApiException("존재하지 않은 타임아웃입니다."));
 
         //isValid == false 변경
         timeout.isValidFalse();
@@ -136,7 +137,7 @@ public class TimeoutServiceImpl implements TimeoutService{
     @Override
     public void removeTimeout(Long timeoutId) {
         Timeout timeout = timeoutRepository.findById(timeoutId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 타임아웃입니다."));
+                new CustomApiException("존재하지 않은 타임아웃입니다."));
 
         //알람 삭제 -> -> 서버컴퓨터 타임아웃 사진 삭제 -> 타임아웃 삭제
         timeoutSelectRepository.deleteByTimoutId(timeoutId);

@@ -20,6 +20,7 @@ import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
 import com.jamsil_team.sugeun.file.FileStore;
 import com.jamsil_team.sugeun.file.ResultFileStore;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import com.jamsil_team.sugeun.service.folder.FolderService;
 import com.jamsil_team.sugeun.service.schedule.ScheduleService;
 import com.jamsil_team.sugeun.service.timeout.TimeoutService;
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService{
         Optional<User> result = userRepository.findByNickname(userSignupDTO.getNickname());
 
         if(result.isPresent()){
-            throw new IllegalStateException("이미 등록된 ID 입니다.");
+            throw new CustomApiException("이미 등록된 ID 입니다.");
         }
 
 
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService{
     public void modifyUserImg(Long userId, MultipartFile multipartFile) throws IOException {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하는 않은 회원입니다."));
+                new CustomApiException("존재하는 않은 회원입니다."));
 
         //서버 컴퓨터에 저장된 기존 프로필 사진 삭제
         fileRemove(user);
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService{
     public void modifyUserId(Long userId, String updateNickname) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 회원입니다."));
+                new CustomApiException("존재하지 않은 회원입니다."));
 
         user.changeUserId(updateNickname);
     }
@@ -141,7 +142,7 @@ public class UserServiceImpl implements UserService{
     public void modifyPassword(Long userId, String password) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 회원입니다."));
+                new CustomApiException("존재하지 않은 회원입니다."));
 
         //암호화
         String encPassword = passwordEncoder.encode(password);
@@ -158,7 +159,7 @@ public class UserServiceImpl implements UserService{
     public Boolean verifyPassword(Long userId, String password) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 회원입니다."));
+                new CustomApiException("존재하지 않은 회원입니다."));
 
         System.out.println(password);
 
@@ -178,7 +179,7 @@ public class UserServiceImpl implements UserService{
     public UserResDTO getUser(Long userId) throws IOException {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 회원입니다."));
+                new CustomApiException("존재하지 않은 회원입니다."));
 
         UserResDTO userResDTO = user.toDTO();
 
@@ -201,7 +202,7 @@ public class UserServiceImpl implements UserService{
     public void modifyAlarm(Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않은 회원입니다."));
+                new CustomApiException("존재하지 않은 회원입니다."));
 
         user.changeAlarm();
     }
@@ -245,7 +246,7 @@ public class UserServiceImpl implements UserService{
     public String findNickname(String phone) {
 
         String nickname = userRepository.nicknameFindByPhone(phone).orElseThrow(() ->
-                new IllegalStateException("존재하지 않은 회원입니다."));
+                new CustomApiException("존재하지 않은 회원입니다."));
 
         return nickname;
     }
@@ -271,7 +272,7 @@ public class UserServiceImpl implements UserService{
     public Boolean verifyPhone(Long userId, String phone) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 ID 입니다."));
+                new CustomApiException("존재하지 않은 회원입니다."));
 
         if(user.getPhone().equals(phone)){
             return true;
@@ -290,7 +291,7 @@ public class UserServiceImpl implements UserService{
     public void removeUser(Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 회원입니다."));
+                new CustomApiException("존재하지 않은 회원입니다."));
 
         //scheduleSelect -> schedule -> timeoutSelect -> 서버컴퓨터 timeout 사진 -> timeout ->
         // phrase -> link -> 서버컴퓨터 folder 사진 -> folder ->

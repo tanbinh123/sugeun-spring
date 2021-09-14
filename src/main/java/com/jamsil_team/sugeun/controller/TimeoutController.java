@@ -3,6 +3,7 @@ package com.jamsil_team.sugeun.controller;
 import com.jamsil_team.sugeun.domain.timeout.Timeout;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutDTO;
 import com.jamsil_team.sugeun.dto.timeout.TimeoutResDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import com.jamsil_team.sugeun.security.dto.AuthUserDTO;
 import com.jamsil_team.sugeun.service.timeout.TimeoutService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class TimeoutController {
                                                            @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("조회 권한이 없습니다.");
+            throw new CustomApiException("조회 권한이 없습니다.");
         }
 
         List<TimeoutResDTO> timeoutResDTOList = timeoutService.getListOfTimeout(userId);
@@ -44,7 +45,7 @@ public class TimeoutController {
                                               @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
         if(!timeoutDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("생성 권한이 없습니다.");
+            throw new CustomApiException("생성 권한이 없습니다.");
         }
 
         Timeout timeout = timeoutService.createTimeout(timeoutDTO);
@@ -61,7 +62,7 @@ public class TimeoutController {
                                                 TimeoutDTO timeoutDTO,
                                                 @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("변경 권한이 없습니다.");
+            throw new CustomApiException("변경 권한이 없습니다.");
         }
 
         //이미지 변경일 경우
@@ -85,7 +86,7 @@ public class TimeoutController {
                                                 @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new IllegalStateException("삭제 권한이 없습니다.");
+            throw new CustomApiException("삭제 권한이 없습니다.");
         }
 
         timeoutService.removeTimeout(timeoutId);

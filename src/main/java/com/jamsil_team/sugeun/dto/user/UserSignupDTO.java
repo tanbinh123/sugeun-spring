@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Data
@@ -15,13 +16,13 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class UserSignupDTO {
 
-    @NotEmpty
+    @NotBlank
     private String nickname;
 
-    @NotEmpty
+    @NotBlank
     private String password;
 
-    @NotEmpty
+    @NotBlank
     private String phone;
 
 

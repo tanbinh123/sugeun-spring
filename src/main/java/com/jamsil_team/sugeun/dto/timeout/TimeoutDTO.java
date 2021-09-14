@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,11 +27,14 @@ public class TimeoutDTO {
 
     private Long timeoutId;
 
+    @NotBlank
     private Long userId;
 
+    @NotBlank
     private String title;
 
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
+    @NotBlank
     private LocalDateTime deadline;
 
     private Boolean isValid;

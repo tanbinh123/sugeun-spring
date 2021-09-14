@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
@@ -18,10 +19,13 @@ public class FolderDTO {
 
     private Long folderId;
 
+    @NotBlank
     private String folderName;
 
+    @NotBlank
     private Long userId;
 
+    @NotBlank
     @Enumerated(EnumType.STRING)
     private FolderType type;
 

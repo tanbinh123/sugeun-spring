@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,12 +20,16 @@ public class LinkDTO {
 
     private Long linkId;
 
+    @NotBlank
     private Long userId;
 
+    @NotBlank
     private Long folderId;
 
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String link;
 
     private Boolean bookmark;

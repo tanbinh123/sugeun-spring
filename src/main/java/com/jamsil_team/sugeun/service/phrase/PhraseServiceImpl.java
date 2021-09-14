@@ -3,6 +3,7 @@ package com.jamsil_team.sugeun.service.phrase;
 import com.jamsil_team.sugeun.domain.phrase.Phrase;
 import com.jamsil_team.sugeun.domain.phrase.PhraseRepository;
 import com.jamsil_team.sugeun.dto.phrase.PhraseDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,7 @@ public class PhraseServiceImpl implements PhraseService{
     public void ModifyPhraseText(Long phraseId, String text) {
 
         Phrase phrase = phraseRepository.findById(phraseId).orElseThrow(() ->
-            new IllegalStateException("존재하지 않는 글귀입니다."));
+            new CustomApiException("존재하지 않는 글귀입니다."));
 
         phrase.changeText(text);
 
@@ -50,7 +51,7 @@ public class PhraseServiceImpl implements PhraseService{
     public void ModifyBookmark(Long phraseId) {
 
         Phrase phrase = phraseRepository.findById(phraseId).orElseThrow(() ->
-                new IllegalStateException("존재하지 않는 글귀입니다."));
+                new CustomApiException("존재하지 않는 글귀입니다."));
 
         if (phrase.getBookmark() == true){
             phrase.cancelBookmark();
