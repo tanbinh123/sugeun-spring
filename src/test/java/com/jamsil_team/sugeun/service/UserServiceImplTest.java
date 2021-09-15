@@ -20,6 +20,7 @@ import com.jamsil_team.sugeun.domain.user.UserRepository;
 import com.jamsil_team.sugeun.dto.user.BookmarkDTO;
 import com.jamsil_team.sugeun.dto.user.UserResDTO;
 import com.jamsil_team.sugeun.dto.user.UserSignupDTO;
+import com.jamsil_team.sugeun.handler.exception.CustomApiException;
 import com.jamsil_team.sugeun.service.user.UserService;
 import org.assertj.core.api.Assertions;
 
@@ -105,7 +106,7 @@ class UserServiceImplTest {
         UserSignupDTO userSignupDTO2 = createSignUpDTO();// loginId = 형우
 
         //when
-        IllegalStateException e = assertThrows(IllegalStateException.class,
+        CustomApiException e = assertThrows(CustomApiException.class,
                 () -> userService.join(userSignupDTO2));
 
         //then
@@ -452,7 +453,7 @@ class UserServiceImplTest {
         //given
         //폰 넘버: 010-0000-0000 인 회원은 존재하지 않는다.
         //when
-        IllegalStateException e = assertThrows(IllegalStateException.class,
+        CustomApiException e = assertThrows(CustomApiException.class,
                 () -> userService.findNickname("010-0000-0000"));
 
         //then
