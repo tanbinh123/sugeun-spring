@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,14 +28,14 @@ public class TimeoutDTO {
 
     private Long timeoutId;
 
-    @NotBlank
+    @NotNull
     private Long userId;
 
     @NotBlank
     private String title;
 
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
-    @NotBlank
+    @NotNull
     private LocalDateTime deadline;
 
     private Boolean isValid;

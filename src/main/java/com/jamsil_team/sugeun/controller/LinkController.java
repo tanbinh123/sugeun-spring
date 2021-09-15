@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 
 @RequiredArgsConstructor
@@ -22,7 +25,7 @@ public class LinkController {
      *  링크 생성
      */
     @PostMapping("/users/{user-id}/folders/{folder-id}/links")
-    public ResponseEntity<String> createLink(@RequestBody LinkDTO linkDTO,
+    public ResponseEntity<String> createLink(@Valid @RequestBody LinkDTO linkDTO, BindingResult bindingResult,
                                              @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!linkDTO.getUserId().equals(authUserDTO.getUser().getUserId())){

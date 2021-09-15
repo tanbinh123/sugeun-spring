@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class TimeoutController {
      *  타임아웃 생성
      */
     @PostMapping("/users/{user-id}/timeouts")
-    public ResponseEntity<Long> createTimeout(TimeoutDTO timeoutDTO,
+    public ResponseEntity<Long> createTimeout(@Valid TimeoutDTO timeoutDTO, BindingResult bindingResult,
                                               @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
 
         if(!timeoutDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
@@ -59,7 +61,7 @@ public class TimeoutController {
     @PatchMapping("/users/{user-id}/timeouts/{timeout-id}")
     public ResponseEntity<String> modifyTimeout(@PathVariable("user-id") Long userId,
                                                 @PathVariable("timeout-id") Long timeoutId,
-                                                TimeoutDTO timeoutDTO,
+                                                @Valid TimeoutDTO timeoutDTO,BindingResult bindingResult,
                                                 @AuthenticationPrincipal AuthUserDTO authUserDTO) throws IOException {
         if(!userId.equals(authUserDTO.getUser().getUserId())){
             throw new CustomApiException("변경 권한이 없습니다.");

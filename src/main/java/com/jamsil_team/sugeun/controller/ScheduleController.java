@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/users/{user-id}/schedules")
@@ -43,7 +45,7 @@ public class ScheduleController {
      *  스케줄 생성
      */
     @PostMapping
-    public ResponseEntity<Long> createSchedule(@RequestBody ScheduleDTO scheduleDTO,
+    public ResponseEntity<Long> createSchedule(@Valid @RequestBody ScheduleDTO scheduleDTO, BindingResult bindingResult,
                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!scheduleDTO.getUserId().equals(authUserDTO.getUser().getUserId())){
@@ -60,7 +62,7 @@ public class ScheduleController {
      *  스케줄 변경
      */
     @PutMapping("{schedule-id}")
-    public ResponseEntity<String> modifySchedule(@RequestBody ScheduleDTO scheduleDTO,
+    public ResponseEntity<String> modifySchedule(@Valid @RequestBody ScheduleDTO scheduleDTO, BindingResult bindingResult,
                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!scheduleDTO.getUserId().equals(authUserDTO.getUser().getUserId())){

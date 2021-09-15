@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,7 +24,7 @@ public class PhraseController {
      *  글귀 생성
      */
     @PostMapping("/users/{user-id}/folders/{folder-id}/phrases")
-    public ResponseEntity<String> createPhrase(@RequestBody PhraseDTO phraseDTO,
+    public ResponseEntity<String> createPhrase(@Valid @RequestBody PhraseDTO phraseDTO, BindingResult bindingResult,
                                                @AuthenticationPrincipal AuthUserDTO authUserDTO){
 
         if(!phraseDTO.getUserId().equals(authUserDTO.getUser().getUserId())){

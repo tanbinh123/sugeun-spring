@@ -50,6 +50,10 @@ dependencies {
 	//jwt 토큰
 	compile group: "io.jsonwebtoken", name: 'jjwt', version: '0.9.1'
 
+	// aop 라이브러리
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.5.4'
+
+
 }
 
 test {
