@@ -74,11 +74,6 @@ public class UserController {
 
         if(userUpdateDTO.getUpdatePassword() != null){
 
-            System.out.println("--------------------------------");
-            System.out.println("pathVariable: " + userId);
-            System.out.println("password: " + userUpdateDTO.getUpdatePassword());
-            System.out.println("authUserDTO: "+ authUserDTO.getUser().getUserId());
-
             userService.modifyPassword(authUserDTO.getUser().getUserId(), userUpdateDTO.getUpdatePassword());
 
 
