@@ -1,9 +1,10 @@
-# 앱소개
+# 📌 Introduction
+
 만능이니까 수근수근이에요 
 - 글, 링크, 기프티콘까지 !! 나만의 정리함에서 톡톡히 필요한 내용들을 정리해보세요 
 - 수근수근이는 여러분의 멋진 내면을 담을수록 더 풍요로워질거에요
 
-# 기술 스펙
+# 👨‍💻 Tech Stack
 front
 
 back - springboot JPA H2 gradle 
