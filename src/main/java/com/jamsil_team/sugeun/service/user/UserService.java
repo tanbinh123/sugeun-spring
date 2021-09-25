@@ -24,8 +24,6 @@ public interface UserService {
 
     UserResDTO getUser(Long userId) throws IOException;
 
-    void modifyAlarm(Long userId);
-
     BookmarkDTO getListOfBookmark(Long userId);
 
     String findNickname(String phone);

@@ -23,8 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class LinkServiceImplTest {
 
-    @Autowired
-    LinkService linkService;
+    @Autowired LinkService linkService;
     @Autowired UserRepository userRepository;
     @Autowired FolderRepository folderRepository;
     @Autowired LinkRepository linkRepository;

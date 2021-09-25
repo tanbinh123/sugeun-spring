@@ -194,18 +194,6 @@ public class UserServiceImpl implements UserService{
         return userResDTO;
     }
 
-    /**
-     * 알람허용 변경
-     */
-    @Transactional
-    @Override
-    public void modifyAlarm(Long userId) {
-
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new CustomApiException("존재하지 않은 회원입니다."));
-
-        user.changeAlarm();
-    }
 
     /**
      * 북마크 DTO 리스트

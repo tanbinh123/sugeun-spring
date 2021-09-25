@@ -44,21 +44,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 class UserServiceImplTest {
 
-    @Autowired
-    UserService userService;
+    @Autowired UserService userService;
     @Autowired UserRepository userRepository;
     @Autowired PasswordEncoder passwordEncoder;
     @Autowired FolderRepository folderRepository;
     @Autowired PhraseRepository phraseRepository;
     @Autowired LinkRepository linkRepository;
-    @Autowired
-    TimeoutRepository timeoutRepository;
-    @Autowired
-    ScheduleRepository scheduleRepository;
-    @Autowired
-    TimeoutSelectRepository timeoutSelectRepository;
-    @Autowired
-    ScheduleSelectRepository scheduleSelectRepository;
+    @Autowired TimeoutRepository timeoutRepository;
+    @Autowired ScheduleRepository scheduleRepository;
+    @Autowired TimeoutSelectRepository timeoutSelectRepository;
+    @Autowired ScheduleSelectRepository scheduleSelectRepository;
 
     @Test
     void 중복확인() throws Exception{
@@ -87,7 +82,6 @@ class UserServiceImplTest {
         //then
         Assertions.assertThat(user.getUserId()).isNotNull();
         Assertions.assertThat(user.getNickname()).isEqualTo(signUpDTOUser.getNickname());
-        Assertions.assertThat(user.getAlarm()).isTrue();
 
         boolean matches = passwordEncoder.matches(rawPassword, user.getPassword());
         Assertions.assertThat(matches).isTrue();
@@ -328,55 +322,11 @@ class UserServiceImplTest {
 
         //then
         Assertions.assertThat(userResDTO.getUserId()).isEqualTo(user.getUserId());
-        Assertions.assertThat(userResDTO.getAlarm()).isEqualTo(user.getAlarm());
         Assertions.assertThat(userResDTO.getPhone()).isEqualTo(user.getPhone());
 //        Assertions.assertThat(userDTO.getFolderPath()).isEqualTo(user.getFolderPath());
 //        Assertions.assertThat(userDTO.getStoreFilename()).isEqualTo(user.getStoreFilename());
     }
 
-    @Test
-    void 알람허용_변경_기존_true() throws Exception{
-        //given
-        User user = User.builder()
-                .nickname("형우")
-                .password(passwordEncoder.encode("1111"))
-                .phone("010-0000-0000")
-                .alarm(true) //알람 허용o
-                .build();
-
-        userRepository.save(user);
-
-        //when
-        userService.modifyAlarm(user.getUserId());
-
-        //then
-        Optional<User> result = userRepository.findById(user.getUserId());
-        User savedUser = result.get();
-
-        Assertions.assertThat(savedUser.getAlarm()).isFalse();
-    }
-    
-    @Test
-    void 알람허용_변경_기존_false() throws Exception{
-        //given
-        User user = User.builder()
-                .nickname("형우")
-                .password(passwordEncoder.encode("1111"))
-                .phone("010-0000-0000")
-                .alarm(false) //알람 허용x
-                .build();
-
-        userRepository.save(user);
-
-        //when
-        userService.modifyAlarm(user.getUserId());
-
-        //then
-        Optional<User> result = userRepository.findById(user.getUserId());
-        User savedUser = result.get();
-
-        Assertions.assertThat(savedUser.getAlarm()).isTrue();
-    }
 
     @Test
     void 북마크_리스트() throws Exception{

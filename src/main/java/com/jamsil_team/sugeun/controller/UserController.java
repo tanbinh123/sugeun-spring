@@ -106,24 +106,6 @@ public class UserController {
 
     }
 
-
-    /**
-     *  알림 허용 변경
-     */
-    @PatchMapping("/alarm")
-    public ResponseEntity<String> modifyUserAlarm(@PathVariable("user-id") Long userId,
-                                                  @AuthenticationPrincipal AuthUserDTO authUserDTO){
-
-        if(!userId.equals(authUserDTO.getUser().getUserId())){
-            throw new CustomApiException("변경 권한이 없습니다.");
-        }
-
-        userService.modifyAlarm(authUserDTO.getUser().getUserId());
-
-        return new ResponseEntity<>("알림허용 변경 완료",HttpStatus.OK);
-    }
-
-
     /**
      *  북마크 조회
      */
