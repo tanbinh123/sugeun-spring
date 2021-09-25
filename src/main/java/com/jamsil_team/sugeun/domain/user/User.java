@@ -29,9 +29,6 @@ public class User {
     @Column(nullable = false)
     private String phone;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Boolean alarm = true;
 
     @Builder.Default
     @Column(nullable = false)
@@ -49,13 +46,6 @@ public class User {
         this.nickname = nickname;
     }
 
-    public void changeAlarm() {
-        if (this.alarm == false) {
-            this.alarm = true;
-        } else {
-            this.alarm = false;
-        }
-    }
 
     public void changePassword(String password){
         this.password = password;
@@ -78,7 +68,6 @@ public class User {
                 .userId(userId)
                 .nickname(nickname)
                 .phone(phone)
-                .alarm(alarm)
                 .build();
 
         return userResDTO;
