@@ -14,7 +14,7 @@ back - Springboot, JPA, MariaDB
 server - AWS EC2, RDS
 
 # 화면
-
+<img src="https://user-images.githubusercontent.com/77663506/144567440-9a3a8c0e-71b3-4076-9fc1-5b4c82584fb4.JPG" width="200" height="400"/>
 
 
 # ERD 설계
