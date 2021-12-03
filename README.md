@@ -13,25 +13,35 @@
 
 ## Member 
 - 조소정(IOS)
-- 이형우(Backend-Spring)
+- 이형우(Backend)
 
 # 👨‍💻 Tech Stack
-back - Springboot, JPA, MariaDB
-server - AWS EC2, RDS
+back 
+- Springboot
+- JPA
+- MariaDB
+- QueryDsl
+- JWT 토큰
+
+server 
+- AWS EC2 
+- AWS RDS
 
 # 화면
-<p float>
-<img src="https://user-images.githubusercontent.com/77663506/144569461-1ae39efe-50aa-4023-8edb-bf45dc1d5b22.JPG" width="250" height="541"/>
-<img src="https://user-images.githubusercontent.com/77663506/144569204-15d14ef1-dca9-4127-ac3e-2b0a48c9c1c1.JPG" width="250" height="541"/>
-<img src="https://user-images.githubusercontent.com/77663506/144569335-5558b8ff-a1ea-4421-9a66-1720fed72edb.JPG" width="250" height="541"/>
-  </p>
-<p float>
-<img src="https://user-images.githubusercontent.com/77663506/144569354-ba6ddd13-bb6c-4ab3-b2f3-a4788b30e50a.JPG" width="250" height="541"/>
-<img src="https://user-images.githubusercontent.com/77663506/144569373-b3fa25ff-f7a3-4c82-829f-3a8eb9a1814d.JPG" width="250" height="541"/>
-<img src="https://user-images.githubusercontent.com/77663506/144569389-b5272241-d363-49a5-8233-a71c8f2b6451.JPG" width="250" height="541"/>
-<img src="https://user-images.githubusercontent.com/77663506/144569422-621f2cfe-cd32-40ee-ba7b-c1daadac14e8.JPG" width="250" height="541"/>
-  </p>
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/50979257/143773561-c21a8167-db23-4671-a5d6-1cf4b147ed24.png" width="250" height="541" />
+  <img src="https://user-images.githubusercontent.com/50979257/143773569-9b8c5989-4bdc-4e2d-87dd-bd96b974a940.png" width="250" height="541" />
+  <img src="https://user-images.githubusercontent.com/50979257/143773579-229de397-6b54-4b13-ba34-78dc94f49bce.png" width="250" height="541" /> 
+</p>
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/50979257/143773572-ecf10585-06cd-48e6-91d9-f5f50934320e.png" width="250" height="541" />
+  <img src="https://user-images.githubusercontent.com/50979257/143773572-ecf10585-06cd-48e6-91d9-f5f50934320e.png"  width="250" height="541" />
+  <img src="https://user-images.githubusercontent.com/50979257/143773580-81402b5a-cc95-436c-be2c-20b003e1c72e.png"  width="250" height="541" /> 
+</p>
 
 
 # ERD 설계
 <img src="https://user-images.githubusercontent.com/77663506/124476472-cf474f00-dddd-11eb-8bdc-8f27d5219818.png" width="750" height="750"/>
+
+# API 문서
+https://documenter.getpostman.com/view/15013144/UUxwEA52#intro
