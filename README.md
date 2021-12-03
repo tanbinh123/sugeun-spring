@@ -18,9 +18,9 @@
 # 👨‍💻 Tech Stack
 back 
 - Springboot
-- JPA
+- SpringData JPA
 - MariaDB
-- springboot Security + JWT 토큰
+- Spring Security + JWT 토큰
 - AOP
 - coolsms 문자발송, thumbnail 라이브러리
 
